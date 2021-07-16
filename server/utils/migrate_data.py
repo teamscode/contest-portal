@@ -1,4 +1,7 @@
 # flake8: noqa
+from problem.models import Problem, ProblemTag, ProblemDifficulty, ProblemRuleType
+from account.models import User, UserProfile, AdminType, ProblemPermission
+from django.conf import settings
 import os
 import sys
 import re
@@ -10,9 +13,6 @@ from json.decoder import JSONDecodeError
 sys.path.append("../")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "oj.settings")
 django.setup()
-from django.conf import settings
-from account.models import User, UserProfile, AdminType, ProblemPermission
-from problem.models import Problem, ProblemTag, ProblemDifficulty, ProblemRuleType
 
 admin_type_map = {
     0: AdminType.REGULAR_USER,
@@ -97,7 +97,6 @@ def import_users():
             if not email_regex.match(data["email"]):
                 print("%s will not be created due to invalid email: %s" % (data["username"], data["email"]))
                 continue
-            data["username"] = data["username"].lower()
             user, created = User.objects.get_or_create(username=data["username"])
             if not created:
                 print("%s already exists, omitted" % user.username)
