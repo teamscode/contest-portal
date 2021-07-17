@@ -1,9 +1,19 @@
-FROM python:3.7-alpine3.9
+FROM node:lts-alpine AS frontend-build-env
+
+WORKDIR /build
+COPY ./client/. .
+
+RUN yarn install --frozen-lockfile && \ 
+    yarn build:dll && \
+    yarn build
+
+
+FROM python:3.9-alpine
 
 ENV OJ_ENV production
 
-ADD . /app
 WORKDIR /app
+COPY ./server/. .
 
 HEALTHCHECK --interval=5s --retries=3 CMD python2 /app/deploy/health_check.py
 
@@ -11,8 +21,6 @@ RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor j
     pip install --no-cache-dir -r /app/deploy/requirements.txt && \
     apk del build-base --purge
 
-RUN curl -L  $(curl -s  https://api.github.com/repos/QingdaoU/OnlineJudgeFE/releases/latest | grep /dist.zip | cut -d '"' -f 4) -o dist.zip && \
-    unzip dist.zip && \
-    rm dist.zip
+COPY --from=frontend-build-env /build/dist ./dist
 
 ENTRYPOINT /app/deploy/entrypoint.sh
