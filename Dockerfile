@@ -1,7 +1,8 @@
 FROM node:lts-buster AS frontend-build-env
 
 WORKDIR /build
-COPY ./client/. .
+COPY client/. .
+COPY .git/. ./.git
 
 RUN yarn install --frozen-lockfile && \ 
     yarn build:dll && \
@@ -13,7 +14,7 @@ FROM python:3.9-alpine
 ENV OJ_ENV production
 
 WORKDIR /app
-COPY ./server/. .
+COPY server/. .
 
 HEALTHCHECK --interval=5s --retries=3 CMD python2 /app/deploy/health_check.py
 
