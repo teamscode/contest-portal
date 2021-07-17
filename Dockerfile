@@ -9,7 +9,7 @@ RUN yarn install --frozen-lockfile && \
     yarn build
 
 
-FROM python:3.9-alpine
+FROM python:3.7-alpine3.9
 
 ENV OJ_ENV production
 
