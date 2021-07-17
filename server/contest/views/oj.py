@@ -113,7 +113,7 @@ class ContestRankAPI(APIView):
             return OIContestRank.objects.filter(contest=self.contest,
                                                 user__admin_type=AdminType.REGULAR_USER,
                                                 user__is_disabled=False). \
-                select_related("user").order_by("-total_score")
+                select_related("user").order_by("-total_score", "last_submission")
 
     def column_string(self, n):
         string = ""

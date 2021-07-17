@@ -400,4 +400,5 @@ class JudgeDispatcher(DispatcherBase):
         else:
             rank.total_score = rank.total_score + current_score
         rank.submission_info[problem_id] = current_score
+        rank.last_submission = self.submission.create_time
         rank.save()
