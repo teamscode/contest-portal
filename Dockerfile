@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS frontend-build-env
+FROM node:lts-buster AS frontend-build-env
 
 WORKDIR /build
 COPY ./client/. .
