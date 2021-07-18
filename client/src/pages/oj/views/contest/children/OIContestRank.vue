@@ -80,7 +80,7 @@
             title: this.$i18n.t('m.Total_Score'),
             align: 'center',
             render: (h, params) => {
-              if (isContestAdmin) {
+              if (this.isContestAdmin) {
                 return h('a', {
                   on: {
                     click: () => {
@@ -168,7 +168,7 @@
       }
     },
     methods: {
-      ...mapActions(['getContestProblems','isContestAdmin']),
+      ...mapActions(['getContestProblems', 'isContestAdmin']),
       applyToChart (rankData) {
         let [usernames, scores] = [[], []]
         rankData.forEach(ele => {
