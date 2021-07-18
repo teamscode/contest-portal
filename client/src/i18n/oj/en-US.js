@@ -24,6 +24,7 @@ export const m = {
   Wrong_Answer: 'Wrong Answer',
   Statistic: 'Statistic',
   Close: 'Close',
+  Add_Problem: 'Add Problem',
   View_Contest: 'View Contest',
   Are_you_sure_you_want_to_reset_your_code: 'Are you sure you want to reset your code?',
   Code_can_not_be_empty: 'Code can not be empty',
@@ -112,6 +113,7 @@ export const m = {
   Problems: 'Problems',
   Announcements: 'Announcements',
   Submissions: 'Submissions',
+  Problem_Submissions: 'Problem Submissions',
   Rankings: 'Rankings',
   Overview: 'Overview',
   Admin_Helper: 'Admin Helper',
@@ -187,7 +189,7 @@ export const m = {
   No_Account: 'No account? Register now!',
   Forget_Password: 'Forget Password',
   UserLogin: 'Login',
-  Welcome_back: 'Welcome back to OJ',
+  Welcome_back: 'Welcome back to TOJ',
   // OIRank.vue
   OI_Ranklist: 'OI Ranklist',
   // OIContestRank.vue

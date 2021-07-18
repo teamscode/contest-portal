@@ -44,7 +44,7 @@
         </p>
         <p>{{$t('m.CDN_HOST')}}:
           <el-tag :type="cdn ? 'success' : 'warning'" size="small">
-            {{cdn ? cdn : 'Not Use'}}
+            {{cdn ? cdn : 'Not Used'}}
           </el-tag>
         </p>
       </panel>
