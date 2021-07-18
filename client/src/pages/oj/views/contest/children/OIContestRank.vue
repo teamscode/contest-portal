@@ -7,13 +7,7 @@
         <Icon type="android-settings" size="20"></Icon>
         <div slot="content" id="switches">
           <p>
-            <span>{{$t('m.Menu')}}</span>
-            <i-switch v-model="showMenu"></i-switch>
-            <span>{{$t('m.Chart')}}</span>
-            <i-switch v-model="showChart"></i-switch>
-          </p>
-          <p>
-            <span>{{$t('m.Auto_Refresh')}}(10s)</span>
+            <span>{{$t('m.Auto_Refresh')}} (10s)</span>
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <p v-if="isContestAdmin">
@@ -25,9 +19,6 @@
           </p>
         </div>
       </Poptip>
-    </div>
-    <div v-show="showChart" class="echarts">
-      <ECharts :options="options" ref="chart" auto-resize></ECharts>
     </div>
     <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover></Table>
     <Pagination :total="total"
@@ -89,16 +80,20 @@
             title: this.$i18n.t('m.Total_Score'),
             align: 'center',
             render: (h, params) => {
-              return h('a', {
-                on: {
-                  click: () => {
-                    this.$router.push({
-                      name: 'contest-submission-list',
-                      query: {username: params.row.user.username}
-                    })
+              if (isContestAdmin) {
+                return h('a', {
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: 'contest-submission-list',
+                        query: {username: params.row.user.username}
+                      })
+                    }
                   }
-                }
-              }, params.row.total_score)
+                }, params.row.total_score)
+              } else {
+                return h('span', {}, params.row.total_score)
+              }
             }
           }
         ],
@@ -173,7 +168,7 @@
       }
     },
     methods: {
-      ...mapActions(['getContestProblems']),
+      ...mapActions(['getContestProblems','isContestAdmin']),
       applyToChart (rankData) {
         let [usernames, scores] = [[], []]
         rankData.forEach(ele => {

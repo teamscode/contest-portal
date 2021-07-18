@@ -43,7 +43,7 @@
 
         <el-table-column prop="email" label="Email"></el-table-column>
 
-        <el-table-column prop="admin_type" label="User Type">
+        <el-table-column prop="admin_type" label="User Role">
           <template slot-scope="scope">
             {{ scope.row.admin_type }}
           </template>
