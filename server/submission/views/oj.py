@@ -163,7 +163,6 @@ class ContestSubmissionListAPI(APIView):
         contest = self.contest
         submissions = Submission.objects.filter(contest_id=contest.id).select_related("problem__created_by")
         problem_id = request.GET.get("problem_id")
-        myself = request.GET.get("myself")
         result = request.GET.get("result")
         username = request.GET.get("username")
         if problem_id:
@@ -173,7 +172,7 @@ class ContestSubmissionListAPI(APIView):
                 return self.error("Problem doesn't exist")
             submissions = submissions.filter(problem=problem)
 
-        if myself and myself == "1":
+        if not request.user.is_contest_admin(contest):
             submissions = submissions.filter(user_id=request.user.id)
         elif username:
             submissions = submissions.filter(username__icontains=username)
