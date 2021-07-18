@@ -7,7 +7,11 @@
         <Icon type="android-settings" size="20"></Icon>
         <div slot="content" id="switches">
           <p>
-            <span>{{$t('m.Auto_Refresh')}} (10s)</span>
+            <span>{{$t('m.Menu')}}</span>
+            <i-switch v-model="showMenu"></i-switch>
+          </p>
+          <p>
+            <span>{{$t('m.Auto_Refresh')}}(10s)</span>
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <p v-if="isContestAdmin">
@@ -19,6 +23,9 @@
           </p>
         </div>
       </Poptip>
+    </div>
+    <div v-show="false" class="echarts">
+      <ECharts :options="options" ref="chart" auto-resize></ECharts>
     </div>
     <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover></Table>
     <Pagination :total="total"
@@ -168,7 +175,7 @@
       }
     },
     methods: {
-      ...mapActions(['getContestProblems', 'isContestAdmin']),
+      ...mapActions(['getContestProblems']),
       applyToChart (rankData) {
         let [usernames, scores] = [[], []]
         rankData.forEach(ele => {

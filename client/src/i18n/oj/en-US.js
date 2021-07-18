@@ -46,7 +46,7 @@ export const m = {
   Memory_Limit_Exceeded_Description: 'The memory your program actually used has exceeded limit.',
   System_Error_Description: 'Oops, something has gone wrong with the judger. Please report this to administrator.',
   // ACMContestRank.vue
-  Menu: 'Menu',
+  Menu: 'Contest Menu',
   Chart: 'Chart',
   Auto_Refresh: 'Auto Refresh',
   RealName: 'Real Name',
