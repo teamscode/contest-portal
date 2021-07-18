@@ -6,6 +6,7 @@ from utils.models import JSONField
 from utils.constants import ContestStatus, ContestType
 from account.models import User
 from utils.models import RichTextField
+from datetime import date, datetime
 
 
 class Contest(models.Model):
@@ -82,7 +83,7 @@ class OIContestRank(AbstractContestRank):
     # {"23": 333}
     # key is problem id, value is current score
     submission_info = JSONField(default=dict)
-    last_submission = models.DateTimeField()
+    last_submission = models.DateTimeField(default=datetime(9999, 12, 31, 0, 0, 0))
 
     class Meta:
         db_table = "oi_contest_rank"
