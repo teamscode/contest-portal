@@ -110,7 +110,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('total_submission_number', models.IntegerField(default=0)),
                 ('total_score', models.IntegerField(default=0)),
-                ('last_submission', models.DateTimeField()),
                 ('submission_info', jsonfield.fields.JSONField(default={})),
                 ('contest', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contest.Contest')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
