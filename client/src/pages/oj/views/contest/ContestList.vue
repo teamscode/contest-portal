@@ -2,7 +2,7 @@
   <Row type="flex">
     <Col :span="24">
     <Panel id="contest-card" shadow>
-      <div slot="title">{{query.rule_type === '' ? this.$i18n.t('m.All') : query.rule_type}} {{$t('m.Contests')}}</div>
+      <div slot="title">{{query.rule_type === '' ? this.$i18n.t('m.All') : (query.rule_type === 'OI' ? 'TeamsCode' : query.rule_type)}} {{$t('m.Contests')}}</div>
       <div slot="extra">
         <ul class="filter">
           <li>
@@ -61,7 +61,7 @@
               </li>
               <li>
                 <Button size="small" shape="circle" @click="onRuleChange(contest.rule_type)">
-                  {{contest.rule_type}}
+                  {{contest.rule_type==='OI' ? 'TeamsCode' : contest.rule_type}}
                 </Button>
               </li>
             </ul>

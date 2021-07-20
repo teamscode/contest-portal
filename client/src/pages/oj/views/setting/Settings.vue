@@ -7,14 +7,6 @@
             <div class="avatar-editor">
               <div class="avatar-container">
                 <img class="avatar" :src="profile.avatar"/>
-                <div class="avatar-mask">
-                  <a @click.stop="goRoute({name: 'profile-setting'})">
-                    <div class="mask-content">
-                      <Icon type="camera" size="30"></Icon>
-                      <p class="text">change avatar</p>
-                    </div>
-                  </a>
-                </div>
               </div>
             </div>
 

@@ -7,55 +7,7 @@
       <div v-if="profile.user">
         <p style="margin-top: -10px">
           <span v-if="profile.user" class="emphasis">{{profile.user.username}}</span>
-          <span v-if="profile.school">@{{profile.school}}</span>
         </p>
-        <p v-if="profile.mood">
-          {{profile.mood}}
-        </p>
-        <hr id="split"/>
-
-        <div class="flex-container">
-          <div class="left">
-            <p>{{$t('m.UserHomeSolved')}}</p>
-            <p class="emphasis">{{profile.accepted_number}}</p>
-          </div>
-          <div class="middle">
-            <p>{{$t('m.UserHomeserSubmissions')}}</p>
-            <p class="emphasis">{{profile.submission_number}}</p>
-          </div>
-          <div class="right">
-            <p>{{$t('m.UserHomeScore')}}</p>
-            <p class="emphasis">{{profile.total_score}}</p>
-          </div>
-        </div>
-        <div id="problems">
-          <div v-if="problems.length">{{$t('m.List_Solved_Problems')}}
-            <Poptip v-if="refreshVisible" trigger="hover" placement="right-start">
-              <Icon type="ios-help-outline"></Icon>
-              <div slot="content">
-                <p>If you find the following problem id does not exist,<br> try to click the button.</p>
-                <Button type="info" @click="freshProblemDisplayID">regenerate</Button>
-              </div>
-            </Poptip>
-          </div>
-          <p v-else>{{$t('m.UserHomeIntro')}}</p>
-          <div class="btns">
-            <div class="problem-btn" v-for="problemID of problems" :key="problemID">
-              <Button type="ghost" @click="goProblem(problemID)">{{problemID}}</Button>
-            </div>
-          </div>
-        </div>
-        <div id="icons">
-          <a :href="profile.github">
-            <Icon type="social-github-outline" size="30"></Icon>
-          </a>
-          <a :href="'mailto:'+ profile.user.email">
-            <Icon class="icon" type="ios-email-outline" size="30"></Icon>
-          </a>
-          <a :href="profile.blog">
-            <Icon class="icon" type="ios-world-outline" size="30"></Icon>
-          </a>
-        </div>
       </div>
     </Card>
   </div>
@@ -83,41 +35,9 @@
         api.getUserInfo(this.username).then(res => {
           this.changeDomTitle({title: res.data.data.user.username})
           this.profile = res.data.data
-          this.getSolvedProblems()
           let registerTime = time.utcToLocal(this.profile.user.create_time, 'YYYY-MM-D')
-          console.log('The guy registered at ' + registerTime + '.')
+          console.log('This person registered at ' + registerTime)
         })
-      },
-      getSolvedProblems () {
-        let ACMProblems = this.profile.acm_problems_status.problems || {}
-        let OIProblems = this.profile.oi_problems_status.problems || {}
-        // todo oi problems
-        let ACProblems = []
-        for (let problems of [ACMProblems, OIProblems]) {
-          Object.keys(problems).forEach(problemID => {
-            if (problems[problemID]['status'] === 0) {
-              ACProblems.push(problems[problemID]['_id'])
-            }
-          })
-        }
-        ACProblems.sort()
-        this.problems = ACProblems
-      },
-      goProblem (problemID) {
-        this.$router.push({name: 'problem-details', params: {problemID: problemID}})
-      },
-      freshProblemDisplayID () {
-        api.freshDisplayID().then(res => {
-          this.$success('Update successfully')
-          this.init()
-        })
-      }
-    },
-    computed: {
-      refreshVisible () {
-        if (!this.username) return true
-        if (this.username && this.username === this.$store.getters.user.username) return true
-        return false
       }
     },
     watch: {

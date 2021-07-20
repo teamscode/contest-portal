@@ -17,6 +17,7 @@ class my_property:
     2. ttl is callable，条件缓存
     3. 缓存 ttl 秒
     """
+
     def __init__(self, func=None, fset=None, ttl=None):
         self.fset = fset
         self.local = threading.local()
@@ -107,9 +108,9 @@ class OptionKeys:
 
 class OptionDefaultValue:
     website_base_url = "http://127.0.0.1"
-    website_name = "Online Judge"
-    website_name_shortcut = "oj"
-    website_footer = "Online Judge Footer"
+    website_name = "TeamsCode OJ"
+    website_name_shortcut = "TOJ"
+    website_footer = "TeamsCode"
     allow_register = True
     submission_list_show_all = True
     smtp_config = {}

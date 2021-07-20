@@ -61,9 +61,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('base_url', models.CharField(default='http://127.0.0.1', max_length=128)),
-                ('name', models.CharField(default='Online Judge', max_length=32)),
-                ('name_shortcut', models.CharField(default='oj', max_length=32)),
-                ('footer', models.TextField(default='Online Judge Footer')),
+                ('name', models.CharField(default='TeamsCode OJ', max_length=32)),
+                ('name_shortcut', models.CharField(default='TOJ', max_length=32)),
+                ('footer', models.TextField(default='TeamsCode')),
                 ('allow_register', models.BooleanField(default=True)),
                 ('submission_list_show_all', models.BooleanField(default=True)),
             ],
