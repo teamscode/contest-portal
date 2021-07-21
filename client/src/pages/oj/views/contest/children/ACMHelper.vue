@@ -92,7 +92,7 @@
                   display: 'inline-block',
                   'max-width': '150px'
                 }
-              }, row.teams_members)
+              }, row.team_members)
             }
           },
           {

@@ -82,7 +82,7 @@ export default {
             align: 'center',
             width: 150,
             render: (h, {row}) => {
-              return h('span', row.user.teams_members)
+              return h('span', row.user.team_members)
             }
           })
         } else {

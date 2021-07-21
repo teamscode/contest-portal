@@ -39,7 +39,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="teams_members" label="Team Members"></el-table-column>
+        <el-table-column prop="team_members" label="Team Members"></el-table-column>
 
         <el-table-column prop="email" label="Email"></el-table-column>
 
@@ -97,6 +97,11 @@
           <el-table-column label="Email">
             <template slot-scope="{row}">
               {{row[2]}}
+            </template>
+          </el-table-column>
+          <el-table-column label="Team Members">
+            <template slot-scope="{row}">
+              {{row[3]}}
             </template>
           </el-table-column>
         </el-table>
@@ -178,7 +183,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('m.User_Team_Members')" required>
-              <el-input v-model="user.teams_members"></el-input>
+              <el-input v-model="user.team_members"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

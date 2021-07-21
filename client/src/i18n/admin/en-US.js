@@ -24,7 +24,7 @@ export const m = {
   // User.vue-dialog
   User_Info: 'User',
   User_Username: 'Username',
-  User_Team_Members: 'Teams Members',
+  User_Team_Members: 'Team Members',
   User_Email: 'Email',
   User_New_Password: 'New Password',
   User_Type: 'User Role',
