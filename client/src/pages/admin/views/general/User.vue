@@ -367,9 +367,11 @@
         papa.parse(file, {
           complete: (results) => {
             let data = results.data.filter(user => {
-              return user[0] && user[1] && user[2]
+              return user[0] && user[1] && user[2] && user[3]
             })
-            let delta = results.data.length - data.length
+            console.log(data)
+            console.log(results.data)
+            let delta = results.data.length - data.length - 1
             if (delta > 0) {
               this.$warning(delta + ' users have been filtered due to empty value')
             }
