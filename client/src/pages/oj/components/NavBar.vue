@@ -125,7 +125,7 @@
     }
 
     .logo {
-      margin-left: 1%;
+      margin-left: 15px;
       margin-right: 2%;
       font-size: 20px;
       float: left;
