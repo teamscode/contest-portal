@@ -51,33 +51,6 @@ class UserProfileAPI(APIView):
         return self.success(UserProfileSerializer(user.userprofile, show_team_members=show_team_members).data)
 
 
-class AvatarUploadAPI(APIView):
-    request_parsers = ()
-
-    @login_required
-    def post(self, request):
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            avatar = form.cleaned_data["image"]
-        else:
-            return self.error("Invalid file content")
-        if avatar.size > 2 * 1024 * 1024:
-            return self.error("Picture is too large")
-        suffix = os.path.splitext(avatar.name)[-1].lower()
-        if suffix not in [".gif", ".jpg", ".jpeg", ".bmp", ".png"]:
-            return self.error("Unsupported file format")
-
-        name = rand_str(10) + suffix
-        with open(os.path.join(settings.AVATAR_UPLOAD_DIR, name), "wb") as img:
-            for chunk in avatar:
-                img.write(chunk)
-        user_profile = request.user.userprofile
-
-        user_profile.avatar = f"{settings.AVATAR_URI_PREFIX}/{name}"
-        user_profile.save()
-        return self.success("Succeeded")
-
-
 class TwoFactorAuthAPI(APIView):
     @login_required
     def get(self, request):
