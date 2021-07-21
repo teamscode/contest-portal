@@ -176,7 +176,7 @@ class UserRegisterAPITest(CaptchaTest):
         self.captcha = rand_str(4)
 
         self.data = {"username": "test_user", "password": "testuserpassword",
-                     "real_name": "real_name", "email": "test@qduoj.com",
+                     "team_members": "team_members", "email": "test@qduoj.com",
                      "captcha": self._set_captcha(self.client.session)}
 
     def test_website_config_limit(self):
@@ -252,11 +252,11 @@ class UserProfileAPITest(APITestCase):
 
     def test_update_profile(self):
         self.create_user("test", "test123")
-        update_data = {"real_name": "zemal", "submission_number": 233, "language": "en-US"}
+        update_data = {"team_members": "zemal", "submission_number": 233, "language": "en-US"}
         resp = self.client.put(self.url, data=update_data)
         self.assertSuccess(resp)
         data = resp.data["data"]
-        self.assertEqual(data["real_name"], "zemal")
+        self.assertEqual(data["team_members"], "zemal")
         self.assertEqual(data["submission_number"], 0)
         self.assertEqual(data["language"], "en-US")
 
@@ -503,7 +503,7 @@ class AdminUserTest(APITestCase):
         self.username = self.password = "test"
         self.regular_user = self.create_user(username=self.username, password=self.password, login=False)
         self.url = self.reverse("user_admin_api")
-        self.data = {"id": self.regular_user.id, "username": self.username, "real_name": "test_name",
+        self.data = {"id": self.regular_user.id, "username": self.username, "team_members": "test_name",
                      "email": "test@qq.com", "admin_type": AdminType.REGULAR_USER,
                      "problem_permission": ProblemPermission.OWN, "open_api": True,
                      "two_factor_auth": False, "is_disabled": False}

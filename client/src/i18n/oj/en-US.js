@@ -49,7 +49,7 @@ export const m = {
   Menu: 'Contest Menu',
   Chart: 'Chart',
   Auto_Refresh: 'Auto Refresh',
-  RealName: 'Real Name',
+  Team_Members: 'Teams Members',
   Force_Update: 'Force Update',
   download_csv: 'Download CSV',
   TotalTime: 'Total Time',

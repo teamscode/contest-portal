@@ -15,8 +15,8 @@
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <p v-if="isContestAdmin">
-            <span>{{$t('m.RealName')}}</span>
-            <i-switch v-model="showRealName"></i-switch>
+            <span>{{$t('m.Team_Members')}}</span>
+            <i-switch v-model="showTeamMembers"></i-switch>
           </p>
           <p>
             <Button type="primary" size="small" @click="downloadRankCSV">{{$t('m.download_csv')}}</Button>

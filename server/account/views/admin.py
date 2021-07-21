@@ -96,7 +96,7 @@ class UserAdminAPI(APIView):
         if pre_username != user.username:
             Submission.objects.filter(username=pre_username).update(username=user.username)
 
-        UserProfile.objects.filter(user=user).update(real_name=data["real_name"])
+        UserProfile.objects.filter(user=user).update(team_members=data["team_members"])
         return self.success(UserAdminSerializer(user).data)
 
     @super_admin_required
@@ -117,7 +117,7 @@ class UserAdminAPI(APIView):
         keyword = request.GET.get("keyword", None)
         if keyword:
             user = user.filter(Q(username__icontains=keyword) |
-                               Q(userprofile__real_name__icontains=keyword) |
+                               Q(userprofile__team_members__icontains=keyword) |
                                Q(email__icontains=keyword))
         return self.success(self.paginate_data(request, user, UserAdminSerializer))
 

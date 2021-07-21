@@ -70,7 +70,7 @@ export default {
         })
       }
     },
-    showRealName: {
+    showTeamMembers: {
       get () {
         return this.$store.state.contest.itemVisible.realName
       },
@@ -78,11 +78,11 @@ export default {
         this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {realName: value})
         if (value) {
           this.columns.splice(2, 0, {
-            title: 'RealName',
+            title: 'Team Members',
             align: 'center',
             width: 150,
             render: (h, {row}) => {
-              return h('span', row.user.real_name)
+              return h('span', row.user.teams_members)
             }
           })
         } else {

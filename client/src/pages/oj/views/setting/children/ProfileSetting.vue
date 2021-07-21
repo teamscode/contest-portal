@@ -4,8 +4,8 @@
     <Form ref="formProfile" :model="formProfile">
       <Row type="flex" :gutter="30" justify="space-around">
         <Col :span="11">
-          <FormItem label="Real Name">
-            <Input v-model="formProfile.real_name"/>
+          <FormItem label="Team Members">
+            <Input v-model="formProfile.teams_members"/>
           </FormItem>
           <FormItem label="Language">
             <Select v-model="formProfile.language">
@@ -47,7 +47,7 @@
         },
         languages: languages,
         formProfile: {
-          real_name: '',
+          teams_members: '',
           language: ''
         }
       }

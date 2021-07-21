@@ -18,8 +18,8 @@
           </p>
           <template v-if="isContestAdmin">
             <p>
-              <span>{{$t('m.RealName')}}</span>
-              <i-switch v-model="showRealName"></i-switch>
+              <span>{{$t('m.Team_Members')}}</span>
+              <i-switch v-model="showTeamMembers"></i-switch>
             </p>
             <p>
               <span>{{$t('m.Force_Update')}}</span>

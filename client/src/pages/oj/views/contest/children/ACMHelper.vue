@@ -84,7 +84,7 @@
             }
           },
           {
-            title: this.$i18n.t('m.RealName'),
+            title: this.$i18n.t('m.Team_Members'),
             align: 'center',
             render: (h, {row}) => {
               return h('span', {
@@ -92,7 +92,7 @@
                   display: 'inline-block',
                   'max-width': '150px'
                 }
-              }, row.real_name)
+              }, row.teams_members)
             }
           },
           {

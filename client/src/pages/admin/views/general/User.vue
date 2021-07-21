@@ -39,7 +39,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="real_name" label="Real Name"></el-table-column>
+        <el-table-column prop="teams_members" label="Team Members"></el-table-column>
 
         <el-table-column prop="email" label="Email"></el-table-column>
 
@@ -177,8 +177,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('m.User_Real_Name')" required>
-              <el-input v-model="user.real_name"></el-input>
+            <el-form-item :label="$t('m.User_Team_Members')" required>
+              <el-input v-model="user.teams_members"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

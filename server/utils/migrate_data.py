@@ -110,7 +110,7 @@ def import_users():
             elif admin_type == AdminType.SUPER_ADMIN:
                 user.problem_permission = ProblemPermission.ALL
             user.save()
-            UserProfile.objects.create(user=user, real_name=data["real_name"])
+            UserProfile.objects.create(user=user, team_members=data["team_members"])
             i += 1
             print("%s imported successfully" % user.username)
         print("%d users have successfully imported\n" % i)

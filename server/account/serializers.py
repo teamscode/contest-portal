@@ -17,9 +17,9 @@ class UsernameOrEmailCheckSerializer(serializers.Serializer):
 
 
 class UserRegisterSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=32)
+    username = serializers.CharField(max_length=128)
     password = serializers.CharField(min_length=6)
-    email = serializers.EmailField(max_length=64)
+    email = serializers.EmailField(max_length=128)
     captcha = serializers.CharField()
 
 
@@ -49,15 +49,15 @@ class ImportUserSeralizer(serializers.Serializer):
 
 
 class UserAdminSerializer(serializers.ModelSerializer):
-    real_name = serializers.SerializerMethodField()
+    team_members = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "admin_type", "problem_permission", "real_name",
+        fields = ["id", "username", "email", "admin_type", "problem_permission", "team_members",
                   "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled"]
 
-    def get_real_name(self, obj):
-        return obj.userprofile.real_name
+    def get_team_members(self, obj):
+        return obj.userprofile.team_members
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -69,26 +69,26 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    real_name = serializers.SerializerMethodField()
+    team_members = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
-        self.show_real_name = kwargs.pop("show_real_name", False)
+        self.show_team_members = kwargs.pop("show_team_members", False)
         super(UserProfileSerializer, self).__init__(*args, **kwargs)
 
-    def get_real_name(self, obj):
-        return obj.real_name if self.show_real_name else None
+    def get_team_members(self, obj):
+        return obj.team_members if self.show_team_members else None
 
 
 class EditUserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    username = serializers.CharField(max_length=32)
-    real_name = serializers.CharField(max_length=32, allow_blank=True, allow_null=True)
+    username = serializers.CharField(max_length=128)
+    team_members = serializers.CharField(max_length=512, allow_blank=True, allow_null=True)
     password = serializers.CharField(min_length=6, allow_blank=True, required=False, default=None)
-    email = serializers.EmailField(max_length=64)
+    email = serializers.EmailField(max_length=128)
     admin_type = serializers.ChoiceField(choices=(AdminType.REGULAR_USER, AdminType.ADMIN, AdminType.SUPER_ADMIN))
     problem_permission = serializers.ChoiceField(choices=(ProblemPermission.NONE, ProblemPermission.OWN,
                                                           ProblemPermission.ALL))
@@ -98,7 +98,7 @@ class EditUserSerializer(serializers.Serializer):
 
 
 class EditUserProfileSerializer(serializers.Serializer):
-    real_name = serializers.CharField(max_length=32, allow_null=True, required=False)
+    team_members = serializers.CharField(max_length=512, allow_null=True, required=False)
     avatar = serializers.CharField(max_length=256, allow_blank=True, required=False)
     language = serializers.CharField(max_length=32, allow_blank=True, required=False)
 

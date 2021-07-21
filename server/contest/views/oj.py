@@ -159,7 +159,7 @@ class ContestRankAPI(APIView):
                 for index, item in enumerate(data):
                     worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
                     worksheet.write_string(index + 1, 1, item["user"]["username"])
-                    worksheet.write_string(index + 1, 2, item["user"]["real_name"] or "")
+                    worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
                     worksheet.write_string(index + 1, 3, str(item["total_score"]))
                     for k, v in item["submission_info"].items():
                         worksheet.write_string(index + 1, 4 + problem_ids.index(int(k)), str(v))
@@ -173,7 +173,7 @@ class ContestRankAPI(APIView):
                 for index, item in enumerate(data):
                     worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
                     worksheet.write_string(index + 1, 1, item["user"]["username"])
-                    worksheet.write_string(index + 1, 2, item["user"]["real_name"] or "")
+                    worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
                     worksheet.write_string(index + 1, 3, str(item["accepted_number"]))
                     worksheet.write_string(index + 1, 4, str(item["submission_number"]))
                     worksheet.write_string(index + 1, 5, str(item["total_time"]))

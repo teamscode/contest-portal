@@ -37,18 +37,18 @@ class UserProfileAPI(APIView):
         user = request.user
         if not user.is_authenticated:
             return self.success()
-        show_real_name = False
+        show_team_members = False
         username = request.GET.get("username")
         try:
             if username:
                 user = User.objects.get(username=username, is_disabled=False)
             else:
                 user = request.user
-                # api返回的是自己的信息，可以返real_name
-                show_real_name = True
+                # api返回的是自己的信息，可以返team_members
+                show_team_members = True
         except User.DoesNotExist:
             return self.error("User does not exist")
-        return self.success(UserProfileSerializer(user.userprofile, show_real_name=show_real_name).data)
+        return self.success(UserProfileSerializer(user.userprofile, show_team_members=show_team_members).data)
 
     @validate_serializer(EditUserProfileSerializer)
     @login_required
@@ -58,7 +58,7 @@ class UserProfileAPI(APIView):
         for k, v in data.items():
             setattr(user_profile, k, v)
         user_profile.save()
-        return self.success(UserProfileSerializer(user_profile, show_real_name=True).data)
+        return self.success(UserProfileSerializer(user_profile, show_team_members=True).data)
 
 
 class AvatarUploadAPI(APIView):
