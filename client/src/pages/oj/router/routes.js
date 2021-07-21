@@ -106,13 +106,7 @@ export default [
         name: 'default-setting',
         path: '',
         meta: {requiresAuth: true, title: 'Default Settings'},
-        component: Setting.ProfileSetting
-      },
-      {
-        name: 'profile-setting',
-        path: 'profile',
-        meta: {requiresAuth: true, title: 'Profile Settings'},
-        component: Setting.ProfileSetting
+        component: Setting.AccountSetting
       },
       {
         name: 'account-setting',

@@ -4,7 +4,7 @@
       <div class="left">
         <p class="section-title">{{$t('m.ChangePassword')}}</p>
         <Form class="setting-content" ref="formPassword" :model="formPassword" :rules="rulePassword">
-          <FormItem label="Old Password" prop="old_password">
+          <FormItem label="Current Password" prop="old_password">
             <Input v-model="formPassword.old_password" type="password"/>
           </FormItem>
           <FormItem label="New Password" prop="new_password">

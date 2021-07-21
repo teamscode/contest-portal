@@ -50,16 +50,6 @@ class UserProfileAPI(APIView):
             return self.error("User does not exist")
         return self.success(UserProfileSerializer(user.userprofile, show_team_members=show_team_members).data)
 
-    @validate_serializer(EditUserProfileSerializer)
-    @login_required
-    def put(self, request):
-        data = request.data
-        user_profile = request.user.userprofile
-        for k, v in data.items():
-            setattr(user_profile, k, v)
-        user_profile.save()
-        return self.success(UserProfileSerializer(user_profile, show_team_members=True).data)
-
 
 class AvatarUploadAPI(APIView):
     request_parsers = ()
