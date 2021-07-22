@@ -136,18 +136,31 @@
       <Card id="info">
         <div slot="title" class="header">
           <Icon type="information-circled"></Icon>
+          <span class="card-title">Limits</span>
+        </div>
+        <ul>
+          <li>
+            <p>C/C++</p>
+            <p>{{problem.time_limit}} ms</p></li>
+          <li>
+            <p>Java</p>
+            <p>{{problem.time_limit*2}} ms</p></li>
+          <li>
+            <p>Python</p>
+            <p>{{problem.time_limit*4}} ms</p></li>
+          <li>
+            <p>{{$t('m.Memory_Limit')}}</p>
+            <p>{{problem.memory_limit}} MB</p></li>
+        </ul>
+      </Card>
+      <Card id="info">
+        <div slot="title" class="header">
+          <Icon type="information-circled"></Icon>
           <span class="card-title">{{$t('m.Information')}}</span>
         </div>
         <ul>
           <li><p>ID</p>
             <p>{{problem._id}}</p></li>
-          <li>
-            <p>{{$t('m.Time_Limit')}}</p>
-            <p>{{problem.time_limit}}MS</p></li>
-          <li>
-            <p>{{$t('m.Memory_Limit')}}</p>
-            <p>{{problem.memory_limit}}MB</p></li>
-          <li>
           <li>
             <p>{{$t('m.IOMode')}}</p>
             <p>{{problem.io_mode.io_mode}}</p>

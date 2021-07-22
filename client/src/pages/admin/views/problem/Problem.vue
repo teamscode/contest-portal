@@ -328,7 +328,7 @@
           description: '',
           input_description: '',
           output_description: '',
-          time_limit: 1000,
+          time_limit: 2000,
           memory_limit: 256,
           difficulty: 'Low',
           visible: true,
