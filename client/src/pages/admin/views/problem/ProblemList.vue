@@ -71,7 +71,7 @@
           width="250">
           <div slot-scope="scope">
             <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn icon="download" name="Download TestCase"
+            <icon-btn icon="download" name="Download Test Case"
                       @click.native="downloadTestCase(scope.row.id)"></icon-btn>
             <icon-btn icon="trash" name="Delete Problem"
                       @click.native="deleteProblem(scope.row.id)"></icon-btn>
