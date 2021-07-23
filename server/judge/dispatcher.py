@@ -400,11 +400,10 @@ class JudgeDispatcher(DispatcherBase):
     def _update_oi_contest_rank(self, rank):
         problem_id = str(self.submission.problem_id)
         current_score = self.submission.statistic_info["score"]
-        last_score = rank.submission_info.get(problem_id)
-        if last_score:
+        last_score = rank.submission_info.get(problem_id, 0)
+
+        if current_score > last_score:
             rank.total_score = rank.total_score - last_score + current_score
-        else:
-            rank.total_score = rank.total_score + current_score
-        rank.submission_info[problem_id] = current_score
-        rank.last_submission = self.submission.create_time
-        rank.save()
+            rank.submission_info[problem_id] = current_score
+            rank.last_submission = self.submission.create_time
+            rank.save()

@@ -83,7 +83,7 @@ class OIContestRank(AbstractContestRank):
     # {"23": 333}
     # key is problem id, value is current score
     submission_info = JSONField(default=dict)
-    last_submission = models.DateTimeField(default=datetime(9999, 12, 31, 0, 0, 0))
+    last_submission = models.DateTimeField(null=True)
 
     class Meta:
         db_table = "oi_contest_rank"
