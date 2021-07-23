@@ -21,7 +21,12 @@ class APITokenAuthMiddleware(MiddlewareMixin):
 
 class SessionRecordMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        request.ip = request.META.get(settings.IP_HEADER, request.META.get("REMOTE_ADDR"))
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            request.id = x_forwarded_for.split(',')[-1].strip()
+        else:
+            request.ip = request.META.get(settings.IP_HEADER, request.META.get("REMOTE_ADDR"))
+
         if request.user.is_authenticated:
             session = request.session
             session["user_agent"] = request.META.get("HTTP_USER_AGENT", "")
