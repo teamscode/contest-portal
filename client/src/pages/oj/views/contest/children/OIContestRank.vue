@@ -102,6 +102,13 @@
                 return h('span', {}, params.row.total_score)
               }
             }
+          },
+          {
+            title: this.$i18n.t('m.Last_Submission'),
+            align: 'center',
+            render: (h, params) => {
+              return h('span', {}, params.row.last_submission)
+            }
           }
         ],
         dataRank: [],
