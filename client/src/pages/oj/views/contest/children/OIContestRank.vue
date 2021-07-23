@@ -107,7 +107,11 @@
             title: this.$i18n.t('m.Last_Submission'),
             align: 'center',
             render: (h, params) => {
-              return h('span', {}, (new Date(params.row.last_submission)).toLocaleString())
+              if (params.row.last_submission) {
+                return h('span', {}, (new Date(params.row.last_submission)).toLocaleString())
+              } else {
+                return h('span', {}, null)
+              }
             }
           }
         ],
