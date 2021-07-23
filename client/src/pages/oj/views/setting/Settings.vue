@@ -9,8 +9,20 @@
                 <img class="avatar" :src="profile.avatar"/>
               </div>
             </div>
-
-            <Menu-item name="/setting/account">{{$t('m.Account')}}</Menu-item>
+            <div class="team-name">
+              <b>{{user.username}}</b>
+            </div>
+            <div class="team-member-section">
+              <Row type="flex" :gutter="-40" justify="space-around">
+                <Col :span="11" v-for="(name,index) in teamMembers" :key="index">
+                  <div class="team-member">
+                    {{name}}
+                  </div>
+                </Col>
+              </Row>
+            </div>
+            <hr class="rounded">
+            <Menu-item style="margin-top:10px" name="/setting/account">{{$t('m.Account')}}</Menu-item>
             <Menu-item name="/setting/security">{{$t('m.Security')}}</Menu-item>
           </Menu>
         </div>
@@ -34,9 +46,12 @@
       }
     },
     computed: {
-      ...mapGetters(['profile']),
+      ...mapGetters(['profile', 'user']),
       activeName () {
         return this.$route.path
+      },
+      teamMembers () {
+        return this.profile.team_members.split(', ')
       }
     }
   }
@@ -57,7 +72,6 @@
       max-width: 250px;
       .avatar-editor {
         padding: 10% 22%;
-        margin-bottom: 10px;
         .avatar-container {
           &:hover {
             .avatar-mask {
@@ -137,5 +151,22 @@
     .mini-container {
       width: 500px;
     }
+  }
+  .team-name {
+    font-size: 17px;
+  }
+  .team-member {
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .team-member-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  hr.rounded {
+    border: 1px solid #bbb;
+    width: 80%;
+    margin-left: 10%;
+    border-radius: 1px;
   }
 </style>
