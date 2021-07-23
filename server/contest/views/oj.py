@@ -150,10 +150,11 @@ class ContestRankAPI(APIView):
             workbook = xlsxwriter.Workbook(f)
             worksheet = workbook.add_worksheet()
             worksheet.write("A1", "User ID")
-            worksheet.write("B1", "Username")
-            worksheet.write("C1", "Real Name")
+            worksheet.write("B1", "Team Name")
+            worksheet.write("C1", "Team Members")
             if self.contest.rule_type == ContestRuleType.OI:
                 worksheet.write("D1", "Total Score")
+                worksheet.write("E1", "Last Submission")
                 for item in range(contest_problems.count()):
                     worksheet.write(self.column_string(5 + item) + "1", f"{contest_problems[item].title}")
                 for index, item in enumerate(data):
@@ -161,6 +162,7 @@ class ContestRankAPI(APIView):
                     worksheet.write_string(index + 1, 1, item["user"]["username"])
                     worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
                     worksheet.write_string(index + 1, 3, str(item["total_score"]))
+                    worksheet.write_string(index + 1, 4, str(item["last_submission"]))
                     for k, v in item["submission_info"].items():
                         worksheet.write_string(index + 1, 4 + problem_ids.index(int(k)), str(v))
             else:
