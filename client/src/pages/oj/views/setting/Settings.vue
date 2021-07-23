@@ -12,7 +12,7 @@
             <div class="team-name">
               <b>{{user.username}}</b>
             </div>
-            <div class="team-member-section">
+            <div class="team-member-section" v-if="teamMembers">
               <Row type="flex" :gutter="-40" justify="space-around">
                 <Col :span="11" v-for="(name,index) in teamMembers" :key="index">
                   <div class="team-member">
@@ -51,7 +51,11 @@
         return this.$route.path
       },
       teamMembers () {
-        return this.profile.team_members.split(', ')
+        if (this.profile.team_members) {
+          return this.profile.team_members.split(', ')
+        } else {
+          return null
+        }
       }
     }
   }
