@@ -46,7 +46,6 @@
             <Icon type="arrow-down-b"></Icon>
           </Button>
           <Dropdown-menu slot="list">
-            <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
             <Dropdown-item name="/setting/account">{{$t('m.Settings')}}</Dropdown-item>
             <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
             <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>

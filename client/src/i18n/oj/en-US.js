@@ -260,5 +260,6 @@ export const m = {
   UserHomeScore: 'Score',
   List_Solved_Problems: 'List of solved problems',
   UserHomeIntro: 'The person has not solved any problem yet.',
-  Last_Submission: 'Last Submission'
+  Last_Submission: 'Last Submission',
+  Team_Name: 'Team'
 }

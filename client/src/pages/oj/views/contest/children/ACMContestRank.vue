@@ -13,7 +13,7 @@
             <i-switch v-model="showChart"></i-switch>
           </p>
           <p>
-            <span>{{$t('m.Auto_Refresh')}}(10s)</span>
+            <span>{{$t('m.Auto_Refresh')}} (10s)</span>
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <template v-if="isContestAdmin">
@@ -74,7 +74,7 @@
             }
           },
           {
-            title: this.$i18n.t('m.User_User'),
+            title: this.$i18n.t('m.Team_Name'),
             align: 'center',
             fixed: 'left',
             width: 150,
