@@ -69,11 +69,6 @@
 
     <Panel>
       <span slot="title">{{$t('m.Import_User')}}
-        <el-popover placement="right" trigger="hover">
-          <p>Only support csv file without headers, check the <a
-            href="http://docs.onlinejudge.me/#/onlinejudge/guide/import_users">link</a> for details</p>
-          <i slot="reference" class="el-icon-fa-question-circle import-user-icon"></i>
-        </el-popover>
       </span>
       <el-upload v-if="!uploadUsers.length"
                  action=""

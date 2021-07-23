@@ -61,13 +61,6 @@
       </div>
       <panel style="margin-top: 5px">
         <span slot="title" v-loading="loadingReleases">Release Notes
-        <el-popover placement="right" trigger="hover">
-          <i slot="reference" class="el-icon-fa-question-circle import-user-icon"></i>
-          <p>Please upgrade to the latest version to enjoy the new features. </p>
-          <p>Reference: <a href="http://docs.onlinejudge.me/#/onlinejudge/guide/upgrade" target="_blank">
-          http://docs.onlinejudge.me/#/onlinejudge/guide/upgrade</a>
-          </p>
-        </el-popover>
         </span>
 
         <el-collapse v-model="activeNames" v-for="(release, index) of releases" :key="'release' + index">
