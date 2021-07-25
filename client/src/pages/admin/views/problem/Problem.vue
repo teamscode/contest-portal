@@ -208,6 +208,7 @@
             </el-form-item>
           </el-col>
 
+
           <el-col :span="6">
             <el-form-item :label="$t('m.IOMode')">
               <el-radio-group v-model="problem.io_mode.io_mode">
@@ -226,6 +227,20 @@
             <el-form-item :label="$t('m.OutputFileName')" required>
               <el-input type="text" v-model="problem.io_mode.output"></el-input>
             </el-form-item>
+          </el-col>
+
+          <el-col :span="6" v-if="problem.rule_type === 'OI'">
+            <p class="el-form-item__label" style="line-height: 0px;">Set the same score for all cases
+              <el-popover placement="right" trigger="hover">
+              </el-popover>
+            </p>
+            <el-form-item>
+              <el-input type="number" v-model="casesScore">
+              </el-input>
+            </el-form-item>
+            <div style="text-align: right;">
+            <el-button :disabled="!casesScore" @click="applySameScore">Apply</el-button>
+            </div>
           </el-col>
 
           <el-col :span="24">
@@ -311,7 +326,8 @@
           spj: '',
           languages: '',
           testCase: ''
-        }
+        },
+        casesScore: null
       }
     },
     mounted () {
@@ -583,6 +599,13 @@
           }
         }).catch(() => {
         })
+      },
+      applySameScore () {
+        let testcasesScore = this.problem.test_case_score
+        for (let testcase of testcasesScore) {
+          testcase.score = this.casesScore
+        }
+        this.problem.test_case_score = testcasesScore
       }
     }
   }
