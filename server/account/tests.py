@@ -45,7 +45,7 @@ class DuplicateUserCheckAPITest(APITestCase):
         resp = self.client.post(self.url, data={"username": "test"})
         data = resp.data["data"]
         self.assertEqual(data["username"], True)
-        resp = self.client.post(self.url, data={"username": "Test"})
+        resp = self.client.post(self.url, data={"username": "test"})
         self.assertEqual(resp.data["data"]["username"], True)
 
     def test_ok_username(self):
@@ -249,17 +249,6 @@ class UserProfileAPITest(APITestCase):
         self.create_user("test", "test123")
         resp = self.client.get(self.url)
         self.assertSuccess(resp)
-
-    def test_update_profile(self):
-        self.create_user("test", "test123")
-        update_data = {"team_members": "zemal", "submission_number": 233, "language": "en-US"}
-        resp = self.client.put(self.url, data=update_data)
-        self.assertSuccess(resp)
-        data = resp.data["data"]
-        self.assertEqual(data["team_members"], "zemal")
-        self.assertEqual(data["submission_number"], 0)
-        self.assertEqual(data["language"], "en-US")
-
 
 class TwoFactorAuthAPITest(APITestCase):
     def setUp(self):
@@ -574,8 +563,8 @@ class AdminUserTest(APITestCase):
         self.assertEqual(User.objects.get(id=self.regular_user.id).open_api_appkey, key)
 
     def test_import_users(self):
-        data = {"users": [["user1", "pass1", "eami1@e.com"],
-                          ["user2", "pass3", "eamil3@e.com"]]
+        data = {"users": [["user1", "pass1", "eami1@e.com", "name1 name"],
+                          ["user2", "pass3", "eamil3@e.com", "name2 name"]]
                 }
         resp = self.client.post(self.url, data)
         self.assertSuccess(resp)
@@ -583,8 +572,8 @@ class AdminUserTest(APITestCase):
         self.assertEqual(User.objects.all().count(), 4)
 
     def test_import_duplicate_user(self):
-        data = {"users": [["user1", "pass1", "eami1@e.com"],
-                          ["user1", "pass1", "eami1@e.com"]]
+        data = {"users": [["user1", "pass1", "eami1@e.com", "name1 name"],
+                          ["user1", "pass1", "eami1@e.com", "name1 name"]]
                 }
         resp = self.client.post(self.url, data)
         self.assertFailed(resp, "DETAIL:  Key (username)=(user1) already exists.")
