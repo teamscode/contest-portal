@@ -36,9 +36,7 @@
 
           <div v-if="problem.hint">
             <p class="title">{{$t('m.Hint')}}</p>
-            <Card dis-hover>
-              <div class="content" v-html=problem.hint></div>
-            </Card>
+            <p class="content" v-html=problem.hint></p>
           </div>
 
           <div v-if="problem.source">

@@ -7,7 +7,7 @@ export const m = {
   Output: 'Output',
   Sample_Input: 'Sample Input',
   Sample_Output: 'Sample Output',
-  Hint: 'Hint',
+  Hint: 'Sample Explanation',
   Source: 'Source',
   Status: 'Status',
   Information: 'Information',
