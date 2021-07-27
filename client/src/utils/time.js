@@ -2,7 +2,7 @@ import moment from 'moment'
 
 // convert utc time to localtime
 function utcToLocal (utcDt) {
-  return moment.utc(utcDt).local().format('lll')
+  return moment.utc(utcDt).local().format('ll') + ' ' + moment.utc(utcDt).local().format('LTS')
 }
 
 // get duration from startTime to endTime, return like 3 days, 2 hours, one year ..
