@@ -461,10 +461,10 @@
         }
       },
       onCopy (event) {
-        this.$success('Code copied')
+        this.$success('Copied!')
       },
       onCopyError (e) {
-        this.$error('Failed to copy code')
+        this.$error('Failed to copy')
       }
     },
     computed: {
