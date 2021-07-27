@@ -115,10 +115,8 @@ export const m = {
   Admin_Helper: 'Admin Helper',
   StartAt: 'Start',
   EndAt: 'End',
-  ContestType: 'Visibility',
+  ContestType: 'Type',
   Creator: 'Creator',
-  Public: 'Public',
-  Password_Protected: 'Password Protected',
   // ContestList.vue
   Rule: 'Rule',
   OI: 'TeamsCode',
@@ -233,7 +231,7 @@ export const m = {
   Real_Time: 'Real Time',
   Signal: 'Signal',
   // SubmissionList.vue
-  When: 'When',
+  When: 'Timestamp',
   ID: 'ID',
   Time: 'Time',
   Memory: 'Memory',

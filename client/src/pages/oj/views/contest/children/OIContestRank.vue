@@ -42,6 +42,7 @@
   import Pagination from '@oj/components/Pagination'
   import ContestRankMixin from './contestRankMixin'
   import utils from '@/utils/utils'
+  import time from '@/utils/time'
 
   export default {
     name: 'acm-contest-rank',
@@ -108,7 +109,7 @@
             align: 'center',
             render: (h, params) => {
               if (params.row.last_submission) {
-                return h('span', {}, (new Date(params.row.last_submission)).toLocaleString())
+                return h('span', {}, time.utcToLocal(params.row.last_submission))
               } else {
                 return h('span', {}, null)
               }

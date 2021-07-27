@@ -84,11 +84,11 @@ const getters = {
         return 'Start At ' + duration.humanize()
       }
       let texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
-      return '-' + texts.join(':')
+      return texts.join(':')
     } else if (getters.contestStatus === CONTEST_STATUS.UNDERWAY) {
       let duration = moment.duration(getters.contestEndTime.diff(state.now, 'seconds'), 'seconds')
       let texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
-      return '-' + texts.join(':')
+      return texts.join(':')
     } else {
       return 'Ended'
     }
@@ -153,12 +153,21 @@ const actions = {
     return new Promise((resolve, reject) => {
       api.getContestProblemList(rootState.route.params.contestID).then(res => {
         res.data.data.sort((a, b) => {
-          if (a._id === b._id) {
-            return 0
-          } else if (a._id > b._id) {
-            return 1
+          if (!isNaN(a._id) && Number.isInteger(parseFloat(a._id)) && !isNaN(b._id) && Number.isInteger(parseFloat(b._id))) {
+            if (parseInt(a._id) === parseInt(b._id)) {
+              return 0
+            } else if (parseInt(a._id) > parseInt(b._id)) {
+              return 1
+            }
+            return -1
+          } else {
+            if (a._id === b._id) {
+              return 0
+            } else if (a._id > b._id) {
+              return 1
+            }
+            return -1
           }
-          return -1
         })
         commit(types.CHANGE_CONTEST_PROBLEMS, {contestProblems: res.data.data})
         resolve(res)
