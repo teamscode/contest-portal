@@ -68,7 +68,7 @@
             title: this.$i18n.t('m.Team_Name'),
             fixed: 'left',
             align: 'center',
-            minWidth: 140,
+            minWidth: 180,
             render: (h, params) => {
               return h('a', {
                 style: {

@@ -81,7 +81,7 @@ export default {
             title: 'Team Members',
             align: 'center',
             fixed: 'left',
-            minWidth: 160,
+            minWidth: 220,
             render: (h, {row}) => {
               return h('span', row.user.team_members)
             }
