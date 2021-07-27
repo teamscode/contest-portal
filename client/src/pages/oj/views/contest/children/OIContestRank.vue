@@ -112,7 +112,7 @@
           {
             title: this.$i18n.t('m.Last_Submission'),
             align: 'center',
-            minWidth: 160,
+            minWidth: 170,
             fixed: 'right',
             render: (h, params) => {
               if (params.row.last_submission) {
