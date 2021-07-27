@@ -68,6 +68,7 @@
             title: this.$i18n.t('m.Team_Name'),
             fixed: 'left',
             align: 'center',
+            minWidth: 140,
             render: (h, params) => {
               return h('a', {
                 style: {
@@ -89,6 +90,7 @@
           {
             title: this.$i18n.t('m.Total_Score'),
             align: 'center',
+            minWidth: 110,
             fixed: 'right',
             render: (h, params) => {
               if (this.isContestAdmin) {
@@ -110,6 +112,7 @@
           {
             title: this.$i18n.t('m.Last_Submission'),
             align: 'center',
+            minWidth: 140,
             fixed: 'right',
             render: (h, params) => {
               if (params.row.last_submission) {
@@ -219,6 +222,7 @@
           this.columns.push({
             align: 'center',
             key: problem.id,
+            minWidth: 80,
             renderHeader: (h, params) => {
               return h('a', {
                 'class': {

@@ -80,7 +80,8 @@ export default {
           this.columns.splice(2, 0, {
             title: 'Team Members',
             align: 'center',
-            width: 150,
+            fixed: 'left',
+            minWidth: 160,
             render: (h, {row}) => {
               return h('span', row.user.team_members)
             }
