@@ -27,7 +27,7 @@
     <div v-show="false" class="echarts">
       <ECharts :options="options" ref="chart" auto-resize></ECharts>
     </div>
-    <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover></Table>
+    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover></Table>
     <Pagination :total="total"
                 :page-size.sync="limit"
                 :current.sync="page"
@@ -58,6 +58,7 @@
         columns: [
           {
             align: 'center',
+            fixed: 'left',
             width: 60,
             render: (h, params) => {
               return h('span', {}, params.index + (this.page - 1) * this.limit + 1)
@@ -65,6 +66,7 @@
           },
           {
             title: this.$i18n.t('m.Team_Name'),
+            fixed: 'left',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -87,6 +89,7 @@
           {
             title: this.$i18n.t('m.Total_Score'),
             align: 'center',
+            fixed: 'right',
             render: (h, params) => {
               if (this.isContestAdmin) {
                 return h('a', {
@@ -107,6 +110,7 @@
           {
             title: this.$i18n.t('m.Last_Submission'),
             align: 'center',
+            fixed: 'right',
             render: (h, params) => {
               if (params.row.last_submission) {
                 return h('span', {}, time.utcToLocal(params.row.last_submission))
