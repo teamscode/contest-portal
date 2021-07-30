@@ -16,7 +16,7 @@
                 {{getDuration(contest.start_time, contest.end_time)}}
               </Button>
               <Button type="warning" shape="circle" size="small" icon="trophy">
-                {{contest.rule_type}}
+                {{contest.rule_type === 'OI' ? 'TeamsCode' : contest.rule_type}}
               </Button>
             </div>
             <div class="contest-content-description">
