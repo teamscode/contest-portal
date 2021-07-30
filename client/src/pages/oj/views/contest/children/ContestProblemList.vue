@@ -44,6 +44,25 @@
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
+          },
+          {
+            title: 'Open',
+            render: (h, params) => {
+              const btn1 = h('Button', {
+                on: {
+                  'click': (event) => {
+                    event.stopPropagation()
+                    window.open(`/contest/${this.$route.params.contestID}/problem/${params.row._id}`, '_blank')
+                  }
+                }
+              }, '↗ New Tab')
+              const btn2 = h('Button', {
+                style: {
+                  'margin-left': '10px'
+                }
+              }, '↗ Current Tab')
+              return h('div', [ btn1, btn2 ])
+            }
           }
         ],
         OITableColumns: [
