@@ -49,6 +49,7 @@ const getters = {
   contestMenuDisabled: (state, getters) => {
     if (getters.isContestAdmin) return false
     if (getters.contestStatus === CONTEST_STATUS.NOT_START) return true
+    if (state.contest.contest_type === CONTEST_TYPE.PUBLIC) return false
     return !state.access
   },
   OIContestRealTimePermission: (state, getters, _, rootGetters) => {
