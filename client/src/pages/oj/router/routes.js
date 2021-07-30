@@ -2,7 +2,6 @@
 import {
   About,
   Announcements,
-  ApplyResetPassword,
   FAQ,
   Home,
   Logout,
@@ -29,12 +28,6 @@ export default [
     path: '/logout',
     meta: {title: 'Logout'},
     component: Logout
-  },
-  {
-    name: 'apply-reset-password',
-    path: '/apply-reset-password',
-    meta: {title: 'Apply Reset Password'},
-    component: ApplyResetPassword
   },
   {
     name: 'reset-password',
