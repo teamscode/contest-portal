@@ -5,14 +5,19 @@ import { types } from '@/store'
 import { CONTEST_STATUS } from '@/utils/constants'
 
 export default {
+  data () {
+    return {
+      loading: false
+    }
+  },
   components: {
     ScreenFull
   },
   methods: {
     getContestRankData (page = 1, refresh = false) {
       let offset = (page - 1) * this.limit
-      if (this.showChart && !refresh) {
-        this.$refs.chart.showLoading({maskColor: 'rgba(250, 250, 250, 0.8)'})
+      if (!refresh) {
+        this.loading = true
       }
       let params = {
         offset,
@@ -21,8 +26,8 @@ export default {
         force_refresh: this.forceUpdate ? '1' : '0'
       }
       api.getContestRank(params).then(res => {
-        if (this.showChart && !refresh) {
-          this.$refs.chart.hideLoading()
+        if (!refresh) {
+          this.loading = false
         }
         this.total = res.data.data.total
         if (page === 1) {

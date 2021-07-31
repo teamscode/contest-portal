@@ -27,7 +27,7 @@
     <div v-show="false" class="echarts">
       <ECharts :options="options" ref="chart" auto-resize></ECharts>
     </div>
-    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover></Table>
+    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover :loading="loading"></Table>
     <Pagination :total="total"
                 :page-size.sync="limit"
                 :current.sync="page"
@@ -192,6 +192,7 @@
       } else {
         this.addTableColumns(this.contestProblems)
       }
+      console.log(this.loading)
     },
     methods: {
       ...mapActions(['getContestProblems']),
