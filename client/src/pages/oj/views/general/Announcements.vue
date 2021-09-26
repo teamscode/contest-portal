@@ -66,6 +66,7 @@
           this.getContestAnnouncementList()
         } else {
           this.getAnnouncementList()
+          setInterval(() => { this.getAnnouncementList() }, 5000)
         }
       },
       getAnnouncementList (page = 1) {
