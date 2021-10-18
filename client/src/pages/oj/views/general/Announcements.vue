@@ -91,7 +91,7 @@
         })
       },
       getContestAnnouncementList () {
-        if(this.isContest){
+        if (this.isContest) {
           this.btnLoading = true
           api.getContestAnnouncementList(this.$route.params.contestID).then(res => {
             this.btnLoading = false
