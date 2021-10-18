@@ -4,32 +4,34 @@
       <!--children-->
       <transition name="fadeInUp">
         <router-view></router-view>
+        <div v-if="route_name === 'contest-details'">
+          <div class="flex-container">
+            <template>
+              <div id="contest-desc">
+                <Panel :padding="20" shadow>
+                  <div slot="title">
+                    {{contest.title}}
+                  </div>
+                  <div slot="extra">
+                    <Tag type="dot" :color="countdownColor">
+                      <span id="countdown">{{countdown}}</span>
+                    </Tag>
+                  </div>
+                  <div v-html="contest.description" class="markdown-body"></div>
+                  <div v-if="passwordFormVisible" class="contest-password">
+                    <Input v-model="contestPassword" type="password"
+                          placeholder="contest password" class="contest-password-input"
+                          @on-enter="checkPassword"/>
+                    <Button type="info" @click="checkPassword">Enter</Button>
+                  </div>
+                </Panel>
+                <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
+              </div>
+            </template>
+          </div>
+        </div>
       </transition>
       <!--children end-->
-      <div class="flex-container" v-if="route_name === 'contest-details'">
-        <template>
-          <div id="contest-desc">
-            <Panel :padding="20" shadow>
-              <div slot="title">
-                {{contest.title}}
-              </div>
-              <div slot="extra">
-                <Tag type="dot" :color="countdownColor">
-                  <span id="countdown">{{countdown}}</span>
-                </Tag>
-              </div>
-              <div v-html="contest.description" class="markdown-body"></div>
-              <div v-if="passwordFormVisible" class="contest-password">
-                <Input v-model="contestPassword" type="password"
-                       placeholder="contest password" class="contest-password-input"
-                       @on-enter="checkPassword"/>
-                <Button type="info" @click="checkPassword">Enter</Button>
-              </div>
-            </Panel>
-            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
-          </div>
-        </template>
-      </div>
 
     </div>
     <div v-show="showMenu" id="contest-menu">
