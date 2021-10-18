@@ -1,18 +1,18 @@
 <template>
-  <Panel shadow :padding="10">
-    <div slot="title">
-      {{title}}
-    </div>
-    <div slot="extra">
-      <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
-      <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
-    </div>
+  <div>
+    <Panel shadow :padding="10">
+      <div slot="title">
+        {{title}}
+      </div>
+      <div slot="extra">
+        <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
+        <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
+      </div>
 
-    <transition-group name="announcement-animate" mode="in-out">
       <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
         <p>{{$t('m.No_Announcements')}}</p>
       </div>
-      <template v-if="listVisible">
+      <div v-if="listVisible">
         <ul class="announcements-container" key="list">
           <li v-for="announcement in announcements" :key="announcement.title">
             <div class="flex-container">
@@ -29,13 +29,13 @@
                     :page-size="limit"
                     @on-change="getAnnouncementList">
         </Pagination>
-      </template>
+      </div>
 
-      <template v-else>
+      <div v-else>
         <div v-katex v-html="announcement.content" key="content" class="content-container markdown-body"></div>
-      </template>
-    </transition-group>
-  </Panel>
+      </div>
+    </Panel>
+  </div>
 </template>
 
 <script>
@@ -54,19 +54,30 @@
         btnLoading: false,
         announcements: [],
         announcement: '',
-        listVisible: true
+        listVisible: true,
+        contestChecker: null,
+        announcementChecker: null
       }
     },
     mounted () {
       this.init()
     },
+    beforeDestroy () {
+      if (this.contestChecker) {
+        clearInterval(this.contestChecker)
+      }
+      if (this.announcementChecker) {
+        clearInterval(this.announcementChecker)
+      }
+    },
     methods: {
       init () {
         if (this.isContest) {
           this.getContestAnnouncementList()
+          this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
         } else {
           this.getAnnouncementList()
-          setInterval(() => { this.getAnnouncementList() }, 5000)
+          this.announcementChecker = setInterval(() => { this.getAnnouncementList() }, 5000)
         }
       },
       getAnnouncementList (page = 1) {
@@ -80,13 +91,15 @@
         })
       },
       getContestAnnouncementList () {
-        this.btnLoading = true
-        api.getContestAnnouncementList(this.$route.params.contestID).then(res => {
-          this.btnLoading = false
-          this.announcements = res.data.data
-        }, () => {
-          this.btnLoading = false
-        })
+        if(this.isContest){
+          this.btnLoading = true
+          api.getContestAnnouncementList(this.$route.params.contestID).then(res => {
+            this.btnLoading = false
+            this.announcements = res.data.data
+          }, () => {
+            this.btnLoading = false
+          })
+        }
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
