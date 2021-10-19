@@ -8,8 +8,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import filters from '@/utils/filters'
 import router from './router'
-import { GOOGLE_ANALYTICS_ID } from '@/utils/constants'
-import VueAnalytics from 'vue-analytics'
 import katex from '@/plugins/katex'
 
 import Panel from './components/Panel.vue'
@@ -23,10 +21,6 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
-Vue.use(VueAnalytics, {
-  id: GOOGLE_ANALYTICS_ID,
-  router
-})
 Vue.use(katex)
 Vue.component(IconBtn.name, IconBtn)
 Vue.component(Panel.name, Panel)
