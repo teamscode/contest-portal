@@ -6,7 +6,7 @@ const utils = require('./utils')
 const glob = require('glob')
 const fs = require('fs')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -23,11 +23,11 @@ const vendors = [
 ];
 
 // clear old dll
-const globOptions = {cwd: resolve('static/js'), absolute: true};
+const globOptions = { cwd: resolve('static/js'), absolute: true };
 let oldDlls = glob.sync('vendor.dll.*.js', globOptions);
 console.log("cleaning old dll..")
 oldDlls.forEach(f => {
-  fs.unlink(f)
+  fs.unlinkSync(f)
 })
 console.log("building ..")
 
@@ -45,7 +45,7 @@ module.exports = {
       'process.env': NODE_ENV === 'production' ? config.build.env : config.dev.env
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-us/),
     new UglifyJSPlugin({
       exclude: /\.min\.js$/,
       cache: true,
