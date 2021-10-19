@@ -40,6 +40,7 @@
 
 <script>
   import api from '@oj/api'
+  import {mapGetters, mapActions} from 'vuex'
   import Pagination from '@oj/components/Pagination'
 
   export default {
@@ -52,7 +53,7 @@
         limit: 10,
         total: 10,
         btnLoading: false,
-        announcements: [],
+        generalAnnouncements: [],
         announcement: '',
         listVisible: true,
         contestChecker: null,
@@ -84,7 +85,7 @@
         this.btnLoading = true
         api.getAnnouncementList((page - 1) * this.limit, this.limit).then(res => {
           this.btnLoading = false
-          this.announcements = res.data.data.results
+          this.generalAnnouncements = res.data.data.results
           this.total = res.data.data.total
         }, () => {
           this.btnLoading = false
@@ -93,9 +94,8 @@
       getContestAnnouncementList () {
         if (this.isContest) {
           this.btnLoading = true
-          api.getContestAnnouncementList(this.$route.params.contestID).then(res => {
+          this.getContestAnnouncements().then(res => {
             this.btnLoading = false
-            this.announcements = res.data.data
           }, () => {
             this.btnLoading = false
           })
@@ -108,7 +108,8 @@
       goBack () {
         this.listVisible = true
         this.announcement = ''
-      }
+      },
+      ...mapActions(['getContestAnnouncements'])
     },
     computed: {
       title () {
@@ -120,7 +121,15 @@
       },
       isContest () {
         return !!this.$route.params.contestID
-      }
+      },
+      announcements () {
+        if (this.isContest) {
+          return this.contestAnnouncements
+        } else {
+          return this.generalAnnouncements
+        }
+      },
+      ...mapGetters(['contestAnnouncements'])
     }
   }
 </script>

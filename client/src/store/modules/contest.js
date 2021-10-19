@@ -24,7 +24,8 @@ const state = {
     menu: true,
     chart: true,
     realName: false
-  }
+  },
+  contestAnnouncements: []
 }
 
 const getters = {
@@ -98,6 +99,9 @@ const getters = {
     } else {
       return 'Ended'
     }
+  },
+  contestAnnouncements: (state, getters) => {
+    return state.contestAnnouncements
   }
 }
 
@@ -106,7 +110,7 @@ const mutations = {
     state.contest = payload.contest
   },
   [types.CHANGE_CONTEST_ITEM_VISIBLE] (state, payload) {
-    state.itemVisible = {...state.itemVisible, ...payload}
+    state.itemVisible = { ...state.itemVisible, ...payload }
   },
   [types.CHANGE_RANK_FORCE_UPDATE] (state, payload) {
     state.forceUpdate = payload.value
@@ -121,7 +125,7 @@ const mutations = {
     state.access = payload.access
   },
   [types.CLEAR_CONTEST] (state) {
-    state.contest = {created_by: {}}
+    state.contest = { created_by: {} }
     state.contestProblems = []
     state.access = false
     state.itemVisible = {
@@ -136,17 +140,20 @@ const mutations = {
   },
   [types.NOW_ADD_1S] (state) {
     state.now = moment(state.now.add(1, 's'))
+  },
+  [types.UPDATE_ANNOUNCEMENTS] (state, payload) {
+    state.contestAnnouncements = payload.data
   }
 }
 
 const actions = {
-  getContest ({commit, rootState, dispatch}) {
+  getContest ({ commit, rootState, dispatch }) {
     return new Promise((resolve, reject) => {
       api.getContest(rootState.route.params.contestID).then((res) => {
         resolve(res)
         let contest = res.data.data
-        commit(types.CHANGE_CONTEST, {contest: contest})
-        commit(types.NOW, {now: moment(contest.now)})
+        commit(types.CHANGE_CONTEST, { contest: contest })
+        commit(types.NOW, { now: moment(contest.now) })
         if (contest.contest_type === CONTEST_TYPE.PRIVATE) {
           dispatch('getContestAccess')
         }
@@ -155,7 +162,7 @@ const actions = {
       })
     })
   },
-  getContestProblems ({commit, rootState}) {
+  getContestProblems ({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getContestProblemList(rootState.route.params.contestID).then(res => {
         res.data.data.sort((a, b) => {
@@ -175,17 +182,25 @@ const actions = {
             return -1
           }
         })
-        commit(types.CHANGE_CONTEST_PROBLEMS, {contestProblems: res.data.data})
+        commit(types.CHANGE_CONTEST_PROBLEMS, { contestProblems: res.data.data })
         resolve(res)
       }, () => {
-        commit(types.CHANGE_CONTEST_PROBLEMS, {contestProblems: []})
+        commit(types.CHANGE_CONTEST_PROBLEMS, { contestProblems: [] })
       })
     })
   },
-  getContestAccess ({commit, rootState}) {
+  getContestAccess ({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getContestAccess(rootState.route.params.contestID).then(res => {
-        commit(types.CONTEST_ACCESS, {access: res.data.data.access})
+        commit(types.CONTEST_ACCESS, { access: res.data.data.access })
+        resolve(res)
+      }).catch()
+    })
+  },
+  getContestAnnouncements ({commit, rootState}) {
+    return new Promise((resolve, reject) => {
+      api.getContestAnnouncementList(rootState.route.params.contestID).then(res => {
+        commit(types.UPDATE_ANNOUNCEMENTS, {data: res.data.data})
         resolve(res)
       }).catch()
     })
