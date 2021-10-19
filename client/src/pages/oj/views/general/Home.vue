@@ -1,6 +1,6 @@
 <template>
   <Row type="flex" justify="space-around">
-    <Col :span="22">
+    <Col :span="24">
     <panel shadow v-if="contests.length" class="contest">
       <div slot="title">
         <Button type="text"  class="contest-title" @click="goContest">{{contests[index].title}}</Button>
@@ -26,7 +26,7 @@
         </CarouselItem>
       </Carousel>
     </panel>
-    <Announcements class="announcement"></Announcements>
+    <Announcements></Announcements>
     </Col>
   </Row>
 </template>
@@ -80,9 +80,6 @@
         margin-top: 25px;
       }
     }
-  }
-
-  .announcement {
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
 </style>
