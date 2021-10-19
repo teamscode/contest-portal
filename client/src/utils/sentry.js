@@ -16,7 +16,7 @@ const options = {
 }
 
 Raven
-  .config('https://6234a51e61a743b089ed64c51d2f6ea9@sentry.io/258234', options)
+  .config('https://2e1aaedb6fed4187a98c3877720ffb13@o1044666.ingest.sentry.io/6019793', options)
   .addPlugin(RavenVue, Vue)
   .install()
 
