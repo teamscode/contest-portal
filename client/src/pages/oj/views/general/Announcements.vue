@@ -9,7 +9,7 @@
         <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
       </div>
 
-      <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
+      <div class="no-announcement" v-if="!announcements.length" key="no-announcement" style="margin-bottom: 20px; margin-top: 10px;">
         <p>{{$t('m.No_Announcements')}}</p>
       </div>
       <div v-if="listVisible">
