@@ -134,6 +134,7 @@ const mutations = {
       realName: false
     }
     state.forceUpdate = false
+    state.contestAnnouncements = []
   },
   [types.NOW] (state, payload) {
     state.now = payload.now
@@ -201,7 +202,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       api.getContestAnnouncementList(rootState.route.params.contestID).then(res => {
         commit(types.UPDATE_ANNOUNCEMENTS, {data: res.data.data})
-        resolve(res)
+        resolve(res.data.data)
       }).catch()
     })
   }

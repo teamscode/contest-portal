@@ -3,7 +3,7 @@
     <div id="contest-main">
       <!--children-->
       <transition name="fadeInUp">
-        <router-view></router-view>
+        <router-view :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList"></router-view>
         <div v-if="route_name === 'contest-details'">
           <div class="flex-container">
             <template>
@@ -92,9 +92,11 @@
       return {
         CONTEST_STATUS: CONTEST_STATUS,
         route_name: '',
+        announcementBtnLoading: false,
         btnLoading: false,
         contestID: '',
         contestPassword: '',
+        contestChecker: null,
         columns: [
           {
             title: this.$i18n.t('m.StartAt'),
@@ -142,6 +144,8 @@
           }, 1000)
         }
       })
+      this.getContestAnnouncementList()
+      this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
     },
     methods: {
       ...mapActions(['changeDomTitle']),
@@ -161,7 +165,16 @@
         }, (res) => {
           this.btnLoading = false
         })
-      }
+      },
+      getContestAnnouncementList () {
+        this.announcementBtnLoading = true
+        this.getContestAnnouncements().then(res => {
+          setTimeout(() => { this.announcementBtnLoading = false }, 200)
+        }, () => {
+          setTimeout(() => { this.announcementBtnLoading = false }, 200)
+        })
+      },
+      ...mapActions(['getContestAnnouncements'])
     },
     computed: {
       ...mapState({
@@ -192,6 +205,7 @@
     },
     beforeDestroy () {
       clearInterval(this.timer)
+      clearInterval(this.contestChecker)
       this.$store.commit(types.CLEAR_CONTEST)
     }
   }

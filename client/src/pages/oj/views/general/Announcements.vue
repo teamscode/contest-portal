@@ -40,7 +40,7 @@
 
 <script>
   import api from '@oj/api'
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters} from 'vuex'
   import Pagination from '@oj/components/Pagination'
 
   export default {
@@ -48,15 +48,15 @@
     components: {
       Pagination
     },
+    props: ['contestBtnLoading'],
     data () {
       return {
         limit: 10,
         total: 10,
-        btnLoading: false,
+        generalBtnLoading: false,
         generalAnnouncements: [],
         announcement: '',
         listVisible: true,
-        contestChecker: null,
         announcementChecker: null
       }
     },
@@ -64,9 +64,6 @@
       this.init()
     },
     beforeDestroy () {
-      if (this.contestChecker) {
-        clearInterval(this.contestChecker)
-      }
       if (this.announcementChecker) {
         clearInterval(this.announcementChecker)
       }
@@ -74,32 +71,21 @@
     methods: {
       init () {
         if (this.isContest) {
-          this.getContestAnnouncementList()
-          this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
+          this.$emit('refreshAnnouncements')
         } else {
           this.getAnnouncementList()
           this.announcementChecker = setInterval(() => { this.getAnnouncementList() }, 5000)
         }
       },
       getAnnouncementList (page = 1) {
-        this.btnLoading = true
+        this.generalBtnLoading = true
         api.getAnnouncementList((page - 1) * this.limit, this.limit).then(res => {
-          this.btnLoading = false
+          setTimeout(() => { this.generalBtnLoading = false }, 200)
           this.generalAnnouncements = res.data.data.results
           this.total = res.data.data.total
         }, () => {
-          this.btnLoading = false
+          setTimeout(() => { this.generalBtnLoading = false }, 200)
         })
-      },
-      getContestAnnouncementList () {
-        if (this.isContest) {
-          this.btnLoading = true
-          this.getContestAnnouncements().then(res => {
-            this.btnLoading = false
-          }, () => {
-            this.btnLoading = false
-          })
-        }
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
@@ -108,8 +94,7 @@
       goBack () {
         this.listVisible = true
         this.announcement = ''
-      },
-      ...mapActions(['getContestAnnouncements'])
+      }
     },
     computed: {
       title () {
@@ -127,6 +112,13 @@
           return this.contestAnnouncements
         } else {
           return this.generalAnnouncements
+        }
+      },
+      btnLoading () {
+        if (this.isContest) {
+          return this.contestBtnLoading
+        } else {
+          return this.generalBtnLoading
         }
       },
       ...mapGetters(['contestAnnouncements'])
