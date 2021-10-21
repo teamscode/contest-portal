@@ -25,7 +25,8 @@ const state = {
     chart: true,
     realName: false
   },
-  contestAnnouncements: []
+  contestAnnouncements: [],
+  lastestAnnouncementTime: 0
 }
 
 const getters = {
@@ -135,6 +136,7 @@ const mutations = {
     }
     state.forceUpdate = false
     state.contestAnnouncements = []
+    state.lastestAnnouncementTime = 0
   },
   [types.NOW] (state, payload) {
     state.now = payload.now
@@ -144,6 +146,7 @@ const mutations = {
   },
   [types.UPDATE_ANNOUNCEMENTS] (state, payload) {
     state.contestAnnouncements = payload.data
+    state.lastestAnnouncementTime = payload.time
   }
 }
 
@@ -198,11 +201,25 @@ const actions = {
       }).catch()
     })
   },
-  getContestAnnouncements ({commit, rootState}) {
+  getContestAnnouncements ({commit, rootState, state}) {
     return new Promise((resolve, reject) => {
       api.getContestAnnouncementList(rootState.route.params.contestID).then(res => {
-        commit(types.UPDATE_ANNOUNCEMENTS, {data: res.data.data})
-        resolve(res.data.data)
+        let newAnnouncementTime = 0
+        let notificationQueue = []
+        for (let index = res.data.data.length - 1; index >= 0; index--) {
+          const announcement = res.data.data[index]
+          const timestamp = +new Date(announcement.create_time)
+          if (timestamp > newAnnouncementTime) {
+            newAnnouncementTime = timestamp
+          }
+          if (timestamp > state.lastestAnnouncementTime) {
+            if (state.lastestAnnouncementTime !== 0) {
+              notificationQueue.push(announcement)
+            }
+          }
+        }
+        commit(types.UPDATE_ANNOUNCEMENTS, {data: res.data.data, time: newAnnouncementTime})
+        resolve(notificationQueue)
       }).catch()
     })
   }

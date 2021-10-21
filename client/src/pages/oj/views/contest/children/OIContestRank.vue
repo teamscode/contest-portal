@@ -192,7 +192,6 @@
       } else {
         this.addTableColumns(this.contestProblems)
       }
-      console.log(this.loading)
     },
     methods: {
       ...mapActions(['getContestProblems']),

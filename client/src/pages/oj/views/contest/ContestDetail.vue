@@ -148,7 +148,7 @@
         }
       })
       this.getContestAnnouncementList()
-      this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
+      this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 10000)
     },
     methods: {
       ...mapActions(['changeDomTitle']),
@@ -172,37 +172,27 @@
       getContestAnnouncementList () {
         this.announcementBtnLoading = true
         this.getContestAnnouncements().then(res => {
-          let newAnnouncementTime = 0
-          for (let index = res.length - 1; index >= 0; index--) {
+          for (let index = 0; index < res.length; index += 1) {
             const announcement = res[index]
-            const timestamp = +new Date(announcement.create_time)
-            if (timestamp > newAnnouncementTime) {
-              newAnnouncementTime = timestamp
-            }
-            if (timestamp > this.lastestAnnouncementTime) {
-              if (this.lastestAnnouncementTime !== 0) {
-                this.$Notice.open({
-                  title: `Announcement - ${announcement.title}`,
-                  desc: ` Announcements tab.`,
-                  render: h => {
-                    return h('span', [
-                      'A new contest announcement has been posted. View in ',
-                      h('a', {
-                        on: {
-                          click: () => {
-                            this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
-                          }
-                        }
-                      }, 'Announcements Tab.')
-                    ])
-                  },
-                  name: announcement.id,
-                  duration: 0
-                })
-              }
-            }
+            this.$Notice.open({
+              title: `Announcement - ${announcement.title}`,
+              desc: ` Announcements tab.`,
+              render: h => {
+                return h('span', [
+                  'A new contest announcement has been posted. View in ',
+                  h('a', {
+                    on: {
+                      click: () => {
+                        this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
+                      }
+                    }
+                  }, 'Announcements Tab.')
+                ])
+              },
+              name: announcement.id,
+              duration: 0
+            })
           }
-          this.lastestAnnouncementTime = newAnnouncementTime
           setTimeout(() => { this.announcementBtnLoading = false }, 200)
         }, () => {
           setTimeout(() => { this.announcementBtnLoading = false }, 200)
