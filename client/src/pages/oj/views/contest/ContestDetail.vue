@@ -128,7 +128,9 @@
               return h('span', data.row.created_by.username)
             }
           }
-        ]
+        ],
+        lastestAnnouncementTime: 0,
+        newAnnouncementCount: 0
       }
     },
     mounted () {
@@ -169,6 +171,35 @@
       getContestAnnouncementList () {
         this.announcementBtnLoading = true
         this.getContestAnnouncements().then(res => {
+          let newAnnouncementTime = 0
+          for (let index = res.length - 1; index >= 0; index--) {
+            const announcement = res[index]
+            const timestamp = +new Date(announcement.create_time)
+            if (timestamp > newAnnouncementTime) {
+              newAnnouncementTime = timestamp
+            }
+            if (timestamp > this.lastestAnnouncementTime) {
+              this.$Notice.open({
+                title: `Announcement - ${announcement.title}`,
+                desc: ` Announcements tab.`,
+                render: h => {
+                  return h('span', [
+                    'A new contest announcement has been posted. View in ',
+                    h('a', {
+                      on: {
+                        click: () => {
+                          this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
+                        }
+                      }
+                    }, 'Announcements Tab.')
+                  ])
+                },
+                name: announcement.id,
+                duration: 0
+              })
+            }
+          }
+          this.lastestAnnouncementTime = newAnnouncementTime
           setTimeout(() => { this.announcementBtnLoading = false }, 200)
         }, () => {
           setTimeout(() => { this.announcementBtnLoading = false }, 200)
@@ -206,6 +237,7 @@
     beforeDestroy () {
       clearInterval(this.timer)
       clearInterval(this.contestChecker)
+      this.$Notice.destroy()
       this.$store.commit(types.CLEAR_CONTEST)
     }
   }

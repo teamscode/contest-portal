@@ -54,12 +54,12 @@
                     event.stopPropagation()
                     window.open(`/contest/${this.$route.params.contestID}/problem/${params.row._id}`, '_blank')
                   }
+                },
+                style: {
+                  'margin-right': '10px'
                 }
               }, '↗ New Tab')
               const btn2 = h('Button', {
-                style: {
-                  'margin-left': '10px'
-                }
               }, '↗ Current Tab')
               return h('div', [ btn1, btn2 ])
             }

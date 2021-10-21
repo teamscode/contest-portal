@@ -29,6 +29,7 @@
                     :page-size="limit"
                     @on-change="getAnnouncementList">
         </Pagination>
+        <Button v-else type="ghost" @click="$Notice.destroy" style="margin-left: 10px;">Dismiss All Notifications</Button>
       </div>
 
       <div v-else>
@@ -89,6 +90,7 @@
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
+        this.$Notice.close(announcement.id)
         this.listVisible = false
       },
       goBack () {
