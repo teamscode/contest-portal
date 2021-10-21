@@ -44,7 +44,9 @@
         <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
           <Icon type="chatbubble-working"></Icon>
-          {{$t('m.Announcements')}}
+          <Badge :count="newAnnouncementCount">
+            {{$t('m.Announcements')}}
+          </Badge>
         </VerticalMenu-item>
 
         <VerticalMenu-item :disabled="contestMenuDisabled"
@@ -129,8 +131,7 @@
             }
           }
         ],
-        lastestAnnouncementTime: 0,
-        newAnnouncementCount: 0
+        lastestAnnouncementTime: 0
       }
     },
     mounted () {
@@ -179,24 +180,26 @@
               newAnnouncementTime = timestamp
             }
             if (timestamp > this.lastestAnnouncementTime) {
-              this.$Notice.open({
-                title: `Announcement - ${announcement.title}`,
-                desc: ` Announcements tab.`,
-                render: h => {
-                  return h('span', [
-                    'A new contest announcement has been posted. View in ',
-                    h('a', {
-                      on: {
-                        click: () => {
-                          this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
+              if (this.lastestAnnouncementTime !== 0) {
+                this.$Notice.open({
+                  title: `Announcement - ${announcement.title}`,
+                  desc: ` Announcements tab.`,
+                  render: h => {
+                    return h('span', [
+                      'A new contest announcement has been posted. View in ',
+                      h('a', {
+                        on: {
+                          click: () => {
+                            this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
+                          }
                         }
-                      }
-                    }, 'Announcements Tab.')
-                  ])
-                },
-                name: announcement.id,
-                duration: 0
-              })
+                      }, 'Announcements Tab.')
+                    ])
+                  },
+                  name: announcement.id,
+                  duration: 0
+                })
+              }
             }
           }
           this.lastestAnnouncementTime = newAnnouncementTime
