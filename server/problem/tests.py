@@ -177,22 +177,6 @@ class ProblemAdminAPITest(APITestCase):
         self.assertSuccess(resp)
 
 
-class ProblemAPITest(ProblemCreateTestBase):
-    def setUp(self):
-        self.url = self.reverse("problem_api")
-        admin = self.create_admin(login=False)
-        self.problem = self.add_problem(DEFAULT_PROBLEM_DATA, admin)
-        self.create_user("test", "test123")
-
-    def test_get_problem_list(self):
-        resp = self.client.get(f"{self.url}?limit=10")
-        self.assertSuccess(resp)
-
-    def get_one_problem(self):
-        resp = self.client.get(self.url + "?id=" + self.problem._id)
-        self.assertSuccess(resp)
-
-
 class ContestProblemAdminTest(APITestCase):
     def setUp(self):
         self.url = self.reverse("contest_problem_admin_api")
