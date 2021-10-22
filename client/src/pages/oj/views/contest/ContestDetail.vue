@@ -3,8 +3,9 @@
     <div id="contest-main">
       <!--children-->
       <transition name="fadeInUp">
-        <router-view :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList"></router-view>
+        <router-view></router-view>
         <div v-if="route_name === 'contest-details'">
+          <Announcements :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList" style="margin-bottom: 20px;"/>
           <div class="flex-container">
             <template>
               <div id="contest-desc">
@@ -38,15 +39,7 @@
       <VerticalMenu @on-click="handleRoute">
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
           <Icon type="home"></Icon>
-          {{$t('m.Overview')}}
-        </VerticalMenu-item>
-
-        <VerticalMenu-item :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
-          <Icon type="chatbubble-working"></Icon>
-          <Badge :count="newAnnouncementCount">
-            {{$t('m.Announcements')}}
-          </Badge>
+          {{$t('m.Home')}}
         </VerticalMenu-item>
 
         <VerticalMenu-item :disabled="contestMenuDisabled"
@@ -86,10 +79,11 @@
   import { types } from '@/store'
   import { CONTEST_STATUS_REVERSE, CONTEST_STATUS } from '@/utils/constants'
   import time from '@/utils/time'
+  import Announcements from '../general/Announcements.vue'
 
   export default {
     name: 'ContestDetail',
-    components: {},
+    components: {Announcements},
     data () {
       return {
         CONTEST_STATUS: CONTEST_STATUS,
@@ -183,10 +177,10 @@
                   h('a', {
                     on: {
                       click: () => {
-                        this.$router.push({name: 'contest-announcement-list', params: {contestID: this.contestID}})
+                        this.$router.push({name: 'contest-details', params: {contestID: this.contestID}})
                       }
                     }
-                  }, 'Announcements Tab.')
+                  }, 'Home Tab.')
                 ])
               },
               name: announcement.id,

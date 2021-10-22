@@ -107,10 +107,6 @@
             {{$t('m.Problems')}}
           </VerticalMenu-item>
 
-          <VerticalMenu-item :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
-            <Icon type="chatbubble-working"></Icon>
-            {{$t('m.Announcements')}}
-          </VerticalMenu-item>
         </template>
 
         <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">

@@ -1,7 +1,6 @@
 // all routes here.
 import {
   About,
-  Announcements,
   FAQ,
   Home,
   Logout,
@@ -67,11 +66,6 @@ export default [
         name: 'contest-problem-details',
         path: 'problem/:problemID/',
         component: Problem
-      },
-      {
-        name: 'contest-announcement-list',
-        path: 'announcements',
-        component: Announcements
       },
       {
         name: 'contest-rank',
