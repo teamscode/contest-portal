@@ -204,7 +204,7 @@ const actions = {
   getContestAnnouncements ({commit, rootState, state}) {
     return new Promise((resolve, reject) => {
       api.getContestAnnouncementList(rootState.route.params.contestID).then(res => {
-        let newAnnouncementTime = 0
+        let newAnnouncementTime = 1
         let notificationQueue = []
         for (let index = res.data.data.length - 1; index >= 0; index--) {
           const announcement = res.data.data[index]

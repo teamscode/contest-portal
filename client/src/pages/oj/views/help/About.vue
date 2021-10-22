@@ -1,6 +1,6 @@
 <template>
   <div>
-    <panel class="container">
+    <panel class="container" shadow>
       <div slot="title">{{$t('m.Compiler')}} & {{$t('m.Judger')}}</div>
       <div class="content markdown-body">
         <ul>

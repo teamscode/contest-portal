@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Panel>
+    <Panel shadow>
       <div slot="title">{{$t('m.Problems_List')}}</div>
       <Table v-if="contestRuleType == 'ACM' || OIContestRealTimePermission"
              :columns="ACMTableColumns"

@@ -1,5 +1,5 @@
 <template>
-  <panel>
+  <panel shadow>
     <div slot="title">{{$t('m.Frequently_Asked_Questions')}}</div>
     <div class="content markdown-body">
       <ul>
