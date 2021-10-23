@@ -49,7 +49,6 @@
           </el-table-column>
           <el-table-column
             fixed="right"
-            label="Option"
             width="200">
             <div slot-scope="scope">
               <icon-btn name="Edit" icon="edit" @click.native="openAnnouncementDialog(scope.row.id)"></icon-btn>

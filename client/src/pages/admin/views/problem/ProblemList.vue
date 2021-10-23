@@ -54,6 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-if="contestId"
           width="100"
           prop="visible"
           label="Visible">
@@ -67,11 +68,10 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="Operation"
           width="250">
           <div slot-scope="scope">
             <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn icon="download" name="Download TestCase"
+            <icon-btn icon="download" name="Download Test Cases"
                       @click.native="downloadTestCase(scope.row.id)"></icon-btn>
             <icon-btn icon="trash" name="Delete Problem"
                       @click.native="deleteProblem(scope.row.id)"></icon-btn>

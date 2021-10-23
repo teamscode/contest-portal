@@ -19,7 +19,7 @@
           label="Test Case ID">
         </el-table-column>
         <el-table-column
-          label="Option"
+
           fixed="right"
           width="200">
           <template slot-scope="{row}">

@@ -129,9 +129,6 @@ export default {
       params: params
     })
   },
-  pickone () {
-    return ajax('pickone', 'get')
-  },
   getProblem (problemID) {
     return ajax('problem', 'get', {
       params: {

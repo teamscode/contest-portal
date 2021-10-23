@@ -21,7 +21,6 @@
         prop="title">
       </el-table-column>
       <el-table-column
-        label="option"
         align="center"
         width="100"
         fixed="right">

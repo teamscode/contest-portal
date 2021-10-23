@@ -1,3 +1,4 @@
+import ProblemList from './problem/ProblemList.vue'
 import Logout from './user/Logout.vue'
 import UserHome from './user/UserHome.vue'
 import About from './help/About.vue'
@@ -17,7 +18,7 @@ const Problem = () => import(/* webpackChunkName: "Problem" */ '@oj/views/proble
 export {
   Home, NotFound, Announcements,
   Logout, UserHome, About, FAQ,
-  Problem,
+  Problem, ProblemList,
   SubmissionList, SubmissionDetails,
   ResetPassword
 }
