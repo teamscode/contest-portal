@@ -8,6 +8,7 @@ from contest.models import ContestRuleType
 
 
 class ProblemTagAPI(APIView):
+    @problem_permission_required
     def get(self, request):
         qs = ProblemTag.objects
         keyword = request.GET.get("keyword")
