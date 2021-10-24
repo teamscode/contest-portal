@@ -71,7 +71,7 @@ class ProblemTagListAPITest(APITestCase):
         ProblemTag.objects.create(name="name1")
         ProblemTag.objects.create(name="name2")
         resp = self.client.get(self.reverse("problem_tag_list_api"))
-        self.assertSuccess(resp)
+        self.assertFailed(resp)
 
 
 class TestCaseUploadAPITest(APITestCase):
@@ -134,6 +134,7 @@ class TestCaseUploadAPITest(APITestCase):
 class ProblemAdminAPITest(APITestCase):
     def setUp(self):
         self.url = self.reverse("problem_admin_api")
+        self.problem_bank_url = self.reverse("problem_api")
         self.create_super_admin()
         self.data = copy.deepcopy(DEFAULT_PROBLEM_DATA)
 
@@ -169,12 +170,37 @@ class ProblemAdminAPITest(APITestCase):
         resp = self.client.get(self.url + "?id=" + str(problem_id))
         self.assertSuccess(resp)
 
+    def test_get_one_problem_from_problem_bank(self):
+        problem_id = self.test_create_problem().data["data"]["id"]
+        resp = self.client.get(self.problem_bank_url + "?id=" + str(problem_id))
+        self.assertFailed(resp)
+
+    def test_get_problem_list(self):
+        resp = self.client.get(f"{self.problem_bank_url}?limit=10")
+        self.assertSuccess(resp)
+
     def test_edit_problem(self):
         problem_id = self.test_create_problem().data["data"]["id"]
         data = copy.deepcopy(self.data)
         data["id"] = problem_id
         resp = self.client.put(self.url, data=data)
         self.assertSuccess(resp)
+
+
+class ProblemAPITest(ProblemCreateTestBase):
+    def setUp(self):
+        self.url = self.reverse("problem_api")
+        admin = self.create_admin(login=False)
+        self.problem = self.add_problem(DEFAULT_PROBLEM_DATA, admin)
+        self.create_user("test", "test123")
+
+    def test_get_problem_list(self):
+        resp = self.client.get(f"{self.url}?limit=10")
+        self.assertFailed(resp)
+
+    def get_one_problem(self):
+        resp = self.client.get(self.url + "?id=" + self.problem._id)
+        self.assertFailed(resp)
 
 
 class ContestProblemAdminTest(APITestCase):

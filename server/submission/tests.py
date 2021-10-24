@@ -54,6 +54,17 @@ class SubmissionListTest(SubmissionPrepare):
 
     def test_get_submission_list(self):
         resp = self.client.get(self.url, data={"limit": "10"})
+        self.assertFailed(resp)
+
+
+class AdminSubmissionListTest(SubmissionPrepare):
+    def setUp(self):
+        self._create_problem_and_submission()
+        self.create_super_admin()
+        self.url = self.reverse("submission_list_api")
+
+    def test_get_submission_list(self):
+        resp = self.client.get(self.url, data={"limit": "10"})
         self.assertSuccess(resp)
 
 
@@ -62,6 +73,27 @@ class SubmissionAPITest(SubmissionPrepare):
     def setUp(self):
         self._create_problem_and_submission()
         self.user = self.create_user("123", "test123")
+        self.url = self.reverse("submission_api")
+
+    def test_create_submission(self, judge_task):
+        resp = self.client.post(self.url, self.submission_data)
+        self.assertFailed(resp)
+        self.assertDictEqual(resp.data, {"error": "error",
+                                         "data": "Problem does not exist"})
+        judge_task.assert_not_called()
+
+    def test_create_submission_with_wrong_language(self, judge_task):
+        self.submission_data.update({"language": "Python3"})
+        resp = self.client.post(self.url, self.submission_data)
+        self.assertFailed(resp)
+        judge_task.assert_not_called()
+
+
+@mock.patch("submission.views.oj.judge_task.send")
+class SubmissionAdminTest(SubmissionPrepare):
+    def setUp(self):
+        self._create_problem_and_submission()
+        self.user = self.create_super_admin()
         self.url = self.reverse("submission_api")
 
     def test_create_submission(self, judge_task):
