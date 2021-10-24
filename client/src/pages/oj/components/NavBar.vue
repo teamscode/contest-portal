@@ -9,10 +9,18 @@
         <Icon type="home"></Icon>
         {{$t('m.Home')}}
       </Menu-item>
-      <Menu-item v-if="isAdminRole" name="/problem">
-        <Icon type="ios-keypad"></Icon>
-        {{$t('m.NavProblems')}}
-      </Menu-item>
+      <Submenu v-if="isAdminRole" name="problem">
+        <template slot="title">
+          <Icon type="ios-keypad"></Icon>
+          {{$t('m.NavProblems')}}
+        </template>
+        <Menu-item name="/problem">
+          {{$t('m.Problem_List')}}
+        </Menu-item>
+        <Menu-item name="/status">
+          {{$t('m.Submissions')}}
+        </Menu-item>
+      </Submenu>
       <Menu-item name="/contest">
         <Icon type="trophy"></Icon>
         {{$t('m.Contests')}}

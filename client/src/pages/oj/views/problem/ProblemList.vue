@@ -19,12 +19,6 @@
             </Dropdown>
           </li>
           <li>
-            <i-switch size="large" @on-change="handleTagsVisible">
-              <span slot="open">{{$t('m.Tags')}}</span>
-              <span slot="close">{{$t('m.Tags')}}</span>
-            </i-switch>
-          </li>
-          <li>
             <Input v-model="query.keyword"
                    @on-enter="filterByKeyword"
                    @on-click="filterByKeyword"
@@ -151,6 +145,21 @@
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
+          },
+          {
+            title: this.$i18n.t('m.Tags'),
+            align: 'center',
+            render: (h, params) => {
+              let tags = []
+              params.row.tags.forEach(tag => {
+                tags.push(h('Tag', {}, tag))
+              })
+              return h('div', {
+                style: {
+                  margin: '8px 0'
+                }
+              }, tags)
+            }
           }
         ],
         problemList: [],
@@ -231,28 +240,6 @@
       filterByKeyword () {
         this.query.page = 1
         this.pushRouter()
-      },
-      handleTagsVisible (value) {
-        if (value) {
-          this.problemTableColumns.push(
-            {
-              title: this.$i18n.t('m.Tags'),
-              align: 'center',
-              render: (h, params) => {
-                let tags = []
-                params.row.tags.forEach(tag => {
-                  tags.push(h('Tag', {}, tag))
-                })
-                return h('div', {
-                  style: {
-                    margin: '8px 0'
-                  }
-                }, tags)
-              }
-            })
-        } else {
-          this.problemTableColumns.splice(this.problemTableColumns.length - 1, 1)
-        }
       },
       onReset () {
         this.$router.push({name: 'problem-list'})
