@@ -1,7 +1,7 @@
 import random
 from django.db.models import Q, Count
 from utils.api import APIView
-from account.decorators import check_contest_permission, problem_permission_required
+from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by
 from ..models import ProblemTag, Problem, ProblemRuleType
 from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
 from contest.models import ContestRuleType
@@ -44,6 +44,7 @@ class ProblemAPI(APIView):
             try:
                 problem = Problem.objects.select_related("created_by") \
                     .get(_id=problem_id, contest_id__isnull=True, visible=True)
+                ensure_created_by(problem, request.user)
                 problem_data = ProblemSerializer(problem).data
                 self._add_problem_status(request, problem_data)
                 return self.success(problem_data)
@@ -69,6 +70,10 @@ class ProblemAPI(APIView):
         difficulty = request.GET.get("difficulty")
         if difficulty:
             problems = problems.filter(difficulty=difficulty)
+
+        if not request.user.can_mgmt_all_problem():
+            problems = problems.filter(created_by=request.user)
+
         # 根据profile 为做过的题目添加标记
         data = self.paginate_data(request, problems, ProblemSerializer)
         self._add_problem_status(request, data)

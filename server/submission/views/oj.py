@@ -1,6 +1,6 @@
 import ipaddress
 
-from account.decorators import login_required, check_contest_permission
+from account.decorators import login_required, check_contest_permission, ensure_created_by, problem_permission_required
 from contest.models import ContestStatus, ContestRuleType
 from judge.tasks import judge_task
 from options.options import SysOptions
@@ -68,7 +68,11 @@ class SubmissionAPI(APIView):
         try:
             problem = Problem.objects.get(id=data["problem_id"], contest_id=data.get("contest_id"), visible=True)
         except Problem.DoesNotExist:
-            return self.error("Problem not exist")
+            return self.error("Problem does not exist")
+
+        if not data.get("contest_id"):
+            ensure_created_by(problem, request.user)
+
         if data["language"] not in problem.languages:
             return self.error(f"{data['language']} is now allowed in the problem")
         submission = Submission.objects.create(user_id=request.user.id,
@@ -126,6 +130,7 @@ class SubmissionAPI(APIView):
 
 
 class SubmissionListAPI(APIView):
+    @problem_permission_required
     def get(self, request):
         if not request.GET.get("limit"):
             return self.error("Limit is needed")
@@ -134,7 +139,6 @@ class SubmissionListAPI(APIView):
 
         submissions = Submission.objects.filter(contest_id__isnull=True).select_related("problem__created_by")
         problem_id = request.GET.get("problem_id")
-        myself = request.GET.get("myself")
         result = request.GET.get("result")
         username = request.GET.get("username")
         if problem_id:
@@ -143,7 +147,7 @@ class SubmissionListAPI(APIView):
             except Problem.DoesNotExist:
                 return self.error("Problem doesn't exist")
             submissions = submissions.filter(problem=problem)
-        if (myself and myself == "1") or not SysOptions.submission_list_show_all:
+        if not request.user.is_super_admin and not request.user.can_mgmt_all_problem():
             submissions = submissions.filter(user_id=request.user.id)
         elif username:
             submissions = submissions.filter(username__icontains=username)
