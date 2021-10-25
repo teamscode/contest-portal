@@ -13,7 +13,7 @@ export const m = {
   ShareSubmission: 'Allow Submission Sharing',
   Problem_List: 'Problem Bank',
   Create_Problem: 'Create Problem',
-  Export_Import_Problem: 'Export Or Import Problem',
+  Export_Import_Problem: 'Import and Export',
   Contest: 'Contest',
   Contest_List: 'Contest List',
   Create_Contest: 'Create Contest',

@@ -2,7 +2,7 @@
   <div>
     <div style="padding-bottom: 10px;">
     </div>
-    <panel title="Export Problems (beta)">
+    <panel title="Export Problems">
       <div slot="header">
         <el-input
           v-model="keyword"
@@ -56,7 +56,7 @@
         </el-pagination>
       </div>
     </panel>
-    <panel title="Import QDUOJ Problems (beta)">
+    <panel title="Import Problems">
       <el-upload
         ref="QDU"
         action="/api/admin/import_problem"
@@ -71,24 +71,6 @@
         :on-error="uploadFailed">
         <el-button size="small" type="primary" icon="el-icon-fa-upload" slot="trigger">Choose File</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('QDU')">Upload</el-button>
-      </el-upload>
-    </panel>
-
-    <panel title="Import FPS Problems (beta)">
-      <el-upload
-        ref="FPS"
-        action="/api/admin/import_fps"
-        name="file"
-        :file-list="fileList2"
-        :show-file-list="true"
-        :with-credentials="true"
-        :limit="3"
-        :on-change="onFile2Change"
-        :auto-upload="false"
-        :on-success="uploadSucceeded"
-        :on-error="uploadFailed">
-        <el-button size="small" type="primary" icon="el-icon-fa-upload" slot="trigger">Choose File</el-button>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('FPS')">Upload</el-button>
       </el-upload>
     </panel>
   </div>
