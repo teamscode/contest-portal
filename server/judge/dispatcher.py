@@ -40,7 +40,7 @@ class ChooseJudgeServer:
             servers = JudgeServer.objects.select_for_update().filter(is_disabled=False).order_by("task_number")
             servers = [s for s in servers if s.status == "normal"]
             for server in servers:
-                if server.task_number < server.cpu_core:
+                if server.task_number <= server.cpu_core:
                     server.task_number = F("task_number") + 1
                     server.save(update_fields=["task_number"])
                     self.server = server
