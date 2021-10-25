@@ -1,15 +1,17 @@
-FROM node:lts-buster AS frontend-build-env
+FROM node:14-alpine AS frontend-build-env
 
 WORKDIR /build
 COPY client/. .
 COPY .git/. ./.git
+
+RUN apk add git
 
 RUN yarn install --frozen-lockfile && \ 
     yarn build:dll && \
     yarn build
 
 
-FROM python:3.7-alpine3.9
+FROM python:3-alpine
 
 ENV OJ_ENV production
 
