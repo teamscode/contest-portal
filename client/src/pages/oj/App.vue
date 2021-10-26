@@ -5,6 +5,12 @@
       <transition name="fadeInUp" mode="out-in">
         <router-view></router-view>
       </transition>
+      <div class="footer">
+        <p v-html="website.website_footer"></p>
+        <p>Powered by <a href="https://github.com/chenhongqiao/TeamsCodeOJ">TeamsCode OJ</a>
+          <span v-if="version">&nbsp; Version: {{ version }}</span>
+        </p>
+      </div>
     </div>
     <BackTop></BackTop>
   </div>
@@ -32,8 +38,6 @@
     },
     mounted () {
       this.getWebsiteConfig()
-      console.log(`TeamsCode OJ Build ${process.env.VERSION}
-Copyright TeamsCode (https://teamscode.org), licensed under MIT`)
     },
     methods: {
       ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
@@ -83,9 +87,16 @@ Copyright TeamsCode (https://teamscode.org), licensed under MIT`)
   }
 }
 
-.fadeInUp-enter-active {
-  animation: fadeInUp .8s;
-}
+  .footer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: small;
+  }
+
+  .fadeInUp-enter-active {
+    animation: fadeInUp .8s;
+  }
 
 
 </style>
