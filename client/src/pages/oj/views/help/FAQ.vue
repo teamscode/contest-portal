@@ -34,6 +34,7 @@
   .content {
     font-size: 16px;
     margin: 0 50px 40px 50px;
+    padding-bottom: 20px;
     > ul {
       list-style: disc;
       li {

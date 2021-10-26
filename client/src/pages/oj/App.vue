@@ -5,12 +5,6 @@
       <transition name="fadeInUp" mode="out-in">
         <router-view></router-view>
       </transition>
-      <div class="footer">
-        <p v-html="website.website_footer"></p>
-        <p>Powered by <a href="https://github.com/chenhongqiao/TeamsCodeOJ">TeamsCode OJ</a>
-          <span v-if="version">&nbsp; Version: {{ version }}</span>
-        </p>
-      </div>
     </div>
     <BackTop></BackTop>
   </div>
@@ -84,6 +78,7 @@
   .content-app {
     margin-top: 80px;
     padding: 0 2%;
+    padding-bottom: 40px;
   }
 }
 

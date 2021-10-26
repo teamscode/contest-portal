@@ -4,14 +4,14 @@
       <div slot="title">{{$t('m.Compiler')}} & {{$t('m.Judger')}}</div>
       <div class="content markdown-body">
         <ul>
-          <li v-for="lang in languages">{{lang.name}} ( {{lang.description}} )
+          <li v-for="lang in languages" :key="lang.name">{{lang.name}} ( {{lang.description}} )
             <pre>{{lang.config.compile.compile_command}}</pre>
           </li>
         </ul>
       </div>
     </panel>
 
-    <panel :padding="15" class="container">
+    <panel class="container" shadow>
       <div slot="title">{{$t('m.Result_Explanation')}}</div>
       <div class="content">
         <ul>
@@ -62,7 +62,8 @@
 
     .content {
       font-size: 16px;
-      margin: 0 50px 20px 50px;
+      margin: 0px 50px 20px 50px;
+      padding-bottom: 20px;
       > ul {
         list-style: disc;
         li {
