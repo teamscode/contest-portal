@@ -147,7 +147,7 @@ class SubmissionListAPI(APIView):
             except Problem.DoesNotExist:
                 return self.error("Problem doesn't exist")
             submissions = submissions.filter(problem=problem)
-        if not request.user.is_super_admin and not request.user.can_mgmt_all_problem():
+        if not request.user.is_super_admin() and not request.user.can_mgmt_all_problem():
             submissions = submissions.filter(user_id=request.user.id)
         elif username:
             submissions = submissions.filter(username__icontains=username)
