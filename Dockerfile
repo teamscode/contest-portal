@@ -1,22 +1,24 @@
-FROM node:lts-buster AS frontend-build-env
+FROM node:14-alpine AS frontend-build-env
 
 WORKDIR /build
 COPY client/. .
 COPY .git/. ./.git
+
+RUN apk add git
 
 RUN yarn install --frozen-lockfile && \ 
     yarn build:dll && \
     yarn build
 
 
-FROM python:3.7-alpine3.9
+FROM python:3-alpine
 
 ENV OJ_ENV production
 
 WORKDIR /app
 COPY server/. .
 
-HEALTHCHECK --interval=5s --retries=3 CMD python2 /app/deploy/health_check.py
+HEALTHCHECK --interval=5s --retries=3 CMD python3 /app/deploy/health_check.py
 
 RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor jpeg-dev zlib-dev postgresql-dev freetype-dev && \
     pip install --no-cache-dir -r /app/deploy/requirements.txt && \

@@ -54,6 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-if="contestId"
           width="100"
           prop="visible"
           label="Visible">
@@ -67,11 +68,10 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="Operation"
           width="250">
           <div slot-scope="scope">
             <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn icon="download" name="Download Test Case"
+            <icon-btn icon="download" name="Download Test Cases"
                       @click.native="downloadTestCase(scope.row.id)"></icon-btn>
             <icon-btn icon="trash" name="Delete Problem"
                       @click.native="deleteProblem(scope.row.id)"></icon-btn>
@@ -81,6 +81,10 @@
       <div class="panel-options">
         <el-button type="primary" size="small"
                    @click="goCreateProblem" icon="el-icon-plus">Create
+        </el-button>
+        <el-button v-if="contestId" type="primary"
+                   size="small" icon="el-icon-plus"
+                   @click="addProblemDialogVisible = true">Add From Problem Bank
         </el-button>
         <el-pagination
           class="page"
@@ -104,15 +108,26 @@
         <save @click.native="updateProblem(currentRow)"></save>
       </span>
     </el-dialog>
+    <el-dialog title="Add Contest Problem"
+               v-if="contestId"
+               width="80%"
+               :visible.sync="addProblemDialogVisible"
+               @close-on-click-modal="false">
+      <add-problem-component :contestID="contestId" @on-change="getProblemList"></add-problem-component>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import api from '../../api.js'
   import utils from '@/utils/utils'
+  import AddProblemComponent from './AddPublicProblem.vue'
 
   export default {
     name: 'ProblemList',
+    components: {
+      AddProblemComponent
+    },
     data () {
       return {
         pageSize: 10,
@@ -126,7 +141,9 @@
         // for make public use
         currentProblemID: '',
         currentRow: {},
-        InlineEditDialogVisible: false
+        InlineEditDialogVisible: false,
+        makePublicDialogVisible: false,
+        addProblemDialogVisible: false
       }
     },
     mounted () {
@@ -186,12 +203,6 @@
             this.getProblemList(this.currentPage - 1)
           ]).catch(() => {
           })
-        }, () => {
-        })
-      },
-      makeContestProblemPublic (problemID) {
-        this.$prompt('Please input display id for the public problem', 'confirm').then(({value}) => {
-          api.makeContestProblemPublic({id: problemID, display_id: value}).catch()
         }, () => {
         })
       },

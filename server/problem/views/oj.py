@@ -1,13 +1,14 @@
 import random
 from django.db.models import Q, Count
 from utils.api import APIView
-from account.decorators import check_contest_permission
+from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by
 from ..models import ProblemTag, Problem, ProblemRuleType
 from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
 from contest.models import ContestRuleType
 
 
 class ProblemTagAPI(APIView):
+    @problem_permission_required
     def get(self, request):
         qs = ProblemTag.objects
         keyword = request.GET.get("keyword")
@@ -15,15 +16,6 @@ class ProblemTagAPI(APIView):
             qs = ProblemTag.objects.filter(name__icontains=keyword)
         tags = qs.annotate(problem_count=Count("problem")).filter(problem_count__gt=0)
         return self.success(TagSerializer(tags, many=True).data)
-
-
-class PickOneAPI(APIView):
-    def get(self, request):
-        problems = Problem.objects.filter(contest_id__isnull=True, visible=True)
-        count = problems.count()
-        if count == 0:
-            return self.error("No problem to pick")
-        return self.success(problems[random.randint(0, count - 1)]._id)
 
 
 class ProblemAPI(APIView):
@@ -45,6 +37,7 @@ class ProblemAPI(APIView):
                 else:
                     problem["my_status"] = oi_problems_status.get(str(problem["id"]), {}).get("status")
 
+    @problem_permission_required
     def get(self, request):
         # 问题详情页
         problem_id = request.GET.get("problem_id")
@@ -52,6 +45,7 @@ class ProblemAPI(APIView):
             try:
                 problem = Problem.objects.select_related("created_by") \
                     .get(_id=problem_id, contest_id__isnull=True, visible=True)
+                ensure_created_by(problem, request.user)
                 problem_data = ProblemSerializer(problem).data
                 self._add_problem_status(request, problem_data)
                 return self.success(problem_data)
@@ -77,6 +71,10 @@ class ProblemAPI(APIView):
         difficulty = request.GET.get("difficulty")
         if difficulty:
             problems = problems.filter(difficulty=difficulty)
+
+        if not request.user.can_mgmt_all_problem():
+            problems = problems.filter(created_by=request.user)
+
         # 根据profile 为做过的题目添加标记
         data = self.paginate_data(request, problems, ProblemSerializer)
         self._add_problem_status(request, data)

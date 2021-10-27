@@ -32,8 +32,6 @@
     },
     mounted () {
       this.getWebsiteConfig()
-      console.log(`TeamsCode OJ Build ${process.env.VERSION}
-Copyright TeamsCode (https://teamscode.org), licensed under MIT`)
     },
     methods: {
       ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
@@ -80,12 +78,20 @@ Copyright TeamsCode (https://teamscode.org), licensed under MIT`)
   .content-app {
     margin-top: 80px;
     padding: 0 2%;
+    padding-bottom: 40px;
   }
 }
 
-.fadeInUp-enter-active {
-  animation: fadeInUp .8s;
-}
+  .footer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: small;
+  }
+
+  .fadeInUp-enter-active {
+    animation: fadeInUp .8s;
+  }
 
 
 </style>

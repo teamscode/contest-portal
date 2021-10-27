@@ -193,7 +193,7 @@ _py3_lang_config = {
 //APPEND END""",
     "compile": {
         "src_name": "solution.py",
-        "exe_name": "__pycache__/solution.cpython-36.pyc",
+        "exe_name": "__pycache__/solution.cpython-39.pyc",
         "max_cpu_time": 3000,
         "max_real_time": 10000,
         "max_memory": 128 * 1024 * 1024,
@@ -208,11 +208,11 @@ _py3_lang_config = {
 
 languages = [
     {"config": _c_lang_config, "spj": {"compile": _c_lang_spj_compile, "config": _c_lang_spj_config},
-     "name": "C", "description": "GCC 7.4", "content_type": "text/x-csrc"},
+     "name": "C", "description": "GCC 10.2", "content_type": "text/x-csrc"},
     {"config": _cpp_lang_config, "spj": {"compile": _cpp_lang_spj_compile, "config": _cpp_lang_spj_config},
-     "name": "C++", "description": "G++ 7.4", "content_type": "text/x-c++src"},
-    {"config": _cpp17_lang_config, "name": "C++17", "description": "G++ 7.4", "content_type": "text/x-c++src"},
-    {"config": _java_lang_config, "name": "Java", "description": "OpenJDK 1.8", "content_type": "text/x-java"},
-    {"config": _py2_lang_config, "name": "Python2", "description": "Python 2.7", "content_type": "text/x-python"},
-    {"config": _py3_lang_config, "name": "Python3", "description": "Python 3.6", "content_type": "text/x-python"},
+     "name": "C++11", "description": "G++ 10.2", "content_type": "text/x-c++src"},
+    {"config": _cpp17_lang_config, "name": "C++17", "description": "G++ 10.2", "content_type": "text/x-c++src"},
+    {"config": _java_lang_config, "name": "Java", "description": "OpenJDK 11", "content_type": "text/x-java"},
+    {"config": _py2_lang_config, "name": "Python 2", "description": "Python 2.7", "content_type": "text/x-python"},
+    {"config": _py3_lang_config, "name": "Python 3", "description": "Python 3.9", "content_type": "text/x-python"},
 ]

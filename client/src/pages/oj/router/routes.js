@@ -9,7 +9,8 @@ import {
   ResetPassword,
   SubmissionDetails,
   SubmissionList,
-  UserHome
+  UserHome,
+  ProblemList
 } from '../views'
 
 import * as Contest from '@oj/views/contest'
@@ -33,6 +34,18 @@ export default [
     path: '/reset-password/:token',
     meta: {title: 'Reset Password'},
     component: ResetPassword
+  },
+  {
+    name: 'problem-list',
+    path: '/problem',
+    meta: {title: 'Problem List'},
+    component: ProblemList
+  },
+  {
+    name: 'problem-details',
+    path: '/problem/:problemID',
+    meta: {title: 'Problem Details'},
+    component: Problem
   },
   {
     name: 'submission-details',
@@ -84,6 +97,12 @@ export default [
     path: '/user-home',
     component: UserHome,
     meta: {requiresAuth: true, title: 'User Home'}
+  },
+  {
+    name: 'submission-list',
+    path: '/status',
+    meta: {title: 'Submission List'},
+    component: SubmissionList
   },
   {
     path: '/setting',

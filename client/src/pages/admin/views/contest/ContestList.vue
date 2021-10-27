@@ -70,8 +70,7 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          width="250"
-          label="Operation">
+          width="250">
           <div slot-scope="scope">
             <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
             <icon-btn name="Problem" icon="list-ol" @click.native="goContestProblemList(scope.row.id)"></icon-btn>
