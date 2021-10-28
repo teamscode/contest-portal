@@ -5,6 +5,10 @@
       <transition name="fadeInUp" mode="out-in">
         <router-view></router-view>
       </transition>
+      <div class="footer">
+        <p v-html="website.website_footer"></p>
+        <p>Powered by <a href="https://teamscode.org">TeamsCode</a> Online Judge</p>
+      </div>
     </div>
     <BackTop></BackTop>
   </div>
@@ -78,13 +82,12 @@
   .content-app {
     margin-top: 80px;
     padding: 0 2%;
-    padding-bottom: 40px;
   }
 }
 
   .footer {
     margin-top: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     text-align: center;
     font-size: small;
   }
