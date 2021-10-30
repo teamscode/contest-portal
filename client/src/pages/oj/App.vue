@@ -8,6 +8,7 @@
       <div class="footer">
         <p v-html="website.website_footer"></p>
         <p>Powered by <a href="https://teamscode.org">TeamsCode</a> Online Judge</p>
+        <p>TeamsCode's <a href="https://discord.com/invite/8pg89SS">Discord</a></p>
       </div>
     </div>
     <BackTop></BackTop>

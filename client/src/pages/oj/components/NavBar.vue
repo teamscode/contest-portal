@@ -1,9 +1,6 @@
 <template>
   <div id="header">
     <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
-      <div class="logoimg">
-        <img src="../../../assets/logo.svg" alt="oj logo"/>
-      </div>
       <div class="logo"><span>{{website.website_name}}</span></div>
       <Menu-item name="/">
         <Icon type="home"></Icon>
@@ -136,7 +133,7 @@
     }
 
     .logo {
-      margin-left: 15px;
+      margin-left: 30px;
       margin-right: 2%;
       font-size: 20px;
       float: left;
