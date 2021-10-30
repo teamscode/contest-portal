@@ -5,7 +5,7 @@
       <transition name="fadeInUp">
         <router-view></router-view>
         <div v-if="route_name === 'contest-details'">
-          <Announcements :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList" style="margin-bottom: 20px;"/>
+          <Announcements v-if="contestStatus !== CONTEST_STATUS.NOT_START" :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList" style="margin-bottom: 20px;"/>
           <div class="flex-container">
             <template>
               <div id="contest-desc">
