@@ -267,7 +267,7 @@ class ApplyResetPasswordAPI(APIView):
         send_email_async.send(from_name=SysOptions.website_name_shortcut,
                               to_email=user.email,
                               to_name=user.username,
-                              subject=f"Reset your password",
+                              subject="Reset your password",
                               content=email_html)
         return self.success("Succeeded")
 
@@ -340,13 +340,11 @@ class ProfileProblemDisplayIDRefreshAPI(APIView):
     def get(self, request):
         profile = request.user.userprofile
         oi_problems = profile.problems_status.get("problems", {})
-        ids = list(acm_problems.keys()) + list(oi_problems.keys())
+        ids = list(oi_problems.keys())
         if not ids:
             return self.success()
         display_ids = Problem.objects.filter(id__in=ids, visible=True).values_list("_id", flat=True)
         id_map = dict(zip(ids, display_ids))
-        for k, v in acm_problems.items():
-            v["_id"] = id_map[k]
         for k, v in oi_problems.items():
             v["_id"] = id_map[k]
         profile.save(update_fields=["problems_status"])
