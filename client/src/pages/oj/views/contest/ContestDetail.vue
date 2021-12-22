@@ -61,12 +61,6 @@
           <Icon type="stats-bars"></Icon>
           {{$t('m.Rankings')}}
         </VerticalMenu-item>
-
-        <VerticalMenu-item v-if="showAdminHelper"
-                           :route="{name: 'acm-helper', params: {contestID: contestID}}">
-          <Icon type="ios-paw"></Icon>
-          {{$t('m.Admin_Helper')}}
-        </VerticalMenu-item>
       </VerticalMenu>
     </div>
   </div>
@@ -110,12 +104,6 @@
             title: this.$i18n.t('m.ContestType'),
             render: (h, params) => {
               return h('span', params.row.contest_type)
-            }
-          },
-          {
-            title: this.$i18n.t('m.Rule'),
-            render: (h, params) => {
-              return h('span', this.$i18n.t('m.' + params.row.rule_type))
             }
           },
           {
@@ -202,16 +190,13 @@
         now: state => state.contest.now
       }),
       ...mapGetters(
-        ['contestMenuDisabled', 'contestRuleType', 'contestStatus', 'countdown', 'isContestAdmin',
+        ['contestMenuDisabled', 'contestStatus', 'countdown', 'isContestAdmin',
           'OIContestRealTimePermission', 'passwordFormVisible']
       ),
       countdownColor () {
         if (this.contestStatus) {
           return CONTEST_STATUS_REVERSE[this.contestStatus].color
         }
-      },
-      showAdminHelper () {
-        return this.isContestAdmin && this.contestRuleType === 'ACM'
       }
     },
     watch: {

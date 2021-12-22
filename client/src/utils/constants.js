@@ -91,11 +91,6 @@ export const CONTEST_STATUS_REVERSE = {
   }
 }
 
-export const RULE_TYPE = {
-  ACM: 'ACM',
-  OI: 'OI'
-}
-
 export const CONTEST_TYPE = {
   PUBLIC: 'Public',
   PRIVATE: 'Password Protected'

@@ -37,12 +37,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="$t('m.Contest_Rule_Type')">
-              <el-radio class="radio" v-model="contest.rule_type" label="OI" :disabled="disableRuleType">TeamsCode</el-radio>
-              <el-radio class="radio" v-model="contest.rule_type" label="ACM" :disabled="disableRuleType">ACM</el-radio>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item :label="$t('m.Real_Time_Rank')">
               <el-switch
                 v-model="contest.real_time_rank"
@@ -100,7 +94,6 @@
           description: '',
           start_time: '',
           end_time: '',
-          rule_type: 'OI',
           password: '',
           real_time_rank: true,
           visible: true,

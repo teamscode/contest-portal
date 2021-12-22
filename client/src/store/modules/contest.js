@@ -48,9 +48,6 @@ const getters = {
       return CONTEST_STATUS.UNDERWAY
     }
   },
-  contestRuleType: (state) => {
-    return state.contest.rule_type || null
-  },
   isContestAdmin: (state, getters, _, rootGetters) => {
     return rootGetters.isAuthenticated &&
       (state.contest.created_by.id === rootGetters.user.id || rootGetters.user.admin_type === USER_TYPE.SUPER_ADMIN)
@@ -62,7 +59,7 @@ const getters = {
     return !state.access
   },
   OIContestRealTimePermission: (state, getters, _, rootGetters) => {
-    if (getters.contestRuleType === 'ACM' || getters.contestStatus === CONTEST_STATUS.ENDED) {
+    if (getters.contestStatus === CONTEST_STATUS.ENDED) {
       return true
     }
     return state.contest.real_time_rank === true || getters.isContestAdmin

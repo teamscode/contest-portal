@@ -434,7 +434,7 @@
           })
         }
 
-        if (this.contestRuleType === 'OI' && !this.OIContestRealTimePermission) {
+        if (!this.OIContestRealTimePermission) {
           if (this.submissionExists) {
             this.$Modal.confirm({
               title: '',
@@ -464,7 +464,7 @@
       }
     },
     computed: {
-      ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus']),
+      ...mapGetters(['problemSubmitDisabled', 'OIContestRealTimePermission', 'contestStatus']),
       contest () {
         return this.$store.state.contest.contest
       },

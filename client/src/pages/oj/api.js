@@ -255,16 +255,6 @@ export default {
     return ajax('contest_rank', 'get', {
       params
     })
-  },
-  getACMACInfo (params) {
-    return ajax('admin/contest/acm_helper', 'get', {
-      params
-    })
-  },
-  updateACInfoCheckedStatus (data) {
-    return ajax('admin/contest/acm_helper', 'put', {
-      data
-    })
   }
 }
 

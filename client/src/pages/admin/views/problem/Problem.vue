@@ -186,14 +186,6 @@
           </Accordion>
         </el-form-item>
         <el-row :gutter="20">
-          <el-col :span="4">
-            <el-form-item :label="$t('m.Type')">
-              <el-radio-group v-model="problem.rule_type" :disabled="true">
-                <el-radio label="ACM">ACM</el-radio>
-                <el-radio label="OI">TeamsCode</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
           <el-col :span="6">
             <el-form-item :label="$t('m.TestCase')" :error="error.testcase">
               <el-upload
@@ -229,7 +221,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="6" v-if="problem.rule_type === 'OI'">
+          <el-col :span="6">
             <p class="el-form-item__label" style="line-height: 0px;">Set the same score for all cases
               <el-popover placement="right" trigger="hover">
               </el-popover>
@@ -262,8 +254,7 @@
                   <el-input
                     size="small"
                     :placeholder="$t('m.Score')"
-                    v-model="scope.row.score"
-                    :disabled="problem.rule_type !== 'OI'">
+                    v-model="scope.row.score">
                   </el-input>
                 </template>
               </el-table-column>
@@ -319,7 +310,6 @@
         template: {},
         title: '',
         spjMode: '',
-        disableRuleType: false,
         routeName: '',
         error: {
           tags: '',
@@ -359,7 +349,6 @@
           spj_compile_ok: false,
           test_case_id: '',
           test_case_score: [],
-          rule_type: 'OI',
           hint: '',
           source: '',
           io_mode: {'io_mode': 'Standard IO', 'input': 'input.txt', 'output': 'output.txt'}
@@ -367,9 +356,7 @@
         let contestID = this.$route.params.contestId
         if (contestID) {
           this.problem.contest_id = this.reProblem.contest_id = contestID
-          this.disableRuleType = true
           api.getContest(contestID).then(res => {
-            this.problem.rule_type = this.reProblem.rule_type = res.data.data.rule_type
             this.contest = res.data.data
           })
         }
@@ -561,17 +548,15 @@
           this.$error(this.error.testCase)
           return
         }
-        if (this.problem.rule_type === 'OI') {
-          for (let item of this.problem.test_case_score) {
-            try {
-              if (parseInt(item.score) <= 0) {
-                this.$error('Invalid test case score')
-                return
-              }
-            } catch (e) {
-              this.$error('Test case score must be an integer')
+        for (let item of this.problem.test_case_score) {
+          try {
+            if (parseInt(item.score) <= 0) {
+              this.$error('Invalid test case score')
               return
             }
+          } catch (e) {
+            this.$error('Test case score must be an integer')
+            return
           }
         }
         this.problem.languages = this.problem.languages.sort()

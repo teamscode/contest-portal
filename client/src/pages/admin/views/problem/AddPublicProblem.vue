@@ -70,8 +70,7 @@
         let params = {
           keyword: this.keyword,
           offset: (page - 1) * this.limit,
-          limit: this.limit,
-          rule_type: this.contest.rule_type
+          limit: this.limit
         }
         api.getProblemList(params).then(res => {
           this.loading = false

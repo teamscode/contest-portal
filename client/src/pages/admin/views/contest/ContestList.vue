@@ -32,13 +32,6 @@
           label="Title">
         </el-table-column>
         <el-table-column
-          label="Rule Type"
-          width="130">
-          <template slot-scope="scope">
-            <el-tag type="gray">{{scope.row.rule_type}}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
           label="Contest Type"
           width="180">
           <template slot-scope="scope">

@@ -2,21 +2,9 @@
   <Row type="flex">
     <Col :span="24">
     <Panel id="contest-card" shadow>
-      <div slot="title">{{query.rule_type === '' ? this.$i18n.t('m.All') : (query.rule_type === 'OI' ? 'TeamsCode' : query.rule_type)}} {{$t('m.Contests')}}</div>
+      <div slot="title">TeamsCode {{$t('m.Contests')}}</div>
       <div slot="extra">
         <ul class="filter">
-          <li>
-            <Dropdown @on-click="onRuleChange">
-              <span>{{query.rule_type === '' ? this.$i18n.t('m.Rule') : this.$i18n.t('m.' + query.rule_type)}}
-                <Icon type="arrow-down-b"></Icon>
-              </span>
-              <Dropdown-menu slot="list">
-                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                <Dropdown-item name="OI">{{$t('m.OI')}}</Dropdown-item>
-                <Dropdown-item name="ACM">{{$t('m.ACM')}}</Dropdown-item>
-              </Dropdown-menu>
-            </Dropdown>
-          </li>
           <li>
             <Dropdown @on-click="onStatusChange">
               <span>{{query.status === '' ? this.$i18n.t('m.Status') : this.$i18n.t('m.' + CONTEST_STATUS_REVERSE[query.status].name.replace(/ /g,"_"))}}
@@ -59,11 +47,6 @@
                 <Icon type="android-time" color="#3091f2"></Icon>
                 {{getDuration(contest.start_time, contest.end_time)}}
               </li>
-              <li>
-                <Button size="small" shape="circle" @click="onRuleChange(contest.rule_type)">
-                  {{contest.rule_type==='OI' ? 'TeamsCode' : contest.rule_type}}
-                </Button>
-              </li>
             </ul>
             </Col>
             <Col :span="4" style="text-align: center">
@@ -99,8 +82,7 @@
         page: 1,
         query: {
           status: '',
-          keyword: '',
-          rule_type: ''
+          keyword: ''
         },
         limit: limit,
         total: 0,
@@ -125,7 +107,6 @@
       init () {
         let route = this.$route.query
         this.query.status = route.status || ''
-        this.query.rule_type = route.rule_type || ''
         this.query.keyword = route.keyword || ''
         this.page = parseInt(route.page) || 1
         this.limit = parseInt(route.limit) || 10
@@ -147,11 +128,6 @@
           name: 'contest-list',
           query: utils.filterEmptyValue(query)
         })
-      },
-      onRuleChange (rule) {
-        this.query.rule_type = rule
-        this.page = 1
-        this.changeRoute()
       },
       onStatusChange (status) {
         this.query.status = status
