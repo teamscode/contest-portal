@@ -5,7 +5,7 @@ from contest.models import ContestStatus, ContestRuleType
 from judge.tasks import judge_task
 from options.options import SysOptions
 # from judge.dispatcher import JudgeDispatcher
-from problem.models import Problem, ProblemRuleType
+from problem.models import Problem
 from utils.api import APIView, validate_serializer
 from utils.cache import cache
 from utils.captcha import Captcha
@@ -13,7 +13,7 @@ from utils.throttling import TokenBucket
 from ..models import Submission
 from ..serializers import (CreateSubmissionSerializer, SubmissionModelSerializer,
                            ShareSubmissionSerializer)
-from ..serializers import SubmissionSafeModelSerializer, SubmissionListSerializer
+from ..serializers import SubmissionListSerializer
 
 
 class SubmissionAPI(APIView):
@@ -102,10 +102,8 @@ class SubmissionAPI(APIView):
         if not submission.check_user_permission(request.user):
             return self.error("No permission for this submission")
 
-        if submission.problem.rule_type == ProblemRuleType.OI or request.user.is_admin_role():
-            submission_data = SubmissionModelSerializer(submission).data
-        else:
-            submission_data = SubmissionSafeModelSerializer(submission).data
+        submission_data = SubmissionModelSerializer(submission).data
+
         # 是否有权限取消共享
         submission_data["can_unshare"] = submission.check_user_permission(request.user, check_share=False)
         return self.success(submission_data)
@@ -186,11 +184,6 @@ class ContestSubmissionListAPI(APIView):
         # filter the test submissions submitted before contest start
         if contest.status != ContestStatus.CONTEST_NOT_START:
             submissions = submissions.filter(create_time__gte=contest.start_time)
-
-        # 封榜的时候只能看到自己的提交
-        if contest.rule_type == ContestRuleType.ACM:
-            if not contest.real_time_rank and not request.user.is_contest_admin(contest):
-                submissions = submissions.filter(user_id=request.user.id)
 
         data = self.paginate_data(request, submissions)
         data["results"] = SubmissionListSerializer(data["results"], many=True, user=request.user).data

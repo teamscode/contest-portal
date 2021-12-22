@@ -1,7 +1,7 @@
 from utils.api import UsernameSerializer, serializers
 
 from .models import Contest, ContestAnnouncement, ContestRuleType
-from .models import ACMContestRank, OIContestRank
+from .models import ContestRank
 
 
 class CreateConetestSeriaizer(serializers.Serializer):
@@ -9,7 +9,6 @@ class CreateConetestSeriaizer(serializers.Serializer):
     description = serializers.CharField()
     start_time = serializers.DateTimeField()
     end_time = serializers.DateTimeField()
-    rule_type = serializers.ChoiceField(choices=[ContestRuleType.ACM, ContestRuleType.OI])
     password = serializers.CharField(allow_blank=True, max_length=32)
     visible = serializers.BooleanField()
     real_time_rank = serializers.BooleanField()
@@ -71,11 +70,11 @@ class ContestPasswordVerifySerializer(serializers.Serializer):
     password = serializers.CharField(max_length=30, required=True)
 
 
-class ACMContestRankSerializer(serializers.ModelSerializer):
+class ContestRankSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
     class Meta:
-        model = ACMContestRank
+        model = ContestRank
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
@@ -84,25 +83,3 @@ class ACMContestRankSerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         return UsernameSerializer(obj.user, need_team_members=self.is_contest_admin).data
-
-
-class OIContestRankSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-
-    class Meta:
-        model = OIContestRank
-        fields = "__all__"
-
-    def __init__(self, *args, **kwargs):
-        self.is_contest_admin = kwargs.pop("is_contest_admin", False)
-        super().__init__(*args, **kwargs)
-
-    def get_user(self, obj):
-        return UsernameSerializer(obj.user, need_team_members=self.is_contest_admin).data
-
-
-class ACMContesHelperSerializer(serializers.Serializer):
-    contest_id = serializers.IntegerField()
-    problem_id = serializers.CharField()
-    rank_id = serializers.IntegerField()
-    checked = serializers.BooleanField()

@@ -10,7 +10,6 @@ from .models import ContestAnnouncement, ContestRuleType, Contest
 DEFAULT_CONTEST_DATA = {"title": "test title", "description": "test description",
                         "start_time": timezone.localtime(timezone.now()),
                         "end_time": timezone.localtime(timezone.now()) + timedelta(days=1),
-                        "rule_type": ContestRuleType.ACM,
                         "password": "123",
                         "allowed_ip_ranges": [],
                         "visible": True, "real_time_rank": True}

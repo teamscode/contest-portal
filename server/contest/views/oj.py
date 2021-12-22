@@ -13,10 +13,10 @@ from account.models import AdminType
 from account.decorators import login_required, check_contest_permission, check_contest_password
 
 from utils.constants import ContestRuleType, ContestStatus
-from ..models import ContestAnnouncement, Contest, OIContestRank, ACMContestRank
+from ..models import ContestAnnouncement, Contest, ContestRank
 from ..serializers import ContestAnnouncementSerializer
 from ..serializers import ContestSerializer, ContestPasswordVerifySerializer
-from ..serializers import OIContestRankSerializer, ACMContestRankSerializer
+from ..serializers import ContestRankSerializer
 
 
 class ContestAnnouncementListAPI(APIView):
@@ -50,12 +50,9 @@ class ContestListAPI(APIView):
     def get(self, request):
         contests = Contest.objects.select_related("created_by").filter(visible=True)
         keyword = request.GET.get("keyword")
-        rule_type = request.GET.get("rule_type")
         status = request.GET.get("status")
         if keyword:
             contests = contests.filter(title__contains=keyword)
-        if rule_type:
-            contests = contests.filter(rule_type=rule_type)
         if status:
             cur = now()
             if status == ContestStatus.CONTEST_NOT_START:
@@ -104,16 +101,10 @@ class ContestAccessAPI(APIView):
 
 class ContestRankAPI(APIView):
     def get_rank(self):
-        if self.contest.rule_type == ContestRuleType.ACM:
-            return ACMContestRank.objects.filter(contest=self.contest,
-                                                 user__admin_type=AdminType.REGULAR_USER,
-                                                 user__is_disabled=False).\
-                select_related("user").order_by("-accepted_number", "total_time")
-        else:
-            return OIContestRank.objects.filter(contest=self.contest,
-                                                user__admin_type=AdminType.REGULAR_USER,
-                                                user__is_disabled=False). \
-                select_related("user").order_by("-total_score", "last_submission")
+        return ContestRank.objects.filter(contest=self.contest,
+                                          user__admin_type=AdminType.REGULAR_USER,
+                                          user__is_disabled=False). \
+            select_related("user").order_by("-total_score", "last_submission")
 
     def column_string(self, n):
         string = ""
@@ -127,10 +118,7 @@ class ContestRankAPI(APIView):
         download_csv = request.GET.get("download_csv")
         force_refresh = request.GET.get("force_refresh")
         is_contest_admin = request.user.is_authenticated and request.user.is_contest_admin(self.contest)
-        if self.contest.rule_type == ContestRuleType.OI:
-            serializer = OIContestRankSerializer
-        else:
-            serializer = ACMContestRankSerializer
+        serializer = ContestRankSerializer
 
         if force_refresh == "1" and is_contest_admin:
             qs = self.get_rank()
@@ -152,35 +140,19 @@ class ContestRankAPI(APIView):
             worksheet.write("A1", "User ID")
             worksheet.write("B1", "Team Name")
             worksheet.write("C1", "Team Members")
-            if self.contest.rule_type == ContestRuleType.OI:
-                worksheet.write("D1", "Total Score")
-                worksheet.write("E1", "Last Submission")
-                for item in range(contest_problems.count()):
-                    worksheet.write(self.column_string(5 + item) + "1", f"{contest_problems[item].title}")
-                for index, item in enumerate(data):
-                    worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
-                    worksheet.write_string(index + 1, 1, item["user"]["username"])
-                    worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
-                    worksheet.write_string(index + 1, 3, str(item["total_score"]))
-                    worksheet.write_string(index + 1, 4, str(item["last_submission"]))
-                    for k, v in item["submission_info"].items():
-                        worksheet.write_string(index + 1, 4 + problem_ids.index(int(k)), str(v))
-            else:
-                worksheet.write("D1", "AC")
-                worksheet.write("E1", "Total Submission")
-                worksheet.write("F1", "Total Time")
-                for item in range(contest_problems.count()):
-                    worksheet.write(self.column_string(7 + item) + "1", f"{contest_problems[item].title}")
 
-                for index, item in enumerate(data):
-                    worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
-                    worksheet.write_string(index + 1, 1, item["user"]["username"])
-                    worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
-                    worksheet.write_string(index + 1, 3, str(item["accepted_number"]))
-                    worksheet.write_string(index + 1, 4, str(item["submission_number"]))
-                    worksheet.write_string(index + 1, 5, str(item["total_time"]))
-                    for k, v in item["submission_info"].items():
-                        worksheet.write_string(index + 1, 6 + problem_ids.index(int(k)), str(v["is_ac"]))
+            worksheet.write("D1", "Total Score")
+            worksheet.write("E1", "Last Submission")
+            for item in range(contest_problems.count()):
+                worksheet.write(self.column_string(5 + item) + "1", f"{contest_problems[item].title}")
+            for index, item in enumerate(data):
+                worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
+                worksheet.write_string(index + 1, 1, item["user"]["username"])
+                worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
+                worksheet.write_string(index + 1, 3, str(item["total_score"]))
+                worksheet.write_string(index + 1, 4, str(item["last_submission"]))
+                for k, v in item["submission_info"].items():
+                    worksheet.write_string(index + 1, 4 + problem_ids.index(int(k)), str(v))
 
             workbook.close()
             f.seek(0)

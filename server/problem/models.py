@@ -1,5 +1,4 @@
 from django.db import models
-from utils.models import JSONField
 
 from account.models import User
 from contest.models import Contest
@@ -12,11 +11,6 @@ class ProblemTag(models.Model):
 
     class Meta:
         db_table = "problem_tag"
-
-
-class ProblemRuleType(Choices):
-    ACM = "ACM"
-    OI = "OI"
 
 
 class ProblemDifficulty(object):
@@ -46,13 +40,13 @@ class Problem(models.Model):
     input_description = RichTextField()
     output_description = RichTextField()
     # [{input: "test", output: "123"}, {input: "test123", output: "456"}]
-    samples = JSONField()
+    samples = models.JSONField()
     test_case_id = models.TextField()
     # [{"input_name": "1.in", "output_name": "1.out", "score": 0}]
-    test_case_score = JSONField()
+    test_case_score = models.JSONField()
     hint = RichTextField(null=True)
-    languages = JSONField()
-    template = JSONField()
+    languages = models.JSONField()
+    template = models.JSONField()
     create_time = models.DateTimeField(auto_now_add=True)
     # we can not use auto_now here
     last_update_time = models.DateTimeField(null=True)
@@ -62,14 +56,13 @@ class Problem(models.Model):
     # MB
     memory_limit = models.IntegerField()
     # io mode
-    io_mode = JSONField(default=_default_io_mode)
+    io_mode = models.JSONField(default=_default_io_mode)
     # special judge related
     spj = models.BooleanField(default=False)
     spj_language = models.TextField(null=True)
     spj_code = models.TextField(null=True)
     spj_version = models.TextField(null=True)
     spj_compile_ok = models.BooleanField(default=False)
-    rule_type = models.TextField()
     visible = models.BooleanField(default=False)
     difficulty = models.TextField()
     tags = models.ManyToManyField(ProblemTag)
@@ -79,7 +72,7 @@ class Problem(models.Model):
     submission_number = models.BigIntegerField(default=0)
     accepted_number = models.BigIntegerField(default=0)
     # {JudgeStatus.ACCEPTED: 3, JudgeStaus.WRONG_ANSWER: 11}, the number means count
-    statistic_info = JSONField(default=dict)
+    statistic_info = models.JSONField(default=dict)
     share_submission = models.BooleanField(default=False)
 
     class Meta:

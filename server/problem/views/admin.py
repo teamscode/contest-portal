@@ -21,7 +21,7 @@ from utils.api import APIView, CSRFExemptAPIView, validate_serializer, APIError
 from utils.constants import Difficulty
 from utils.shortcuts import rand_str, natural_sort_key
 from utils.tasks import delete_files
-from ..models import Problem, ProblemRuleType, ProblemTag
+from ..models import Problem, ProblemTag
 from ..serializers import (CreateContestProblemSerializer, CompileSPJSerializer,
                            CreateProblemSerializer, EditProblemSerializer, EditContestProblemSerializer,
                            ProblemAdminSerializer, TestCaseUploadForm, ContestProblemMakePublicSerializer,
@@ -185,14 +185,14 @@ class ProblemBase(APIView):
         else:
             data["spj_language"] = None
             data["spj_code"] = None
-        if data["rule_type"] == ProblemRuleType.OI:
-            total_score = 0
-            for item in data["test_case_score"]:
-                if item["score"] <= 0:
-                    return "Invalid score"
-                else:
-                    total_score += item["score"]
-            data["total_score"] = total_score
+
+        total_score = 0
+        for item in data["test_case_score"]:
+            if item["score"] <= 0:
+                return "Invalid score"
+            else:
+                total_score += item["score"]
+        data["total_score"] = total_score
         data["languages"] = list(data["languages"])
 
 
@@ -227,7 +227,6 @@ class ProblemAPI(ProblemBase):
     @problem_permission_required
     def get(self, request):
         problem_id = request.GET.get("id")
-        rule_type = request.GET.get("rule_type")
         user = request.user
         if problem_id:
             try:
@@ -238,11 +237,6 @@ class ProblemAPI(ProblemBase):
                 return self.error("Problem does not exist")
 
         problems = Problem.objects.filter(contest_id__isnull=True).order_by("-create_time")
-        if rule_type:
-            if rule_type not in ProblemRuleType.choices():
-                return self.error("Invalid rule_type")
-            else:
-                problems = problems.filter(rule_type=rule_type)
 
         keyword = request.GET.get("keyword", "").strip()
         if keyword:
@@ -317,9 +311,6 @@ class ContestProblemAPI(ProblemBase):
         except Contest.DoesNotExist:
             return self.error("Contest does not exist")
 
-        if data["rule_type"] != contest.rule_type:
-            return self.error("Invalid rule type")
-
         _id = data["_id"]
         if not _id:
             return self.error("Display ID is required")
@@ -382,9 +373,6 @@ class ContestProblemAPI(ProblemBase):
             ensure_created_by(contest, user)
         except Contest.DoesNotExist:
             return self.error("Contest does not exist")
-
-        if data["rule_type"] != contest.rule_type:
-            return self.error("Invalid rule type")
 
         problem_id = data.pop("id")
 
@@ -585,7 +573,6 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                                                                                  v["append"])
 
                         spj = problem_info["spj"] is not None
-                        rule_type = problem_info["rule_type"]
                         test_case_score = problem_info["test_case_score"]
 
                         # process test case
@@ -603,8 +590,6 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                                                              time_limit=problem_info["time_limit"],
                                                              memory_limit=problem_info["memory_limit"],
                                                              samples=problem_info["samples"],
-                                                             template=problem_info["template"],
-                                                             rule_type=problem_info["rule_type"],
                                                              source=problem_info["source"],
                                                              spj=spj,
                                                              spj_code=problem_info["spj"]["code"] if spj else None,
@@ -615,8 +600,7 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                                                              created_by=request.user,
                                                              visible=False,
                                                              difficulty=Difficulty.MID,
-                                                             total_score=sum(item["score"] for item in test_case_score)
-                                                             if rule_type == ProblemRuleType.OI else 0,
+                                                             total_score=sum(item["score"] for item in test_case_score),
                                                              test_case_id=test_case_id
                                                              )
                         for tag_name in problem_info["tags"]:
@@ -643,7 +627,7 @@ class FPSProblemImport(CSRFExemptAPIView):
         for t in problem_data["template"]:
             our_lang = lang = t["language"]
             if lang == "Python":
-                our_lang = "Python3"
+                our_lang = "Python 3"
             template[our_lang] = TEMPLATE_BASE.format(prepend.get(lang, ""), t["code"], append.get(lang, ""))
         spj = problem_data["spj"] is not None
         Problem.objects.create(_id=f"fps-{rand_str(4)}",
@@ -657,7 +641,6 @@ class FPSProblemImport(CSRFExemptAPIView):
                                memory_limit=problem_data["memory_limit"]["value"],
                                samples=problem_data["samples"],
                                template=template,
-                               rule_type=ProblemRuleType.ACM,
                                source=problem_data.get("source", ""),
                                spj=spj,
                                spj_code=problem_data["spj"]["code"] if spj else None,
@@ -692,7 +675,7 @@ class FPSProblemImport(CSRFExemptAPIView):
                 os.mkdir(test_case_dir)
                 score = []
                 for item in helper.save_test_case(_problem, test_case_dir)["test_cases"].values():
-                    score.append({"score": 0, "input_name": item["input_name"],
+                    score.append({"score": 10, "input_name": item["input_name"],
                                   "output_name": item.get("output_name")})
                 problem_data = helper.save_image(_problem, settings.UPLOAD_DIR, settings.UPLOAD_PREFIX)
                 s = FPSProblemSerializer(data=problem_data)

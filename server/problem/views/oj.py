@@ -2,7 +2,7 @@ import random
 from django.db.models import Q, Count
 from utils.api import APIView
 from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by
-from ..models import ProblemTag, Problem, ProblemRuleType
+from ..models import ProblemTag, Problem
 from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
 from contest.models import ContestRuleType
 
@@ -23,8 +23,7 @@ class ProblemAPI(APIView):
     def _add_problem_status(request, queryset_values):
         if request.user.is_authenticated:
             profile = request.user.userprofile
-            acm_problems_status = profile.acm_problems_status.get("problems", {})
-            oi_problems_status = profile.oi_problems_status.get("problems", {})
+            problems_status = profile.problems_status.get("problems", {})
             # paginate data
             results = queryset_values.get("results")
             if results is not None:
@@ -32,10 +31,7 @@ class ProblemAPI(APIView):
             else:
                 problems = [queryset_values, ]
             for problem in problems:
-                if problem["rule_type"] == ProblemRuleType.ACM:
-                    problem["my_status"] = acm_problems_status.get(str(problem["id"]), {}).get("status")
-                else:
-                    problem["my_status"] = oi_problems_status.get(str(problem["id"]), {}).get("status")
+                problem["my_status"] = problems_status.get(str(problem["id"]), {}).get("status")
 
     @problem_permission_required
     def get(self, request):
@@ -85,10 +81,7 @@ class ContestProblemAPI(APIView):
     def _add_problem_status(self, request, queryset_values):
         if request.user.is_authenticated:
             profile = request.user.userprofile
-            if self.contest.rule_type == ContestRuleType.ACM:
-                problems_status = profile.acm_problems_status.get("contest_problems", {})
-            else:
-                problems_status = profile.oi_problems_status.get("contest_problems", {})
+            problems_status = profile.problems_status.get("contest_problems", {})
             for problem in queryset_values:
                 problem["my_status"] = problems_status.get(str(problem["id"]), {}).get("status")
 

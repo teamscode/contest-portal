@@ -1,7 +1,6 @@
 from django.db import models
 
 from utils.constants import ContestStatus
-from utils.models import JSONField
 from problem.models import Problem
 from contest.models import Contest
 
@@ -32,12 +31,12 @@ class Submission(models.Model):
     code = models.TextField()
     result = models.IntegerField(db_index=True, default=JudgeStatus.PENDING)
     # 从JudgeServer返回的判题详情
-    info = JSONField(default=dict)
+    info = models.JSONField(default=dict)
     language = models.TextField()
     shared = models.BooleanField(default=False)
     # 存储该提交所用时间和内存值，方便提交列表显示
     # {time_cost: "", memory_cost: "", err_info: "", score: 0}
-    statistic_info = JSONField(default=dict)
+    statistic_info = models.JSONField(default=dict)
     ip = models.TextField(null=True)
 
     def check_user_permission(self, user, check_share=True):

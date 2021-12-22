@@ -10,7 +10,7 @@ from django.conf import settings
 from utils.api.tests import APITestCase
 
 from .models import ProblemTag, ProblemIOMode
-from .models import Problem, ProblemRuleType
+from .models import Problem
 from contest.models import Contest
 from contest.tests import DEFAULT_CONTEST_DATA
 
@@ -19,15 +19,15 @@ from .utils import parse_problem_template
 
 DEFAULT_PROBLEM_DATA = {"_id": "A-110", "title": "test", "description": "<p>test</p>", "input_description": "test",
                         "output_description": "test", "time_limit": 1000, "memory_limit": 256, "difficulty": "Low",
-                        "visible": True, "tags": ["test"], "languages": ["C", "C++", "Java", "Python2"], "template": {},
+                        "visible": True, "tags": ["test"], "languages": ["C", "C++11", "C++17", "Java", "Python 2", "Python 3"], "template": {},
                         "samples": [{"input": "test", "output": "test"}], "spj": False, "spj_language": "C",
                         "spj_code": "", "spj_compile_ok": True, "test_case_id": "499b26290cc7994e0b497212e842ea85",
                         "test_case_score": [{"output_name": "1.out", "input_name": "1.in", "output_size": 0,
                                              "stripped_output_md5": "d41d8cd98f00b204e9800998ecf8427e",
-                                             "input_size": 0, "score": 0}],
+                                             "input_size": 0, "score": 100}],
                         "io_mode": {"io_mode": ProblemIOMode.standard, "input": "input.txt", "output": "output.txt"},
                         "share_submission": False,
-                        "rule_type": "ACM", "hint": "<p>test</p>", "source": "test"}
+                        "hint": "<p>test</p>", "source": "test"}
 
 
 class ProblemCreateTestBase(APITestCase):
@@ -42,14 +42,14 @@ class ProblemCreateTestBase(APITestCase):
         else:
             data["spj_language"] = None
             data["spj_code"] = None
-        if data["rule_type"] == ProblemRuleType.OI:
-            total_score = 0
-            for item in data["test_case_score"]:
-                if item["score"] <= 0:
-                    raise ValueError("invalid score")
-                else:
-                    total_score += item["score"]
-            data["total_score"] = total_score
+
+        total_score = 0
+        for item in data["test_case_score"]:
+            if item["score"] <= 0:
+                raise ValueError("invalid score")
+            else:
+                total_score += item["score"]
+        data["total_score"] = total_score
         data["created_by"] = created_by
         tags = data.pop("tags")
 

@@ -335,26 +335,11 @@ class SessionManagementAPI(APIView):
             return self.error("Invalid session_key")
 
 
-class UserRankAPI(APIView):
-    def get(self, request):
-        rule_type = request.GET.get("rule")
-        if rule_type not in ContestRuleType.choices():
-            rule_type = ContestRuleType.ACM
-        profiles = UserProfile.objects.filter(user__admin_type=AdminType.REGULAR_USER, user__is_disabled=False) \
-            .select_related("user")
-        if rule_type == ContestRuleType.ACM:
-            profiles = profiles.filter(submission_number__gt=0).order_by("-accepted_number", "submission_number")
-        else:
-            profiles = profiles.filter(total_score__gt=0).order_by("-total_score")
-        return self.success(self.paginate_data(request, profiles, RankInfoSerializer))
-
-
 class ProfileProblemDisplayIDRefreshAPI(APIView):
     @login_required
     def get(self, request):
         profile = request.user.userprofile
-        acm_problems = profile.acm_problems_status.get("problems", {})
-        oi_problems = profile.oi_problems_status.get("problems", {})
+        oi_problems = profile.problems_status.get("problems", {})
         ids = list(acm_problems.keys()) + list(oi_problems.keys())
         if not ids:
             return self.success()
@@ -364,7 +349,7 @@ class ProfileProblemDisplayIDRefreshAPI(APIView):
             v["_id"] = id_map[k]
         for k, v in oi_problems.items():
             v["_id"] = id_map[k]
-        profile.save(update_fields=["acm_problems_status", "oi_problems_status"])
+        profile.save(update_fields=["problems_status"])
         return self.success()
 
 

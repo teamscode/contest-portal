@@ -14,11 +14,11 @@ from utils.cache import cache
 from utils.constants import CacheKey
 from utils.shortcuts import rand_str
 from utils.tasks import delete_files
-from ..models import Contest, ContestAnnouncement, ACMContestRank
+from ..models import Contest, ContestAnnouncement
 from ..serializers import (ContestAnnouncementSerializer, ContestAdminSerializer,
                            CreateConetestSeriaizer, CreateContestAnnouncementSerializer,
                            EditConetestSeriaizer, EditContestAnnouncementSerializer,
-                           ACMContesHelperSerializer, )
+                            )
 
 
 class ContestAPI(APIView):
@@ -157,43 +157,6 @@ class ContestAnnouncementAPI(APIView):
         if keyword:
             contest_announcements = contest_announcements.filter(title__contains=keyword)
         return self.success(ContestAnnouncementSerializer(contest_announcements, many=True).data)
-
-
-class ACMContestHelper(APIView):
-    @check_contest_permission(check_type="ranks")
-    def get(self, request):
-        ranks = ACMContestRank.objects.filter(contest=self.contest, accepted_number__gt=0) \
-            .values("id", "user__username", "user__userprofile__team_members", "submission_info")
-        results = []
-        for rank in ranks:
-            for problem_id, info in rank["submission_info"].items():
-                if info["is_ac"]:
-                    results.append({
-                        "id": rank["id"],
-                        "username": rank["user__username"],
-                        "team_members": rank["user__userprofile__team_members"],
-                        "problem_id": problem_id,
-                        "ac_info": info,
-                        "checked": info.get("checked", False)
-                    })
-        results.sort(key=lambda x: -x["ac_info"]["ac_time"])
-        return self.success(results)
-
-    @check_contest_permission(check_type="ranks")
-    @validate_serializer(ACMContesHelperSerializer)
-    def put(self, request):
-        data = request.data
-        try:
-            rank = ACMContestRank.objects.get(pk=data["rank_id"])
-        except ACMContestRank.DoesNotExist:
-            return self.error("Rank id does not exist")
-        problem_rank_status = rank.submission_info.get(data["problem_id"])
-        if not problem_rank_status:
-            return self.error("Problem id does not exist")
-        problem_rank_status["checked"] = data["checked"]
-        rank.save(update_fields=("submission_info",))
-        return self.success()
-
 
 class DownloadContestSubmissions(APIView):
     def _dump_submissions(self, contest, exclude_admin=True):

@@ -23,15 +23,6 @@ class SubmissionModelSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# 不显示submission info的serializer, 用于ACM rule_type
-class SubmissionSafeModelSerializer(serializers.ModelSerializer):
-    problem = serializers.SlugRelatedField(read_only=True, slug_field="_id")
-
-    class Meta:
-        model = Submission
-        exclude = ("info", "contest", "ip")
-
-
 class SubmissionListSerializer(serializers.ModelSerializer):
     problem = serializers.SlugRelatedField(read_only=True, slug_field="_id")
     show_link = serializers.SerializerMethodField()
