@@ -38,7 +38,7 @@
              :data="problemList"
              :loading="loadings.table"
              disabled-hover></Table>
-    </Panel>
+      </Panel>
     <Pagination
       :total="total" :page-size.sync="query.limit" @on-change="pushRouter" @on-page-size-change="pushRouter" :current.sync="query.page" :show-sizer="true"></Pagination>
 

@@ -1,6 +1,6 @@
 // all routes here.
 import {
-  About,
+  Judger,
   FAQ,
   Home,
   Logout,
@@ -124,10 +124,10 @@ export default [
     ]
   },
   {
-    path: '/about',
-    name: 'about',
-    meta: {title: 'About'},
-    component: About
+    path: '/judger',
+    name: 'judger',
+    meta: {title: 'Judger'},
+    component: Judger
   },
   {
     path: '/faq',

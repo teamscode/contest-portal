@@ -132,7 +132,7 @@ export const m = {
   Rank: 'Rank',
   ACM_Rank: 'ACM Rank',
   OI_Rank: 'OI Rank',
-  About: 'About',
+  About: 'Help',
   Judger: 'Judger',
   FAQ: 'FAQ',
   Login: 'Login',

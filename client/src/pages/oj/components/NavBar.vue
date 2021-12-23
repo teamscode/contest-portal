@@ -30,7 +30,7 @@
           <Icon type="information-circled"></Icon>
           {{$t('m.About')}}
         </template>
-        <Menu-item name="/about">
+        <Menu-item name="/judger">
           {{$t('m.Judger')}}
         </Menu-item>
         <Menu-item name="/FAQ">
