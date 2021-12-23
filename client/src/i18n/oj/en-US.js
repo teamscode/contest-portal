@@ -55,20 +55,6 @@ export const m = {
   TotalTime: 'Total Time',
   Top_10_Teams: 'Top 10 Teams',
   save_as_image: 'save as image',
-  // ACMHelper.vue
-  ACM_Helper: 'ACM Helper',
-  AC_Time: 'AC Time',
-  ProblemID: 'Problem ID',
-  First_Blood: 'First Blood',
-  Username: 'Username',
-  Checked: 'Checked',
-  Not_Checked: 'Not Checked',
-  Check_It: 'Check It',
-  // ACMRank.vue
-  ACM_Ranklist: 'ACM Ranklist',
-  mood: 'mood',
-  AC: 'AC',
-  Rating: 'Rating',
   // Announcements.vue
   Contest_Announcements: 'Contest Announcements',
   By: 'By',
@@ -156,7 +142,6 @@ export const m = {
   Settings: 'Settings',
   Management: 'Management',
   Logout: 'Logout',
-  Welcome_to: 'Welcome to',
   // announcements.vue
   Refresh: 'Refresh',
   Back: 'Back',
@@ -182,7 +167,7 @@ export const m = {
   No_Account: 'No account? Register now!',
   Forget_Password: 'Forget Password',
   UserLogin: 'Login',
-  Welcome_back: 'Welcome back to TOJ',
+  Welcome_back: 'You\'ve logged in to TeamsCode Contest Portal',
   // OIRank.vue
   OI_Ranklist: 'OI Ranklist',
   // OIContestRank.vue

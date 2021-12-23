@@ -59,7 +59,7 @@ class WebsiteConfigAPITest(APITestCase):
         url = self.reverse("website_config_api")
         data = {"website_base_url": "http://test.com", "website_name": "test name",
                 "website_name_shortcut": "test oj", "website_footer": "<a>test</a>",
-                "allow_register": True, "submission_list_show_all": False}
+                "allow_register": True, }
         resp = self.client.post(url, data=data)
         self.assertSuccess(resp)
 
@@ -68,7 +68,7 @@ class WebsiteConfigAPITest(APITestCase):
         url = self.reverse("website_config_api")
         data = {"website_base_url": "http://test.com", "website_name": "test name",
                 "website_name_shortcut": "test oj", "website_footer": "<img onerror=alert(1) src=#>",
-                "allow_register": True, "submission_list_show_all": False}
+                "allow_register": True, }
         resp = self.client.post(url, data=data)
         self.assertSuccess(resp)
         self.assertEqual(SysOptions.website_footer, "<img src=\"#\" />")

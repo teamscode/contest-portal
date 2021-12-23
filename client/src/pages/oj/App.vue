@@ -5,10 +5,6 @@
       <transition name="fadeInUp" mode="out-in">
         <router-view></router-view>
       </transition>
-      <div class="footer">
-        <p v-html="website.website_footer"></p>
-        <p>Powered by <a href="https://teamscode.org">TeamsCode</a> Online Judge</p>
-      </div>
     </div>
     <BackTop></BackTop>
   </div>

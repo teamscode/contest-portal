@@ -25,7 +25,6 @@ class CreateEditWebsiteConfigSerializer(serializers.Serializer):
     website_name_shortcut = serializers.CharField(max_length=64)
     website_footer = serializers.CharField(max_length=1024 * 1024)
     allow_register = serializers.BooleanField()
-    submission_list_show_all = serializers.BooleanField()
 
 
 class JudgeServerSerializer(serializers.ModelSerializer):

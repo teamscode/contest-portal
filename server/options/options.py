@@ -99,7 +99,6 @@ class OptionKeys:
     website_name_shortcut = "website_name_shortcut"
     website_footer = "website_footer"
     allow_register = "allow_register"
-    submission_list_show_all = "submission_list_show_all"
     smtp_config = "smtp_config"
     judge_server_token = "judge_server_token"
     throttling = "throttling"
@@ -108,11 +107,9 @@ class OptionKeys:
 
 class OptionDefaultValue:
     website_base_url = "http://127.0.0.1"
-    website_name = "TeamsCode OJ"
-    website_name_shortcut = "TOJ"
-    website_footer = "TeamsCode"
+    website_name = "TeamsCode Contest Portal"
+    website_name_shortcut = "TCP"
     allow_register = True
-    submission_list_show_all = True
     smtp_config = {}
     judge_server_token = default_token
     throttling = {"ip": {"capacity": 100, "fill_rate": 0.1, "default_capacity": 50},
@@ -221,14 +218,6 @@ class _SysOptionsMeta(type):
     @allow_register.setter
     def allow_register(cls, value):
         cls._set_option(OptionKeys.allow_register, value)
-
-    @my_property(ttl=DEFAULT_SHORT_TTL)
-    def submission_list_show_all(cls):
-        return cls._get_option(OptionKeys.submission_list_show_all)
-
-    @submission_list_show_all.setter
-    def submission_list_show_all(cls, value):
-        cls._set_option(OptionKeys.submission_list_show_all, value)
 
     @my_property
     def smtp_config(cls):
