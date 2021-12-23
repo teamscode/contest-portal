@@ -25,9 +25,6 @@
           </div>
         </Poptip>
       </div>
-      <div v-show="false" class="echarts">
-        <ECharts :options="options" ref="chart" auto-resize></ECharts>
-      </div>
       <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover :loading="loading"></Table>
       <Pagination :total="total"
                   :page-size.sync="limit"
@@ -201,15 +198,6 @@
     },
     methods: {
       ...mapActions(['getContestProblems']),
-      applyToChart (rankData) {
-        let [usernames, scores] = [[], []]
-        rankData.forEach(ele => {
-          usernames.push(ele.user.username)
-          scores.push(ele.total_score)
-        })
-        this.options.xAxis[0].data = usernames
-        this.options.series[0].data = scores
-      },
       applyToTable (data) {
         // deepcopy
         let dataRank = JSON.parse(JSON.stringify(data))
@@ -260,11 +248,6 @@
   }
 </script>
 <style scoped lang="less">
-  .echarts {
-    margin: 20px auto;
-    height: 400px;
-    width: 98%;
-  }
 
   .screen-full {
     margin-right: 8px;

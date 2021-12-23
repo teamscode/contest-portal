@@ -30,9 +30,6 @@ export default {
           this.loading = false
         }
         this.total = res.data.data.total
-        if (page === 1) {
-          this.applyToChart(res.data.data.results.slice(0, 10))
-        }
         this.applyToTable(res.data.data.results)
       })
     },
@@ -53,14 +50,6 @@ export default {
       'contest': state => state.contest.contest,
       'contestProblems': state => state.contest.contestProblems
     }),
-    showChart: {
-      get () {
-        return this.$store.state.contest.itemVisible.chart
-      },
-      set (value) {
-        this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {chart: value})
-      }
-    },
     showMenu: {
       get () {
         return this.$store.state.contest.itemVisible.menu
@@ -68,9 +57,6 @@ export default {
       set (value) {
         this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {menu: value})
         this.$nextTick(() => {
-          if (this.showChart) {
-            this.$refs.chart.resize()
-          }
           this.$refs.tableRank.handleResize()
         })
       }

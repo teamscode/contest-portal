@@ -183,15 +183,6 @@
         </ul>
       </Card>
     </div>
-
-    <Modal v-model="graphVisible">
-      <div id="pieChart-detail">
-        <ECharts :options="largePie" :initOptions="largePieInitOpts"></ECharts>
-      </div>
-      <div slot="footer">
-        <Button type="ghost" @click="graphVisible=false">{{$t('m.Close')}}</Button>
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -203,7 +194,6 @@
   import {FormMixin} from '@oj/components/mixins'
   import {JUDGE_STATUS, CONTEST_STATUS, buildProblemCodeKey} from '@/utils/constants'
   import api from '@oj/api'
-  import {pie, largePie} from './chartData'
 
   // 只显示这些状态的图形占用
   const filtedStatus = ['-1', '-2', '0', '1', '2', '3', '4', '8']
@@ -218,7 +208,6 @@
       return {
         statusVisible: false,
         captchaRequired: false,
-        graphVisible: false,
         submissionExists: false,
         captchaCode: '',
         captchaSrc: '',
@@ -245,13 +234,6 @@
           },
           tags: [],
           io_mode: {'io_mode': 'Standard IO'}
-        },
-        pie: pie,
-        largePie: largePie,
-        // echarts 无法获取隐藏dom的大小，需手动指定
-        largePieInitOpts: {
-          width: '500',
-          height: '480'
         }
       }
     },
@@ -287,7 +269,6 @@
           })
           problem.languages = problem.languages.sort()
           this.problem = problem
-          this.changePie(problem)
 
           // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template
           if (this.code !== '') {
@@ -302,42 +283,6 @@
         }, () => {
           this.$Loading.error()
         })
-      },
-      changePie (problemData) {
-        // 只显示特定的一些状态
-        for (let k in problemData.statistic_info) {
-          if (filtedStatus.indexOf(k) === -1) {
-            delete problemData.statistic_info[k]
-          }
-        }
-        let acNum = problemData.accepted_number
-        let data = [
-          {name: 'WA', value: problemData.submission_number - acNum},
-          {name: 'AC', value: acNum}
-        ]
-        this.pie.series[0].data = data
-        // 只把大图的AC selected下，这里需要做一下deepcopy
-        let data2 = JSON.parse(JSON.stringify(data))
-        data2[1].selected = true
-        this.largePie.series[1].data = data2
-
-        // 根据结果设置legend,没有提交过的legend不显示
-        let legend = Object.keys(problemData.statistic_info).map(ele => JUDGE_STATUS[ele].short)
-        if (legend.length === 0) {
-          legend.push('AC', 'WA')
-        }
-        this.largePie.legend.data = legend
-
-        // 把ac的数据提取出来放在最后
-        let acCount = problemData.statistic_info['0']
-        delete problemData.statistic_info['0']
-
-        let largePieData = []
-        Object.keys(problemData.statistic_info).forEach(ele => {
-          largePieData.push({name: JUDGE_STATUS[ele].short, value: problemData.statistic_info[ele]})
-        })
-        largePieData.push({name: 'AC', value: acCount})
-        this.largePie.series[0].data = largePieData
       },
       handleRoute (route) {
         this.$router.push(route)
@@ -599,24 +544,6 @@
 
   .fl-right {
     float: right;
-  }
-
-  #pieChart {
-    .echarts {
-      height: 250px;
-      width: 210px;
-    }
-    #detail {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-    }
-  }
-
-  #pieChart-detail {
-    margin-top: 20px;
-    width: 500px;
-    height: 480px;
   }
 </style>
 
