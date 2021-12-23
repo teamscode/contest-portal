@@ -97,7 +97,6 @@ class OptionKeys:
     website_base_url = "website_base_url"
     website_name = "website_name"
     website_name_shortcut = "website_name_shortcut"
-    website_footer = "website_footer"
     allow_register = "allow_register"
     smtp_config = "smtp_config"
     judge_server_token = "judge_server_token"
@@ -202,14 +201,6 @@ class _SysOptionsMeta(type):
     @website_name_shortcut.setter
     def website_name_shortcut(cls, value):
         cls._set_option(OptionKeys.website_name_shortcut, value)
-
-    @my_property(ttl=DEFAULT_SHORT_TTL)
-    def website_footer(cls):
-        return cls._get_option(OptionKeys.website_footer)
-
-    @website_footer.setter
-    def website_footer(cls, value):
-        cls._set_option(OptionKeys.website_footer, value)
 
     @my_property
     def allow_register(cls):

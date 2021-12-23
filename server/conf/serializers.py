@@ -23,7 +23,6 @@ class CreateEditWebsiteConfigSerializer(serializers.Serializer):
     website_base_url = serializers.CharField(max_length=128)
     website_name = serializers.CharField(max_length=64)
     website_name_shortcut = serializers.CharField(max_length=64)
-    website_footer = serializers.CharField(max_length=1024 * 1024)
     allow_register = serializers.BooleanField()
 
 

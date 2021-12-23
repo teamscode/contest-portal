@@ -91,16 +91,13 @@ class WebsiteConfigAPI(APIView):
     def get(self, request):
         ret = {key: getattr(SysOptions, key) for key in
                ["website_base_url", "website_name", "website_name_shortcut",
-                "website_footer", "allow_register"]}
+                "allow_register"]}
         return self.success(ret)
 
     @super_admin_required
     @validate_serializer(CreateEditWebsiteConfigSerializer)
     def post(self, request):
         for k, v in request.data.items():
-            if k == "website_footer":
-                with XSSHtml() as parser:
-                    v = parser.clean(v)
             setattr(SysOptions, k, v)
         return self.success()
 
