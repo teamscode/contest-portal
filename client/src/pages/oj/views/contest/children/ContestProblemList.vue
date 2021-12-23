@@ -74,6 +74,25 @@
           {
             title: this.$i18n.t('m.Title'),
             key: 'title'
+          },
+          {
+            title: 'Open',
+            render: (h, params) => {
+              const btn1 = h('Button', {
+                on: {
+                  'click': (event) => {
+                    event.stopPropagation()
+                    window.open(`/contest/${this.$route.params.contestID}/problem/${params.row._id}`, '_blank')
+                  }
+                },
+                style: {
+                  'margin-right': '10px'
+                }
+              }, '↗ New Tab')
+              const btn2 = h('Button', {
+              }, '↗ Current Tab')
+              return h('div', [ btn1, btn2 ])
+            }
           }
         ]
       }
