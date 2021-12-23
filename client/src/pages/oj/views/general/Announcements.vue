@@ -63,6 +63,7 @@
     },
     mounted () {
       this.init()
+      this.announcementChecker = setInterval(() => { this.getAnnouncementList() }, 5000)
     },
     beforeDestroy () {
       if (this.announcementChecker) {
@@ -75,7 +76,6 @@
           this.$emit('refreshAnnouncements')
         } else {
           this.getAnnouncementList()
-          this.announcementChecker = setInterval(() => { this.getAnnouncementList() }, 5000)
         }
       },
       getAnnouncementList (page = 1) {

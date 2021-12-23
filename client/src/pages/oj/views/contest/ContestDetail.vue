@@ -130,7 +130,7 @@
         }
       })
       this.getContestAnnouncementList()
-      this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 10000)
+      this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
     },
     methods: {
       ...mapActions(['changeDomTitle']),
