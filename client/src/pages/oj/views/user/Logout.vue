@@ -1,5 +1,4 @@
-<template>
-</template>
+<template />
 
 <script>
   import api from '../../api.js'

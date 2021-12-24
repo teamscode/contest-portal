@@ -7,62 +7,85 @@
       <el-table
         :data="servers"
         :default-expand-all="true"
-        border>
+        border
+      >
         <el-table-column
-          type="expand">
+          type="expand"
+        >
           <template slot-scope="props">
-            <p>{{$t('m.IP')}}:
-              <el-tag type="success">{{ props.row.ip }}</el-tag>&nbsp;&nbsp;
-              {{$t('m.Judger_Version')}}:
-              <el-tag type="success">{{ props.row.judger_version }}</el-tag>
+            <p>
+              {{ $t('m.IP') }}:
+              <el-tag type="success">
+                {{ props.row.ip }}
+              </el-tag>&nbsp;&nbsp;
+              {{ $t('m.Judger_Version') }}:
+              <el-tag type="success">
+                {{ props.row.judger_version }}
+              </el-tag>
             </p>
-            <p>{{$t('m.Service_URL')}}: <code>{{ props.row.service_url }}</code></p>
-            <p>{{$t('m.Last_Heartbeat')}}: {{ props.row.last_heartbeat | localtime}}</p>
-            <p>{{$t('m.Create_Time')}}: {{ props.row.create_time | localtime }}</p>
+            <p>{{ $t('m.Service_URL') }}: <code>{{ props.row.service_url }}</code></p>
+            <p>{{ $t('m.Last_Heartbeat') }}: {{ props.row.last_heartbeat | localtime }}</p>
+            <p>{{ $t('m.Create_Time') }}: {{ props.row.create_time | localtime }}</p>
           </template>
         </el-table-column>
         <el-table-column
           prop="status"
-          label="Status">
+          label="Status"
+        >
           <template slot-scope="scope">
             <el-tag
-              :type="scope.row.status === 'normal' ? 'success' : 'danger'">
+              :type="scope.row.status === 'normal' ? 'success' : 'danger'"
+            >
               {{ scope.row.status === 'normal' ? 'Normal' : 'Abnormal' }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column
           prop="hostname"
-          label="Hostname">
-        </el-table-column>
+          label="Hostname"
+        />
         <el-table-column
           prop="task_number"
-          label="Task Number">
-        </el-table-column>
+          label="Task Number"
+        />
         <el-table-column
           prop="cpu_core"
-          label="CPU Core">
-        </el-table-column>
+          label="CPU Core"
+        />
         <el-table-column
           prop="cpu_usage"
-          label="CPU Usage">
-          <template slot-scope="scope">{{ scope.row.cpu_usage }}%</template>
+          label="CPU Usage"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.cpu_usage }}%
+          </template>
         </el-table-column>
         <el-table-column
           prop="memory_usage"
-          label="Memory Usage">
-          <template slot-scope="scope">{{ scope.row.memory_usage }}%</template>
+          label="Memory Usage"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.memory_usage }}%
+          </template>
         </el-table-column>
         <el-table-column label="Disabled">
           <template slot-scope="{row}">
-            <el-switch v-model="row.is_disabled" @change="handleDisabledSwitch(row.id, row.is_disabled)"></el-switch>
+            <el-switch
+              v-model="row.is_disabled"
+              @change="handleDisabledSwitch(row.id, row.is_disabled)"
+            />
           </template>
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="Options">
+          label="Options"
+        >
           <template slot-scope="scope">
-            <icon-btn name="Delete" icon="trash" @click.native="deleteJudgeServer(scope.row.hostname)"></icon-btn>
+            <icon-btn
+              name="Delete"
+              icon="trash"
+              @click.native="deleteJudgeServer(scope.row.hostname)"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -75,6 +98,10 @@
 
   export default {
     name: 'JudgeServer',
+    beforeRouteLeave (to, from, next) {
+      clearInterval(this.intervalId)
+      next()
+    },
     data () {
       return {
         servers: [],
@@ -114,10 +141,6 @@
         }
         api.updateJudgeServer(data).catch(() => {})
       }
-    },
-    beforeRouteLeave (to, from, next) {
-      clearInterval(this.intervalId)
-      next()
     }
   }
 </script>

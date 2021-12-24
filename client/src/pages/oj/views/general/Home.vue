@@ -1,29 +1,61 @@
 <template>
-  <Row type="flex" justify="space-around">
+  <Row
+    type="flex"
+    justify="space-around"
+  >
     <Col :span="24">
-    <panel shadow v-if="contests.length" class="contest">
-      <div slot="title">
-        <Button type="text"  class="contest-title" @click="goContest">{{contests[index].title}}</Button>
-      </div>
-      <Carousel v-model="index" trigger="hover" autoplay :autoplay-speed="6000" class="contest">
-        <CarouselItem v-for="(contest, index) of contests" :key="index">
-          <div class="contest-content">
-            <div class="contest-content-tags">
-              <Button type="info" shape="circle" size="small" icon="calendar">
-                {{contest.start_time | localtime('YYYY-M-D HH:mm') }}
-              </Button>
-              <Button type="success" shape="circle" size="small" icon="android-time">
-                {{getDuration(contest.start_time, contest.end_time)}}
-              </Button>
+      <panel
+        v-if="contests.length"
+        shadow
+        class="contest"
+      >
+        <div slot="title">
+          <Button
+            type="text"
+            class="contest-title"
+            @click="goContest"
+          >
+            {{ contests[index].title }}
+          </Button>
+        </div>
+        <Carousel
+          v-model="index"
+          trigger="hover"
+          autoplay
+          :autoplay-speed="6000"
+          class="contest"
+        >
+          <CarouselItem
+            v-for="(contest, index) of contests"
+            :key="index"
+          >
+            <div class="contest-content">
+              <div class="contest-content-tags">
+                <Button
+                  type="info"
+                  shape="circle"
+                  size="small"
+                  icon="calendar"
+                >
+                  {{ contest.start_time | localtime('YYYY-M-D HH:mm') }}
+                </Button>
+                <Button
+                  type="success"
+                  shape="circle"
+                  size="small"
+                  icon="android-time"
+                >
+                  {{ getDuration(contest.start_time, contest.end_time) }}
+                </Button>
+              </div>
+              <div class="contest-content-description">
+                <blockquote v-html="contest.description" />
+              </div>
             </div>
-            <div class="contest-content-description">
-              <blockquote v-html="contest.description"></blockquote>
-            </div>
-          </div>
-        </CarouselItem>
-      </Carousel>
-    </panel>
-    <Announcements></Announcements>
+          </CarouselItem>
+        </Carousel>
+      </panel>
+      <Announcements />
     </Col>
   </Row>
 </template>
@@ -35,7 +67,7 @@
   import { CONTEST_STATUS } from '@/utils/constants'
 
   export default {
-    name: 'home',
+    name: 'Home',
     components: {
       Announcements
     },

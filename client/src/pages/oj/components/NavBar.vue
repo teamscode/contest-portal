@@ -1,74 +1,129 @@
 <template>
   <div id="header">
-    <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
+    <Menu
+      theme="light"
+      mode="horizontal"
+      :active-name="activeMenu"
+      class="oj-menu"
+      @on-select="handleRoute"
+    >
       <div class="logoimg">
-        <img src="../../../assets/logo.svg" alt="oj logo"/>
+        <img
+          src="../../../assets/logo.svg"
+          alt="oj logo"
+        >
       </div>
-      <div class="logo"><span>{{website.website_name}}</span></div>
+      <div class="logo">
+        <span>{{ website.website_name }}</span>
+      </div>
       <Menu-item name="/">
-        <Icon type="home"></Icon>
-        {{$t('m.Home')}}
+        <Icon type="home" />
+        {{ $t('m.Home') }}
       </Menu-item>
-      <Submenu v-if="isAdminRole" name="problem">
+      <Submenu
+        v-if="isAdminRole"
+        name="problem"
+      >
         <template slot="title">
-          <Icon type="ios-keypad"></Icon>
-          {{$t('m.NavProblems')}}
+          <Icon type="ios-keypad" />
+          {{ $t('m.NavProblems') }}
         </template>
         <Menu-item name="/problem">
-          {{$t('m.Problem_List')}}
+          {{ $t('m.Problem_List') }}
         </Menu-item>
         <Menu-item name="/status">
-          {{$t('m.Submissions')}}
+          {{ $t('m.Submissions') }}
         </Menu-item>
       </Submenu>
       <Menu-item name="/contest">
-        <Icon type="trophy"></Icon>
-        {{$t('m.Contests')}}
+        <Icon type="trophy" />
+        {{ $t('m.Contests') }}
       </Menu-item>
       <Submenu name="about">
         <template slot="title">
-          <Icon type="information-circled"></Icon>
-          {{$t('m.About')}}
+          <Icon type="information-circled" />
+          {{ $t('m.About') }}
         </template>
         <Menu-item name="/judger">
-          {{$t('m.Judger')}}
+          {{ $t('m.Judger') }}
         </Menu-item>
         <Menu-item name="/FAQ">
-          {{$t('m.FAQ')}}
+          {{ $t('m.FAQ') }}
         </Menu-item>
       </Submenu>
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
-          <Button type="ghost"
-                  ref="loginBtn"
-                  shape="circle"
-                  @click="handleBtnClick('login')">{{$t('m.Login')}}
+          <Button
+            ref="loginBtn"
+            type="ghost"
+            shape="circle"
+            @click="handleBtnClick('login')"
+          >
+            {{ $t('m.Login') }}
           </Button>
-          <Button v-if="website.allow_register"
-                  type="ghost"
-                  shape="circle"
-                  @click="handleBtnClick('register')"
-                  style="margin-left: 5px;">{{$t('m.Register')}}
+          <Button
+            v-if="website.allow_register"
+            type="ghost"
+            shape="circle"
+            style="margin-left: 5px;"
+            @click="handleBtnClick('register')"
+          >
+            {{ $t('m.Register') }}
           </Button>
         </div>
       </template>
       <template v-else>
-        <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
-          <Button type="text" class="drop-menu-title">{{ user.username }}
-            <Icon type="arrow-down-b"></Icon>
+        <Dropdown
+          class="drop-menu"
+          placement="bottom"
+          trigger="click"
+          @on-click="handleRoute"
+        >
+          <Button
+            type="text"
+            class="drop-menu-title"
+          >
+            {{ user.username }}
+            <Icon type="arrow-down-b" />
           </Button>
           <Dropdown-menu slot="list">
-            <Dropdown-item name="/setting/account">{{$t('m.Settings')}}</Dropdown-item>
-            <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
-            <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
+            <Dropdown-item name="/setting/account">
+              {{ $t('m.Settings') }}
+            </Dropdown-item>
+            <Dropdown-item
+              v-if="isAdminRole"
+              name="/admin"
+            >
+              {{ $t('m.Management') }}
+            </Dropdown-item>
+            <Dropdown-item
+              divided
+              name="/logout"
+            >
+              {{ $t('m.Logout') }}
+            </Dropdown-item>
           </Dropdown-menu>
         </Dropdown>
       </template>
     </Menu>
-    <Modal v-model="modalVisible" :width="400">
-      <div slot="header" class="modal-title">{{website.website_name}}</div>
-      <component :is="modalStatus.mode" v-if="modalVisible"></component>
-      <div slot="footer" style="display: none"></div>
+    <Modal
+      v-model="modalVisible"
+      :width="modalStatus.mode==='register'?800:400"
+    >
+      <div
+        slot="header"
+        class="modal-title"
+      >
+        {{ website.website_name }}
+      </div>
+      <component
+        :is="modalStatus.mode"
+        v-if="modalVisible"
+      />
+      <div
+        slot="footer"
+        style="display: none"
+      />
     </Modal>
   </div>
 </template>

@@ -1,60 +1,106 @@
 <template>
   <div class="setting-main">
-    <p class="section-title">{{$t('m.Sessions')}}</p>
+    <p class="section-title">
+      {{ $t('m.Sessions') }}
+    </p>
     <div class="flex-container setting-content">
       <template v-for="session in sessions">
-        <Card :padding="20" class="flex-child">
-          <span slot="title" style="line-height: 20px">{{session.ip}}</span>
+        <Card
+          :padding="20"
+          class="flex-child"
+        >
+          <span
+            slot="title"
+            style="line-height: 20px"
+          >{{ session.ip }}</span>
           <div slot="extra">
-            <Tag v-if="session.current_session" color="green">Current</Tag>
-            <Button v-else
-                    type="warning"
-                    size="small"
-                    @click="deleteSession(session.session_key)">Revoke
+            <Tag
+              v-if="session.current_session"
+              color="green"
+            >
+              Current
+            </Tag>
+            <Button
+              v-else
+              type="warning"
+              size="small"
+              @click="deleteSession(session.session_key)"
+            >
+              Revoke
             </Button>
           </div>
           <Form :label-width="100">
-            <FormItem label="OS :" class="item">
-              {{session.user_agent | platform}}
+            <FormItem
+              label="OS :"
+              class="item"
+            >
+              {{ session.user_agent | platform }}
             </FormItem>
-            <FormItem label="Browser :" class="item">
-              {{session.user_agent | browser}}
+            <FormItem
+              label="Browser :"
+              class="item"
+            >
+              {{ session.user_agent | browser }}
             </FormItem>
-            <FormItem label="Last Activity :" class="item">
-              {{session.last_activity | localtime }}
+            <FormItem
+              label="Last Activity :"
+              class="item"
+            >
+              {{ session.last_activity | localtime }}
             </FormItem>
           </Form>
         </Card>
       </template>
     </div>
 
-    <p class="section-title">{{$t('m.Two_Factor_Authentication')}}</p>
+    <p class="section-title">
+      {{ $t('m.Two_Factor_Authentication') }}
+    </p>
     <div class="mini-container setting-content">
       <Form>
-        <Alert v-if="TFAOpened"
-               type="success"
-               class="notice"
-               showIcon>You have enabled two-factor authentication.
+        <Alert
+          v-if="TFAOpened"
+          type="success"
+          class="notice"
+          show-icon
+        >
+          You have enabled two-factor authentication.
         </Alert>
         <FormItem v-if="!TFAOpened">
           <div class="oj-relative">
-            <img :src="qrcodeSrc" id="qr-img">
-            <Spin size="large" fix v-if="loadingQRcode"></Spin>
+            <img
+              id="qr-img"
+              :src="qrcodeSrc"
+            >
+            <Spin
+              v-if="loadingQRcode"
+              size="large"
+              fix
+            />
           </div>
         </FormItem>
         <template v-if="!loadingQRcode">
           <FormItem style="width: 250px">
-            <Input v-model="formTwoFactor.code" placeholder="Enter the code from your application"/>
+            <Input
+              v-model="formTwoFactor.code"
+              placeholder="Enter the code from your application"
+            />
           </FormItem>
-          <Button type="primary"
-                  :loading="loadingBtn"
-                  @click="updateTFA(false)"
-                  v-if="!TFAOpened">Enable TFA
+          <Button
+            v-if="!TFAOpened"
+            type="primary"
+            :loading="loadingBtn"
+            @click="updateTFA(false)"
+          >
+            Enable TFA
           </Button>
-          <Button type="error"
-                  :loading="loadingBtn"
-                  @click="closeTFA"
-                  v-else>Disable TFA
+          <Button
+            v-else
+            type="error"
+            :loading="loadingBtn"
+            @click="closeTFA"
+          >
+            Disable TFA
           </Button>
         </template>
       </Form>

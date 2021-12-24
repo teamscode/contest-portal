@@ -1,39 +1,89 @@
 <template>
   <div>
-    <Panel shadow :padding="10">
+    <Panel
+      shadow
+      :padding="10"
+    >
       <div slot="title">
-        {{title}}
+        {{ title }}
       </div>
       <div slot="extra">
-        <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
-        <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
+        <Button
+          v-if="listVisible"
+          type="info"
+          :loading="btnLoading"
+          @click="init"
+        >
+          {{ $t('m.Refresh') }}
+        </Button>
+        <Button
+          v-else
+          type="ghost"
+          icon="ios-undo"
+          @click="goBack"
+        >
+          {{ $t('m.Back') }}
+        </Button>
       </div>
 
-      <div class="no-announcement" v-if="!announcements.length" key="no-announcement" style="margin-bottom: 20px; margin-top: 10px;">
-        <p>{{$t('m.No_Announcements')}}</p>
+      <div
+        v-if="!announcements.length"
+        key="no-announcement"
+        class="no-announcement"
+        style="margin-bottom: 20px; margin-top: 10px;"
+      >
+        <p>{{ $t('m.No_Announcements') }}</p>
       </div>
       <div v-if="listVisible">
-        <ul class="announcements-container" key="list">
-          <li v-for="announcement in announcements" :key="announcement.title">
+        <ul
+          key="list"
+          class="announcements-container"
+        >
+          <li
+            v-for="announcement in announcements"
+            :key="announcement.title"
+          >
             <div class="flex-container">
-              <div class="title"><a class="entry" @click="goAnnouncement(announcement)">
-                {{announcement.title}}</a></div>
-              <div class="date">{{announcement.create_time | localtime }}</div>
-              <div class="creator"> {{$t('m.By')}} {{announcement.created_by.username}}</div>
+              <div class="title">
+                <a
+                  class="entry"
+                  @click="goAnnouncement(announcement)"
+                >
+                  {{ announcement.title }}</a>
+              </div>
+              <div class="date">
+                {{ announcement.create_time | localtime }}
+              </div>
+              <div class="creator">
+                {{ $t('m.By') }} {{ announcement.created_by.username }}
+              </div>
             </div>
           </li>
         </ul>
-        <Pagination v-if="!isContest"
-                    key="page"
-                    :total="total"
-                    :page-size="limit"
-                    @on-change="getAnnouncementList">
-        </Pagination>
-        <Button v-else type="ghost" @click="$Notice.destroy" style="margin-left: 10px;">Dismiss All Notifications</Button>
+        <Pagination
+          v-if="!isContest"
+          key="page"
+          :total="total"
+          :page-size="limit"
+          @on-change="getAnnouncementList"
+        />
+        <Button
+          v-else
+          type="ghost"
+          style="margin-left: 10px;"
+          @click="$Notice.destroy"
+        >
+          Dismiss All Notifications
+        </Button>
       </div>
 
       <div v-else>
-        <div v-katex v-html="announcement.content" key="content" class="content-container markdown-body"></div>
+        <div
+          key="content"
+          v-katex
+          class="content-container markdown-body"
+          v-html="announcement.content"
+        />
       </div>
     </Panel>
   </div>

@@ -16,10 +16,17 @@ class UsernameOrEmailCheckSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
 
 
+class TeamMemberSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=64)
+    email = serializers.EmailField(max_length=64)
+
+
 class UserRegisterSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=128)
+    username = serializers.CharField(max_length=64)
+    team_name = serializers.CharField(max_length=128)
     password = serializers.CharField(min_length=6)
-    email = serializers.EmailField(max_length=128)
+    email = serializers.EmailField(max_length=64)
+    team_members = TeamMemberSerializer(many=True)
     captcha = serializers.CharField()
 
 
@@ -50,14 +57,18 @@ class ImportUserSeralizer(serializers.Serializer):
 
 class UserAdminSerializer(serializers.ModelSerializer):
     team_members = serializers.SerializerMethodField()
+    team_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "admin_type", "problem_permission", "team_members",
+        fields = ["id", "username", "email", "admin_type", "problem_permission", "team_members", "team_name",
                   "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled"]
 
     def get_team_members(self, obj):
         return obj.userprofile.team_members
+
+    def get_team_name(self, obj):
+        return obj.userprofile.team_name
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -85,10 +96,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class EditUserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    username = serializers.CharField(max_length=128)
-    team_members = serializers.CharField(max_length=512, allow_blank=True, allow_null=True)
+    username = serializers.CharField(max_length=64)
+    team_name = serializers.CharField(max_length=128)
+    team_members = TeamMemberSerializer(many=True)
     password = serializers.CharField(min_length=6, allow_blank=True, required=False, default=None)
-    email = serializers.EmailField(max_length=128)
+    email = serializers.EmailField(max_length=64)
     admin_type = serializers.ChoiceField(choices=(AdminType.REGULAR_USER, AdminType.ADMIN, AdminType.SUPER_ADMIN))
     problem_permission = serializers.ChoiceField(choices=(ProblemPermission.NONE, ProblemPermission.OWN,
                                                           ProblemPermission.ALL))
@@ -98,7 +110,7 @@ class EditUserSerializer(serializers.Serializer):
 
 
 class EditUserProfileSerializer(serializers.Serializer):
-    team_members = serializers.CharField(max_length=512, allow_null=True, required=False)
+    team_members = TeamMemberSerializer(many=True)
     avatar = serializers.CharField(max_length=256, allow_blank=True, required=False)
     language = serializers.CharField(max_length=32, allow_blank=True, required=False)
 

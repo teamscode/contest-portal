@@ -1,12 +1,15 @@
 <template>
   <div>
-    <NavBar></NavBar>
+    <NavBar />
     <div class="content-app">
-      <transition name="fadeInUp" mode="out-in">
-        <router-view></router-view>
+      <transition
+        name="fadeInUp"
+        mode="out-in"
+      >
+        <router-view />
       </transition>
     </div>
-    <BackTop></BackTop>
+    <BackTop />
   </div>
 </template>
 
@@ -15,7 +18,7 @@
   import NavBar from '@oj/components/NavBar.vue'
 
   export default {
-    name: 'app',
+    name: 'App',
     components: {
       NavBar
     },
@@ -28,6 +31,7 @@
       try {
         document.body.removeChild(document.getElementById('app-loader'))
       } catch (e) {
+        console.err(e)
       }
     },
     mounted () {

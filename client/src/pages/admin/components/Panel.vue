@@ -1,22 +1,25 @@
 <template>
-  <div class="panel" :class="{'small': small}">
+  <div
+    class="panel"
+    :class="{'small': small}"
+  >
     <header>
       <div class="title">
         <template v-if="$slots.title">
-          <slot name="title"></slot>
+          <slot name="title" />
         </template>
         <template v-else>
-          {{title}}
+          {{ title }}
         </template>
       </div>
 
       <div class="header_right">
-        <slot name="header"></slot>
+        <slot name="header" />
       </div>
     </header>
 
     <div class="body">
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

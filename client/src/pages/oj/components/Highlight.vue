@@ -1,17 +1,13 @@
 <template>
-  <pre v-highlight="code"><code :class="language" :style="styleObject"></code></pre>
+  <pre v-highlight="code"><code
+:class="language"
+                                :style="styleObject"
+  /></pre>
 </template>
 
 <script>
   export default {
-    name: 'highlight',
-    data () {
-      return {
-        styleObject: {
-          'border-left': '2px solid green'
-        }
-      }
-    },
+    name: 'Highlight',
     props: {
       language: {
         type: String
@@ -23,6 +19,13 @@
       borderColor: {
         type: String,
         default: 'green'
+      }
+    },
+    data () {
+      return {
+        styleObject: {
+          'border-left': '2px solid green'
+        }
       }
     },
     watch: {

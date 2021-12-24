@@ -1,17 +1,23 @@
 <template>
   <div>
     <Panel shadow>
-      <div slot="title">{{$t('m.Problems_List')}}</div>
-      <Table v-if="OIContestRealTimePermission"
-             :columns="ACMTableColumns"
-             :data="problems"
-             @on-row-click="goContestProblem"
-             :no-data-text="$t('m.No_Problems')"></Table>
-      <Table v-else
-             :data="problems"
-             :columns="OITableColumns"
-             @on-row-click="goContestProblem"
-             no-data-text="$t('m.No_Problems')"></Table>
+      <div slot="title">
+        {{ $t('m.Problems_List') }}
+      </div>
+      <Table
+        v-if="OIContestRealTimePermission"
+        :columns="ACMTableColumns"
+        :data="problems"
+        :no-data-text="$t('m.No_Problems')"
+        @on-row-click="goContestProblem"
+      />
+      <Table
+        v-else
+        :data="problems"
+        :columns="OITableColumns"
+        no-data-text="$t('m.No_Problems')"
+        @on-row-click="goContestProblem"
+      />
     </Panel>
   </div>
 </template>

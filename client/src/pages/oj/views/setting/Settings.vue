@@ -3,32 +3,62 @@
     <Card :padding="0">
       <div class="flex-container">
         <div class="menu">
-          <Menu accordion @on-select="goRoute" :activeName="activeName" style="text-align: center;" width="auto">
+          <Menu
+            accordion
+            :active-name="activeName"
+            style="text-align: center;"
+            width="auto"
+            @on-select="goRoute"
+          >
             <div class="avatar-editor">
               <div class="avatar-container">
-                <img class="avatar" :src="profile.avatar"/>
+                <img
+                  class="avatar"
+                  :src="profile.avatar"
+                >
               </div>
             </div>
             <div class="team-name">
-              <b>{{user.username}}</b>
+              <b>{{profile.team_name}} ({{ user.username }})</b>
             </div>
-            <div class="team-member-section" v-if="teamMembers">
-              <Row type="flex" :gutter="-40" justify="space-around">
-                <Col :span="11" v-for="(name,index) in teamMembers" :key="index">
+            <div
+              v-if="teamMembers"
+              class="team-member-section"
+            >
+              <Row
+                type="flex"
+                :gutter="-40"
+                justify="space-around"
+              >
+                <Col
+                  v-for="(name,index) in teamMembers"
+                  :key="index"
+                  :span="11"
+                >
                   <div class="team-member">
-                    {{name}}
+                    {{ name }}
                   </div>
                 </Col>
               </Row>
             </div>
             <hr class="rounded">
-            <Menu-item style="margin-top:10px" name="/setting/account">{{$t('m.Account')}}</Menu-item>
-            <Menu-item name="/setting/security">{{$t('m.Security')}}</Menu-item>
+            <Menu-item
+              style="margin-top:10px"
+              name="/setting/account"
+            >
+              {{ $t('m.Account') }}
+            </Menu-item>
+            <Menu-item name="/setting/team">
+              Team
+            </Menu-item>
+            <Menu-item name="/setting/security">
+              {{ $t('m.Security') }}
+            </Menu-item>
           </Menu>
         </div>
         <div class="panel">
           <transition name="fadeInUp">
-            <router-view></router-view>
+            <router-view />
           </transition>
         </div>
       </div>
@@ -39,7 +69,7 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    name: 'profile',
+    name: 'Profile',
     methods: {
       goRoute (routePath) {
         this.$router.push(routePath)
@@ -52,7 +82,7 @@
       },
       teamMembers () {
         if (this.profile.team_members) {
-          return this.profile.team_members.split(', ')
+          return this.profile.team_members.map((value) => value.name)
         } else {
           return null
         }

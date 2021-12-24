@@ -2,34 +2,63 @@
   <div class="flex-container">
     <div id="main">
       <Panel shadow>
-        <div slot="title">{{title}}</div>
+        <div slot="title">
+          {{ title }}
+        </div>
         <div slot="extra">
           <ul class="filter">
             <li>
               <Dropdown @on-click="handleResultChange">
-                <span>{{status}}
-                  <Icon type="arrow-down-b"></Icon>
+                <span>{{ status }}
+                  <Icon type="arrow-down-b" />
                 </span>
                 <Dropdown-menu slot="list">
-                  <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                  <Dropdown-item v-for="status in Object.keys(JUDGE_STATUS)" :key="status" :name="status">
-                    {{$t('m.' + JUDGE_STATUS[status].name.replace(/ /g, "_"))}}
+                  <Dropdown-item name="">
+                    {{ $t('m.All') }}
+                  </Dropdown-item>
+                  <Dropdown-item
+                    v-for="status in Object.keys(JUDGE_STATUS)"
+                    :key="status"
+                    :name="status"
+                  >
+                    {{ $t('m.' + JUDGE_STATUS[status].name.replace(/ /g, "_")) }}
                   </Dropdown-item>
                 </Dropdown-menu>
               </Dropdown>
             </li>
 
             <li v-if="isContestAdmin">
-              <Input v-model="formFilter.username" :placeholder="$t('m.Search_Author')" @on-enter="handleQueryChange"/>
+              <Input
+                v-model="formFilter.username"
+                :placeholder="$t('m.Search_Author')"
+                @on-enter="handleQueryChange"
+              />
             </li>
 
             <li>
-              <Button type="info" icon="refresh" @click="getSubmissions">{{$t('m.Refresh')}}</Button>
+              <Button
+                type="info"
+                icon="refresh"
+                @click="getSubmissions"
+              >
+                {{ $t('m.Refresh') }}
+              </Button>
             </li>
           </ul>
         </div>
-        <Table stripe :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable"></Table>
-        <Pagination :total="total" :page-size="limit" @on-change="changeRoute" :current.sync="page"></Pagination>
+        <Table
+          stripe
+          :disabled-hover="true"
+          :columns="columns"
+          :data="submissions"
+          :loading="loadingTable"
+        />
+        <Pagination
+          :total="total"
+          :page-size="limit"
+          :current.sync="page"
+          @on-change="changeRoute"
+        />
       </Panel>
     </div>
   </div>
@@ -44,7 +73,7 @@
   import Pagination from '@/pages/oj/components/Pagination'
 
   export default {
-    name: 'submissionList',
+    name: 'SubmissionList',
     components: {
       Pagination
     },
@@ -145,19 +174,10 @@
             title: this.$i18n.t('m.Author'),
             align: 'center',
             render: (h, params) => {
-              return h('a', {
+              return h('span', {
                 style: {
                   'display': 'inline-block',
                   'max-width': '150px'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push(
-                      {
-                        name: 'user-home',
-                        query: {username: params.row.username}
-                      })
-                  }
                 }
               }, params.row.username)
             }

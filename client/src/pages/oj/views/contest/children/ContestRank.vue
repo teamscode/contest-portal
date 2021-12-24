@@ -1,37 +1,69 @@
 <template>
   <div>
     <Panel shadow>
-      <div slot="title">{{ contest.title }}</div>
+      <div slot="title">
+        {{ contest.title }}
+      </div>
       <div slot="extra">
-        <screen-full :height="18" :width="18" class="screen-full"></screen-full>
-        <Poptip trigger="hover" placement="left-start">
-          <Icon type="android-settings" size="20"></Icon>
-          <div slot="content" id="switches">
+        <screen-full
+          :height="18"
+          :width="18"
+          class="screen-full"
+        />
+        <Poptip
+          trigger="hover"
+          placement="left-start"
+        >
+          <Icon
+            type="android-settings"
+            size="20"
+          />
+          <div
+            id="switches"
+            slot="content"
+          >
             <p>
-              <span>{{$t('m.Menu')}}</span>
-              <i-switch v-model="showMenu"></i-switch>
+              <span>{{ $t('m.Menu') }}</span>
+              <i-switch v-model="showMenu" />
             </p>
             <p>
-              <span>{{$t('m.Auto_Refresh')}}(10s)</span>
-              <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
+              <span>{{ $t('m.Auto_Refresh') }}(10s)</span>
+              <i-switch
+                :disabled="refreshDisabled"
+                @on-change="handleAutoRefresh"
+              />
             </p>
             <p v-if="isContestAdmin">
-              <span>{{$t('m.Team_Members')}}</span>
-              <i-switch v-model="showTeamMembers"></i-switch>
+              <span>{{ $t('m.Team_Members') }}</span>
+              <i-switch v-model="showTeamMembers" />
             </p>
             <p>
-              <Button type="primary" size="small" @click="downloadRankCSV">{{$t('m.download_csv')}}</Button>
+              <Button
+                type="primary"
+                size="small"
+                @click="downloadRankCSV"
+              >
+                {{ $t('m.download_csv') }}
+              </Button>
             </p>
           </div>
         </Poptip>
       </div>
-      <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover :loading="loading"></Table>
-      <Pagination :total="total"
-                  :page-size.sync="limit"
-                  :current.sync="page"
-                  @on-change="getContestRankData"
-                  @on-page-size-change="getContestRankData(1)"
-                  show-sizer></Pagination>
+      <Table
+        ref="tableRank"
+        :columns="columns"
+        :data="dataRank"
+        disabled-hover
+        :loading="loading"
+      />
+      <Pagination
+        :total="total"
+        :page-size.sync="limit"
+        :current.sync="page"
+        show-sizer
+        @on-change="getContestRankData"
+        @on-page-size-change="getContestRankData(1)"
+      />
     </Panel>
   </div>
 </template>
@@ -44,11 +76,15 @@
   import time from '@/utils/time'
 
   export default {
-    name: 'acm-contest-rank',
+    name: 'AcmContestRank',
     components: {
       Pagination
     },
     mixins: [ContestRankMixin],
+    beforeRouteLeave (to, from, next) {
+      this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {menu: true})
+      next()
+    },
     data () {
       return {
         total: 0,
@@ -69,19 +105,10 @@
             align: 'center',
             minWidth: 180,
             render: (h, params) => {
-              return h('a', {
+              return h('span', {
                 style: {
                   display: 'inline-block',
                   'max-width': '150px'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push(
-                      {
-                        name: 'user-home',
-                        query: {username: params.row.user.username}
-                      })
-                  }
                 }
               }, params.row.user.username)
             }
@@ -191,10 +218,6 @@
       } else {
         this.addTableColumns(this.contestProblems)
       }
-    },
-    beforeRouteLeave (to, from, next) {
-      this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {menu: true})
-      next()
     },
     methods: {
       ...mapActions(['getContestProblems']),

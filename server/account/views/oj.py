@@ -50,6 +50,16 @@ class UserProfileAPI(APIView):
             return self.error("User does not exist")
         return self.success(UserProfileSerializer(user.userprofile, show_team_members=show_team_members).data)
 
+    @validate_serializer(EditUserProfileSerializer)
+    @login_required
+    def put(self, request):
+        data = request.data
+        user_profile = request.user.userprofile
+        for k, v in data.items():
+            setattr(user_profile, k, v)
+        user_profile.save()
+        return self.success(UserProfileSerializer(user_profile, show_team_members=True).data)
+
 
 class TwoFactorAuthAPI(APIView):
     @login_required
@@ -185,12 +195,16 @@ class UserRegisterAPI(APIView):
             return self.error("Invalid captcha")
         if User.objects.filter(username=data["username"].lower()).exists():
             return self.error("Username already exists")
+        if UserProfile.objects.filter(team_name=data["team_name"]).exists():
+            return self.error("Team name already exists")
         if User.objects.filter(email=data["email"]).exists():
             return self.error("Email already exists")
+        if len(data["team_members"]) < 1 or len(data["team_members"]) > 4:
+            return self.error("Invalid member info")
         user = User.objects.create(username=data["username"], email=data["email"])
         user.set_password(data["password"])
         user.save()
-        UserProfile.objects.create(user=user)
+        UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"])
         return self.success("Succeeded")
 
 

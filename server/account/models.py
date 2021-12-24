@@ -68,7 +68,8 @@ class User(AbstractBaseUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     problems_status = models.JSONField(default=dict)
-    team_members = models.TextField(null=True)
+    team_members = models.JSONField(default=list)
+    team_name = models.TextField(null=True)
     avatar = models.TextField(default=f"{settings.AVATAR_URI_PREFIX}/default.png")
     language = models.TextField(null=True)
 

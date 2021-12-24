@@ -1,7 +1,10 @@
 <template>
-  <Card :padding="0" dis-hover>
+  <Card
+    :padding="0"
+    dis-hover
+  >
     <ul>
-      <slot></slot>
+      <slot />
     </ul>
   </Card>
 </template>

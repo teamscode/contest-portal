@@ -1,5 +1,5 @@
 <template>
-  <textarea ref="editor"></textarea>
+  <textarea ref="editor" />
 </template>
 
 <script>
@@ -24,6 +24,20 @@
         currentValue: this.value
       }
     },
+    watch: {
+      'value' (val) {
+        if (this.currentValue !== val) {
+          this.currentValue = val
+          this.editor.setValue(val)
+        }
+      },
+      'currentValue' (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$emit('change', newVal)
+          this.$emit('input', newVal)
+        }
+      }
+    },
     mounted () {
       Simditor.locale = 'en-US'
 
@@ -44,20 +58,6 @@
       })
 
       this.editor.setValue(this.value)
-    },
-    watch: {
-      'value' (val) {
-        if (this.currentValue !== val) {
-          this.currentValue = val
-          this.editor.setValue(val)
-        }
-      },
-      'currentValue' (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.$emit('change', newVal)
-          this.$emit('input', newVal)
-        }
-      }
     }
   }
 </script>

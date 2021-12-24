@@ -9,7 +9,6 @@ import {
   ResetPassword,
   SubmissionDetails,
   SubmissionList,
-  UserHome,
   ProblemList
 } from '../views'
 
@@ -88,12 +87,6 @@ export default [
     ]
   },
   {
-    name: 'user-home',
-    path: '/user-home',
-    component: UserHome,
-    meta: {requiresAuth: true, title: 'User Home'}
-  },
-  {
     name: 'submission-list',
     path: '/status',
     meta: {title: 'Submission List'},
@@ -114,6 +107,12 @@ export default [
         path: 'account',
         meta: {requiresAuth: true, title: 'Account Settings'},
         component: Setting.AccountSetting
+      },
+      {
+        name: 'team-setting',
+        path: 'team',
+        meta: {requiresAuth: true, title: 'Team Settings'},
+        component: Setting.TeamSetting
       },
       {
         name: 'security-setting',

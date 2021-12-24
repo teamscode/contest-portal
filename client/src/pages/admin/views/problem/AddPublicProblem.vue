@@ -3,30 +3,37 @@
     <el-input
       v-model="keyword"
       placeholder="Keywords"
-      prefix-icon="el-icon-search">
-    </el-input>
-    <el-table :data="problems" v-loading="loading">
+      prefix-icon="el-icon-search"
+    />
+    <el-table
+      v-loading="loading"
+      :data="problems"
+    >
       <el-table-column
         label="ID"
         width="100"
-        prop="id">
-      </el-table-column>
+        prop="id"
+      />
       <el-table-column
         label="DisplayID"
         width="200"
-        prop="_id">
-      </el-table-column>
+        prop="_id"
+      />
       <el-table-column
         label="Title"
-        prop="title">
-      </el-table-column>
+        prop="title"
+      />
       <el-table-column
         align="center"
         width="100"
-        fixed="right">
+        fixed="right"
+      >
         <template slot-scope="{row}">
-          <icon-btn icon="plus" name="Add the problem"
-                    @click.native="handleAddProblem(row.id)"></icon-btn>
+          <icon-btn
+            icon="plus"
+            name="Add the problem"
+            @click.native="handleAddProblem(row.id)"
+          />
         </template>
       </el-table-column>
     </el-table>
@@ -34,17 +41,17 @@
     <el-pagination
       class="page"
       layout="prev, pager, next"
-      @current-change="getPublicProblem"
       :page-size="limit"
-      :total="total">
-    </el-pagination>
+      :total="total"
+      @current-change="getPublicProblem"
+    />
   </div>
 </template>
 <script>
   import api from '@admin/api'
 
   export default {
-    name: 'add-problem-from-public',
+    name: 'AddProblemFromPublic',
     props: ['contestID'],
     data () {
       return {
@@ -55,6 +62,11 @@
         problems: [],
         contest: {},
         keyword: ''
+      }
+    },
+    watch: {
+      'keyword' () {
+        this.getPublicProblem(this.page)
       }
     },
     mounted () {
@@ -92,11 +104,6 @@
           })
         }, () => {
         })
-      }
-    },
-    watch: {
-      'keyword' () {
-        this.getPublicProblem(this.page)
       }
     }
   }

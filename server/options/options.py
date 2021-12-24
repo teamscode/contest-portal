@@ -105,7 +105,7 @@ class OptionKeys:
 
 
 class OptionDefaultValue:
-    website_base_url = "http://127.0.0.1"
+    website_base_url = "http://contest.teamscode.org"
     website_name = "TeamsCode Contest Portal"
     website_name_shortcut = "TCP"
     allow_register = True

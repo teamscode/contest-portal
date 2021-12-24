@@ -1,15 +1,41 @@
 <template>
-  <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px"
-           class="demo-ruleForm login-container">
-    <h3 class="title">TeamsCode Contest Portal</h3>
+  <el-form
+    ref="ruleForm2"
+    :model="ruleForm2"
+    :rules="rules2"
+    label-position="left"
+    label-width="0px"
+    class="demo-ruleForm login-container"
+  >
+    <h3 class="title">
+      TeamsCode Contest Portal
+    </h3>
     <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" :placeholder="$t('m.username')" @keyup.enter.native="handleLogin"></el-input>
+      <el-input
+        v-model="ruleForm2.account"
+        type="text"
+        auto-complete="off"
+        :placeholder="$t('m.username')"
+        @keyup.enter.native="handleLogin"
+      />
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" v-model="ruleForm2.password" auto-complete="off" :placeholder="$t('m.password')" @keyup.enter.native="handleLogin"></el-input>
+      <el-input
+        v-model="ruleForm2.password"
+        type="password"
+        auto-complete="off"
+        :placeholder="$t('m.password')"
+        @keyup.enter.native="handleLogin"
+      />
     </el-form-item>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin" :loading="logining">{{$t('m.GO')}}
+      <el-button
+        type="primary"
+        style="width:100%;"
+        :loading="logining"
+        @click.native.prevent="handleLogin"
+      >
+        {{ $t('m.GO') }}
       </el-button>
     </el-form-item>
   </el-form>

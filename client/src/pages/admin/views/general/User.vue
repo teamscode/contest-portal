@@ -4,55 +4,99 @@
       <div slot="header">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-button v-show="selectedUsers.length"
-                       type="warning" icon="el-icon-fa-trash"
-                       @click="deleteUsers(selectedUserIDs)">Delete
+            <el-button
+              v-show="selectedUsers.length"
+              type="warning"
+              icon="el-icon-fa-trash"
+              @click="deleteUsers(selectedUserIDs)"
+            >
+              Delete
             </el-button>
           </el-col>
           <el-col :span="selectedUsers.length ? 16: 24">
-            <el-input v-model="keyword" prefix-icon="el-icon-search" placeholder="Keywords"></el-input>
+            <el-input
+              v-model="keyword"
+              prefix-icon="el-icon-search"
+              placeholder="Keywords"
+            />
           </el-col>
         </el-row>
       </div>
       <el-table
+        ref="table"
         v-loading="loadingTable"
         element-loading-text="loading"
-        @selection-change="handleSelectionChange"
-        ref="table"
         :data="userList"
-        style="width: 100%">
-        <el-table-column type="selection" width="55"></el-table-column>
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          type="selection"
+          width="55"
+        />
 
-        <el-table-column prop="id" label="ID"></el-table-column>
+        <el-table-column
+          prop="id"
+          label="ID"
+        />
 
-        <el-table-column prop="username" label="Username"></el-table-column>
+        <el-table-column
+          prop="username"
+          label="Username"
+        />
 
-        <el-table-column prop="create_time" label="Create Time">
+        <el-table-column
+          prop="create_time"
+          label="Create Time"
+        >
           <template slot-scope="scope">
-            {{scope.row.create_time | localtime }}
+            {{ scope.row.create_time | localtime }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="last_login" label="Last Login">
+        <el-table-column
+          prop="last_login"
+          label="Last Login"
+        >
           <template slot-scope="scope">
-            {{scope.row.last_login | localtime }}
+            {{ scope.row.last_login | localtime }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="team_members" label="Team Members"></el-table-column>
+        <el-table-column
+          prop="team_members"
+          label="Team Members"
+        />
 
-        <el-table-column prop="email" label="Email"></el-table-column>
+        <el-table-column
+          prop="email"
+          label="Email"
+        />
 
-        <el-table-column prop="admin_type" label="User Role">
+        <el-table-column
+          prop="admin_type"
+          label="User Role"
+        >
           <template slot-scope="scope">
             {{ scope.row.admin_type }}
           </template>
         </el-table-column>
 
-        <el-table-column fixed="right" width="200">
+        <el-table-column
+          fixed="right"
+          width="200"
+        >
           <template slot-scope="{row}">
-            <icon-btn name="Edit" icon="edit" @click.native="openUserDialog(row.id)"></icon-btn>
-            <icon-btn name="Delete" icon="trash" @click.native="deleteUsers([row.id])"></icon-btn>
+            <icon-btn
+              name="Edit"
+              icon="edit"
+              @click.native="openUserDialog(row.id)"
+            />
+            <icon-btn
+              name="Delete"
+              icon="trash"
+              @click.native="deleteUsers([row.id])"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -60,152 +104,253 @@
         <el-pagination
           class="page"
           layout="prev, pager, next"
-          @current-change="currentChange"
           :page-size="pageSize"
-          :total="total">
-        </el-pagination>
+          :total="total"
+          @current-change="currentChange"
+        />
       </div>
     </Panel>
 
     <Panel>
-      <span slot="title">{{$t('m.Import_User')}}
+      <span slot="title">{{ $t('m.Import_User') }}
       </span>
-      <el-upload v-if="!uploadUsers.length"
-                 action=""
-                 :show-file-list="false"
-                 accept=".csv"
-                 :before-upload="handleUsersCSV">
-        <el-button size="small" icon="el-icon-fa-upload" type="primary">Choose File</el-button>
+      <el-upload
+        v-if="!uploadUsers.length"
+        action=""
+        :show-file-list="false"
+        accept=".csv"
+        :before-upload="handleUsersCSV"
+      >
+        <el-button
+          size="small"
+          icon="el-icon-fa-upload"
+          type="primary"
+        >
+          Choose File
+        </el-button>
       </el-upload>
       <template v-else>
         <el-table :data="uploadUsersPage">
           <el-table-column label="Username">
             <template slot-scope="{row}">
-              {{row[0]}}
+              {{ row[0] }}
             </template>
           </el-table-column>
           <el-table-column label="Password">
             <template slot-scope="{row}">
-              {{row[1]}}
+              {{ row[1] }}
             </template>
           </el-table-column>
           <el-table-column label="Email">
             <template slot-scope="{row}">
-              {{row[2]}}
+              {{ row[2] }}
             </template>
           </el-table-column>
           <el-table-column label="Team Members">
             <template slot-scope="{row}">
-              {{row[3]}}
+              {{ row[3] }}
             </template>
           </el-table-column>
         </el-table>
         <div class="panel-options">
-          <el-button type="primary" size="small"
-                     icon="el-icon-fa-upload"
-                     @click="handleUsersUpload">Import All
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-fa-upload"
+            @click="handleUsersUpload"
+          >
+            Import All
           </el-button>
-          <el-button type="warning" size="small"
-                     icon="el-icon-fa-undo"
-                     @click="handleResetData">Reset Data
+          <el-button
+            type="warning"
+            size="small"
+            icon="el-icon-fa-undo"
+            @click="handleResetData"
+          >
+            Reset Data
           </el-button>
           <el-pagination
             class="page"
             layout="prev, pager, next"
             :page-size="uploadUsersPageSize"
             :current-page.sync="uploadUsersCurrentPage"
-            :total="uploadUsers.length">
-          </el-pagination>
+            :total="uploadUsers.length"
+          />
         </div>
       </template>
     </Panel>
 
     <Panel :title="$t('m.Generate_User')">
-      <el-form :model="formGenerateUser" ref="formGenerateUser">
-        <el-row type="flex" justify="space-between">
+      <el-form
+        ref="formGenerateUser"
+        :model="formGenerateUser"
+      >
+        <el-row
+          type="flex"
+          justify="space-between"
+        >
           <el-col :span="4">
-            <el-form-item label="Prefix" prop="prefix">
-              <el-input v-model="formGenerateUser.prefix" placeholder="Prefix"></el-input>
+            <el-form-item
+              label="Prefix"
+              prop="prefix"
+            >
+              <el-input
+                v-model="formGenerateUser.prefix"
+                placeholder="Prefix"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="Suffix" prop="suffix">
-              <el-input v-model="formGenerateUser.suffix" placeholder="Suffix"></el-input>
+            <el-form-item
+              label="Suffix"
+              prop="suffix"
+            >
+              <el-input
+                v-model="formGenerateUser.suffix"
+                placeholder="Suffix"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="Start Number" prop="number_from" required>
-              <el-input-number v-model="formGenerateUser.number_from" style="width: 100%"></el-input-number>
+            <el-form-item
+              label="Start Number"
+              prop="number_from"
+              required
+            >
+              <el-input-number
+                v-model="formGenerateUser.number_from"
+                style="width: 100%"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="End Number" prop="number_to" required>
-              <el-input-number v-model="formGenerateUser.number_to" style="width: 100%"></el-input-number>
+            <el-form-item
+              label="End Number"
+              prop="number_to"
+              required
+            >
+              <el-input-number
+                v-model="formGenerateUser.number_to"
+                style="width: 100%"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="Password Length" prop="password_length" required>
-              <el-input v-model="formGenerateUser.password_length"
-                        placeholder="Password Length"></el-input>
+            <el-form-item
+              label="Password Length"
+              prop="password_length"
+              required
+            >
+              <el-input
+                v-model="formGenerateUser.password_length"
+                placeholder="Password Length"
+              />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-form-item>
-          <el-button type="primary" @click="generateUser" icon="el-icon-fa-users" :loading="loadingGenerate">Generate & Export
+          <el-button
+            type="primary"
+            icon="el-icon-fa-users"
+            :loading="loadingGenerate"
+            @click="generateUser"
+          >
+            Generate & Export
           </el-button>
-          <span class="userPreview" v-if="formGenerateUser.number_from && formGenerateUser.number_to &&
-                                          formGenerateUser.number_from <= formGenerateUser.number_to">
-            The usernames will be {{formGenerateUser.prefix + formGenerateUser.number_from + formGenerateUser.suffix}},
+          <span
+            v-if="formGenerateUser.number_from && formGenerateUser.number_to &&
+              formGenerateUser.number_from <= formGenerateUser.number_to"
+            class="userPreview"
+          >
+            The usernames will be {{ formGenerateUser.prefix + formGenerateUser.number_from + formGenerateUser.suffix }},
             <span v-if="formGenerateUser.number_from + 1 < formGenerateUser.number_to">
-              {{formGenerateUser.prefix + (formGenerateUser.number_from + 1) + formGenerateUser.suffix + '...'}}
+              {{ formGenerateUser.prefix + (formGenerateUser.number_from + 1) + formGenerateUser.suffix + '...' }}
             </span>
             <span v-if="formGenerateUser.number_from + 1 <= formGenerateUser.number_to">
-              {{formGenerateUser.prefix + formGenerateUser.number_to + formGenerateUser.suffix}}
+              {{ formGenerateUser.prefix + formGenerateUser.number_to + formGenerateUser.suffix }}
             </span>
           </span>
         </el-form-item>
       </el-form>
     </Panel>
     <!--对话框-->
-    <el-dialog :title="$t('m.User_Info')" :visible.sync="showUserDialog" :close-on-click-modal="false">
-      <el-form :model="user" label-width="120px" label-position="left">
+    <el-dialog
+      :title="$t('m.User_Info')"
+      :visible.sync="showUserDialog"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="user"
+        label-width="120px"
+        label-position="left"
+      >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('m.User_Username')" required>
-              <el-input v-model="user.username"></el-input>
+            <el-form-item
+              :label="$t('m.User_Username')"
+              required
+            >
+              <el-input v-model="user.username" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('m.User_Team_Members')" required>
-              <el-input v-model="user.team_members"></el-input>
+            <el-form-item
+              :label="$t('m.User_Team_Members')"
+              required
+            >
+              <el-input v-model="user.team_members" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('m.User_Email')" required>
-              <el-input v-model="user.email"></el-input>
+            <el-form-item
+              :label="$t('m.User_Email')"
+              required
+            >
+              <el-input v-model="user.email" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('m.User_New_Password')">
-              <el-input v-model="user.password"></el-input>
+              <el-input v-model="user.password" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('m.User_Type')">
               <el-select v-model="user.admin_type">
-                <el-option label="Regular User" value="Regular User"></el-option>
-                <el-option label="Admin" value="Admin"></el-option>
-                <el-option label="Super Admin" value="Super Admin"></el-option>
+                <el-option
+                  label="Regular User"
+                  value="Regular User"
+                />
+                <el-option
+                  label="Admin"
+                  value="Admin"
+                />
+                <el-option
+                  label="Super Admin"
+                  value="Super Admin"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('m.Problem_Permission')">
-              <el-select v-model="user.problem_permission" :disabled="user.admin_type!=='Admin'">
-                <el-option label="None" value="None"></el-option>
-                <el-option label="Own" value="Own"></el-option>
-                <el-option label="All" value="All"></el-option>
+              <el-select
+                v-model="user.problem_permission"
+                :disabled="user.admin_type!=='Admin'"
+              >
+                <el-option
+                  label="None"
+                  value="None"
+                />
+                <el-option
+                  label="Own"
+                  value="Own"
+                />
+                <el-option
+                  label="All"
+                  value="All"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -215,8 +360,8 @@
                 v-model="user.two_factor_auth"
                 :disabled="!user.real_tfa"
                 active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
+                inactive-color="#ff4949"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -224,22 +369,25 @@
               <el-switch
                 v-model="user.open_api"
                 active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
+                inactive-color="#ff4949"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Is_Disabled')">
               <el-switch
-                v-model="user.is_disabled">
-              </el-switch>
+                v-model="user.is_disabled"
+              />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <cancel @click.native="showUserDialog = false">Cancel</cancel>
-        <save @click.native="saveUser()"></save>
+        <save @click.native="saveUser()" />
       </span>
     </el-dialog>
   </div>
@@ -284,6 +432,30 @@
         }
       }
     },
+    computed: {
+      selectedUserIDs () {
+        let ids = []
+        for (let user of this.selectedUsers) {
+          ids.push(user.id)
+        }
+        return ids
+      }
+    },
+    watch: {
+      'keyword' () {
+        this.currentChange(1)
+      },
+      'user.admin_type' () {
+        if (this.user.admin_type === 'Super Admin') {
+          this.user.problem_permission = 'All'
+        } else if (this.user.admin_type === 'Regular User') {
+          this.user.problem_permission = 'None'
+        }
+      },
+      'uploadUsersCurrentPage' (page) {
+        this.uploadUsersPage = this.uploadUsers.slice((page - 1) * this.uploadUsersPageSize, page * this.uploadUsersPageSize)
+      }
+    },
     mounted () {
       this.getUserList(1)
     },
@@ -319,6 +491,7 @@
           this.loadingTable = false
           this.total = res.data.data.total
           this.userList = res.data.data.results
+          console.log(this.userList)
         }, res => {
           this.loadingTable = false
         })
@@ -388,30 +561,6 @@
       },
       handleResetData () {
         this.uploadUsers = []
-      }
-    },
-    computed: {
-      selectedUserIDs () {
-        let ids = []
-        for (let user of this.selectedUsers) {
-          ids.push(user.id)
-        }
-        return ids
-      }
-    },
-    watch: {
-      'keyword' () {
-        this.currentChange(1)
-      },
-      'user.admin_type' () {
-        if (this.user.admin_type === 'Super Admin') {
-          this.user.problem_permission = 'All'
-        } else if (this.user.admin_type === 'Regular User') {
-          this.user.problem_permission = 'None'
-        }
-      },
-      'uploadUsersCurrentPage' (page) {
-        this.uploadUsersPage = this.uploadUsers.slice((page - 1) * this.uploadUsersPageSize, page * this.uploadUsersPageSize)
       }
     }
   }

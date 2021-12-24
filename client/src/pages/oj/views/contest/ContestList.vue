@@ -1,65 +1,128 @@
 <template>
   <Row type="flex">
     <Col :span="24">
-    <Panel id="contest-card" shadow>
-      <div slot="title">TeamsCode {{$t('m.Contests')}}</div>
-      <div slot="extra">
-        <ul class="filter">
-          <li>
-            <Dropdown @on-click="onStatusChange">
-              <span>{{query.status === '' ? this.$i18n.t('m.Status') : this.$i18n.t('m.' + CONTEST_STATUS_REVERSE[query.status].name.replace(/ /g,"_"))}}
-                <Icon type="arrow-down-b"></Icon>
-              </span>
-              <Dropdown-menu slot="list">
-                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                <Dropdown-item name="0">{{$t('m.Underway')}}</Dropdown-item>
-                <Dropdown-item name="1">{{$t('m.Not_Started')}}</Dropdown-item>
-                <Dropdown-item name="-1">{{$t('m.Ended')}}</Dropdown-item>
-              </Dropdown-menu>
-            </Dropdown>
+      <Panel
+        id="contest-card"
+        shadow
+      >
+        <div slot="title">
+          TeamsCode {{ $t('m.Contests') }}
+        </div>
+        <div slot="extra">
+          <ul class="filter">
+            <li>
+              <Dropdown @on-click="onStatusChange">
+                <span>{{ query.status === '' ? $i18n.t('m.Status') : $i18n.t('m.' + CONTEST_STATUS_REVERSE[query.status].name.replace(/ /g,"_")) }}
+                  <Icon type="arrow-down-b" />
+                </span>
+                <Dropdown-menu slot="list">
+                  <Dropdown-item name="">
+                    {{ $t('m.All') }}
+                  </Dropdown-item>
+                  <Dropdown-item name="0">
+                    {{ $t('m.Underway') }}
+                  </Dropdown-item>
+                  <Dropdown-item name="1">
+                    {{ $t('m.Not_Started') }}
+                  </Dropdown-item>
+                  <Dropdown-item name="-1">
+                    {{ $t('m.Ended') }}
+                  </Dropdown-item>
+                </Dropdown-menu>
+              </Dropdown>
+            </li>
+            <li>
+              <Input
+                id="keyword"
+                v-model="query.keyword"
+                icon="ios-search-strong"
+                placeholder="Keyword"
+                @on-enter="changeRoute"
+                @on-click="changeRoute"
+              />
+            </li>
+          </ul>
+        </div>
+        <p
+          v-if="contests.length == 0"
+          id="no-contest"
+        >
+          {{ $t('m.No_contest') }}
+        </p>
+        <ol id="contest-list">
+          <li
+            v-for="contest in contests"
+            :key="contest.title"
+          >
+            <Row
+              type="flex"
+              justify="space-between"
+              align="middle"
+            >
+              <img
+                class="trophy"
+                src="../../../../assets/Cup.png"
+              >
+              <Col
+                :span="18"
+                class="contest-main"
+              >
+                <p class="title">
+                  <a
+                    class="entry"
+                    @click.stop="goContest(contest)"
+                  >
+                    {{ contest.title }}
+                  </a>
+                  <template v-if="contest.contest_type != 'Public'">
+                    <Icon
+                      type="ios-locked-outline"
+                      size="20"
+                    />
+                  </template>
+                </p>
+                <ul class="detail">
+                  <li>
+                    <Icon
+                      type="calendar"
+                      color="#3091f2"
+                    />
+                    {{ contest.start_time | localtime('YYYY-M-D HH:mm') }}
+                  </li>
+                  <li>
+                    <Icon
+                      type="android-time"
+                      color="#3091f2"
+                    />
+                    {{ getDuration(contest.start_time, contest.end_time) }}
+                  </li>
+                </ul>
+              </Col>
+              <Col
+                :span="4"
+                style="text-align: center"
+              >
+                <Tag
+                  type="dot"
+                  :color="CONTEST_STATUS_REVERSE[contest.status].color"
+                >
+                  {{ $t('m.' + CONTEST_STATUS_REVERSE[contest.status].name.replace(/ /g, "_")) }}
+                </Tag>
+              </Col>
+            </Row>
           </li>
-          <li>
-            <Input id="keyword" @on-enter="changeRoute" @on-click="changeRoute" v-model="query.keyword"
-                   icon="ios-search-strong" placeholder="Keyword"/>
-          </li>
-        </ul>
-      </div>
-      <p id="no-contest" v-if="contests.length == 0">{{$t('m.No_contest')}}</p>
-      <ol id="contest-list">
-        <li v-for="contest in contests" :key="contest.title">
-          <Row type="flex" justify="space-between" align="middle">
-            <img class="trophy" src="../../../../assets/Cup.png"/>
-            <Col :span="18" class="contest-main">
-            <p class="title">
-              <a class="entry" @click.stop="goContest(contest)">
-                {{contest.title}}
-              </a>
-              <template v-if="contest.contest_type != 'Public'">
-                <Icon type="ios-locked-outline" size="20"></Icon>
-              </template>
-            </p>
-            <ul class="detail">
-              <li>
-                <Icon type="calendar" color="#3091f2"></Icon>
-                {{contest.start_time | localtime('YYYY-M-D HH:mm') }}
-              </li>
-              <li>
-                <Icon type="android-time" color="#3091f2"></Icon>
-                {{getDuration(contest.start_time, contest.end_time)}}
-              </li>
-            </ul>
-            </Col>
-            <Col :span="4" style="text-align: center">
-            <Tag type="dot" :color="CONTEST_STATUS_REVERSE[contest.status].color">{{$t('m.' + CONTEST_STATUS_REVERSE[contest.status].name.replace(/ /g, "_"))}}</Tag>
-            </Col>
-          </Row>
-        </li>
-      </ol>
-    </Panel>
-    <Pagination :total="total" :page-size.sync="limit" @on-change="changeRoute" :current.sync="page" :show-sizer="true" @on-page-size-change="changeRoute"></Pagination>
+        </ol>
+      </Panel>
+      <Pagination
+        :total="total"
+        :page-size.sync="limit"
+        :current.sync="page"
+        :show-sizer="true"
+        @on-change="changeRoute"
+        @on-page-size-change="changeRoute"
+      />
     </Col>
   </Row>
-
 </template>
 
 <script>
@@ -73,9 +136,19 @@
   const limit = 10
 
   export default {
-    name: 'contest-list',
+    name: 'ContestList',
     components: {
       Pagination
+    },
+    beforeRouteEnter (to, from, next) {
+      api.getContestList(0, limit).then((res) => {
+        next((vm) => {
+          vm.contests = res.data.data.results
+          vm.total = res.data.data.total
+        })
+      }, (res) => {
+        next()
+      })
     },
     data () {
       return {
@@ -92,16 +165,6 @@
 //      for password modal use
         cur_contest_id: ''
       }
-    },
-    beforeRouteEnter (to, from, next) {
-      api.getContestList(0, limit).then((res) => {
-        next((vm) => {
-          vm.contests = res.data.data.results
-          vm.total = res.data.data.total
-        })
-      }, (res) => {
-        next()
-      })
     },
     methods: {
       init () {

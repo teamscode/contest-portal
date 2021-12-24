@@ -175,8 +175,8 @@ class UserRegisterAPITest(CaptchaTest):
         self.register_url = self.reverse("user_register_api")
         self.captcha = rand_str(4)
 
-        self.data = {"username": "test_user", "password": "testuserpassword",
-                     "team_members": "team_members", "email": "test@qduoj.com",
+        self.data = {"username": "test_user", "password": "testuserpassword", "team_name": "test team",
+                     "team_members": [{"name": "test captain", "email": "test@qduoj.com"}], "email": "test@qduoj.com",
                      "captcha": self._set_captcha(self.client.session)}
 
     def test_website_config_limit(self):
@@ -202,6 +202,7 @@ class UserRegisterAPITest(CaptchaTest):
 
         self.data["captcha"] = self._set_captcha(self.client.session)
         self.data["email"] = "test1@qduoj.com"
+        self.data["team_name"] = "test_team1"
         response = self.client.post(self.register_url, data=self.data)
         self.assertDictEqual(response.data, {"error": "error", "data": "Username already exists"})
 
@@ -210,8 +211,36 @@ class UserRegisterAPITest(CaptchaTest):
 
         self.data["captcha"] = self._set_captcha(self.client.session)
         self.data["username"] = "test_user1"
+        self.data["team_name"] = "test_team1"
         response = self.client.post(self.register_url, data=self.data)
         self.assertDictEqual(response.data, {"error": "error", "data": "Email already exists"})
+
+    def test_team_name_already_exists(self):
+        self.test_register_with_correct_info()
+
+        self.data["captcha"] = self._set_captcha(self.client.session)
+        self.data["username"] = "test_user1"
+        self.data["email"] = "test1@qduoj.com"
+        response = self.client.post(self.register_url, data=self.data)
+        self.assertDictEqual(response.data, {"error": "error", "data": "Team name already exists"})
+
+    def test_invalid_team_member(self):
+        self.data["captcha"] = self._set_captcha(self.client.session)
+        self.data["team_members"] = [{"name": "test captain", "email": "test"}]
+        response = self.client.post(self.register_url, data=self.data)
+        self.assertDictEqual(response.data, {"error": "invalid-email", "data": "email: Enter a valid email address."})
+
+    def test_empty_team_member(self):
+        self.data["captcha"] = self._set_captcha(self.client.session)
+        self.data["team_members"] = []
+        response = self.client.post(self.register_url, data=self.data)
+        self.assertDictEqual(response.data, {"error": "error", "data": "Invalid member info"})
+
+    def test_invalid_team_name(self):
+        self.data["captcha"] = self._set_captcha(self.client.session)
+        self.data["team_name"] = []
+        response = self.client.post(self.register_url, data=self.data)
+        self.assertDictEqual(response.data, {"data": "team_name: Not a valid string.", "error": "invalid-team_name"})
 
 
 class SessionManagementAPITest(APITestCase):
@@ -443,7 +472,8 @@ class AdminUserTest(APITestCase):
         self.username = self.password = "test"
         self.regular_user = self.create_user(username=self.username, password=self.password, login=False)
         self.url = self.reverse("user_admin_api")
-        self.data = {"id": self.regular_user.id, "username": self.username, "team_members": "test_name",
+        self.data = {"id": self.regular_user.id, "username": self.username, "team_name": "test team",
+                     "team_members": [{"name": "test captain", "email": "test@qduoj.com"}],
                      "email": "test@qq.com", "admin_type": AdminType.REGULAR_USER,
                      "problem_permission": ProblemPermission.OWN, "open_api": True,
                      "two_factor_auth": False, "is_disabled": False}
@@ -514,8 +544,8 @@ class AdminUserTest(APITestCase):
         self.assertEqual(User.objects.get(id=self.regular_user.id).open_api_appkey, key)
 
     def test_import_users(self):
-        data = {"users": [["user1", "pass1", "eami1@e.com", "name1 name"],
-                          ["user2", "pass3", "eamil3@e.com", "name2 name"]]
+        data = {"users": [["user1", "pass1", "team name test", "name1 name", "eami1@e.com"],
+                          ["user2", "pass3", "team name test", "name2 name", "eamil3@e.com"]]
                 }
         resp = self.client.post(self.url, data)
         self.assertSuccess(resp)
@@ -523,8 +553,8 @@ class AdminUserTest(APITestCase):
         self.assertEqual(User.objects.all().count(), 4)
 
     def test_import_duplicate_user(self):
-        data = {"users": [["user1", "pass1", "eami1@e.com", "name1 name"],
-                          ["user1", "pass1", "eami1@e.com", "name1 name"]]
+        data = {"users": [["user1", "pass1", "team name test", "name1 name", "eami1@e.com"],
+                          ["user1", "pass1", "team name test", "name1 name", "eami1@e.com"]]
                 }
         resp = self.client.post(self.url, data)
         self.assertFailed(resp, "DETAIL:  Key (username)=(user1) already exists.")

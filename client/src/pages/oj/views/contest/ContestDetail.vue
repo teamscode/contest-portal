@@ -3,63 +3,102 @@
     <div id="contest-main">
       <!--children-->
       <transition name="fadeInUp">
-        <router-view></router-view>
+        <router-view />
         <div v-if="route_name === 'contest-details'">
-          <Announcements v-if="contestStatus !== CONTEST_STATUS.NOT_START" :contestBtnLoading="announcementBtnLoading" @refreshAnnouncements="getContestAnnouncementList" style="margin-bottom: 20px;"/>
+          <Announcements
+            v-if="contestStatus !== CONTEST_STATUS.NOT_START"
+            :contest-btn-loading="announcementBtnLoading"
+            style="margin-bottom: 20px;"
+            @refreshAnnouncements="getContestAnnouncementList"
+          />
           <div class="flex-container">
             <template>
               <div id="contest-desc">
-                <Panel :padding="20" shadow>
+                <Panel
+                  :padding="20"
+                  shadow
+                >
                   <div slot="title">
-                    {{contest.title}}
+                    {{ contest.title }}
                   </div>
                   <div slot="extra">
-                    <Tag type="dot" :color="countdownColor">
-                      <span id="countdown">{{countdown}}</span>
+                    <Tag
+                      type="dot"
+                      :color="countdownColor"
+                    >
+                      <span id="countdown">{{ countdown }}</span>
                     </Tag>
                   </div>
-                  <div v-html="contest.description" class="markdown-body"></div>
-                  <div v-if="passwordFormVisible" class="contest-password">
-                    <Input v-model="contestPassword" type="password"
-                          placeholder="contest password" class="contest-password-input"
-                          @on-enter="checkPassword"/>
-                    <Button type="info" @click="checkPassword">Enter</Button>
+                  <div
+                    class="markdown-body"
+                    v-html="contest.description"
+                  />
+                  <div
+                    v-if="passwordFormVisible"
+                    class="contest-password"
+                  >
+                    <Input
+                      v-model="contestPassword"
+                      type="password"
+                      placeholder="contest password"
+                      class="contest-password-input"
+                      @on-enter="checkPassword"
+                    />
+                    <Button
+                      type="info"
+                      @click="checkPassword"
+                    >
+                      Enter
+                    </Button>
                   </div>
                 </Panel>
-                <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
+                <Table
+                  :columns="columns"
+                  :data="contest_table"
+                  disabled-hover
+                  style="margin-bottom: 40px;"
+                />
               </div>
             </template>
           </div>
         </div>
       </transition>
       <!--children end-->
-
     </div>
-    <div v-show="showMenu" id="contest-menu">
+    <div
+      v-show="showMenu"
+      id="contest-menu"
+    >
       <VerticalMenu @on-click="handleRoute">
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
-          <Icon type="home"></Icon>
-          {{$t('m.Home')}}
+          <Icon type="home" />
+          {{ $t('m.Home') }}
         </VerticalMenu-item>
 
-        <VerticalMenu-item :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
-          <Icon type="ios-photos"></Icon>
-          {{$t('m.Problems')}}
+        <VerticalMenu-item
+          :disabled="contestMenuDisabled"
+          :route="{name: 'contest-problem-list', params: {contestID: contestID}}"
+        >
+          <Icon type="ios-photos" />
+          {{ $t('m.Problems') }}
         </VerticalMenu-item>
 
-        <VerticalMenu-item v-if="OIContestRealTimePermission"
-                           :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-submission-list'}">
-          <Icon type="navicon-round"></Icon>
-          {{$t('m.Submissions')}}
+        <VerticalMenu-item
+          v-if="OIContestRealTimePermission"
+          :disabled="contestMenuDisabled"
+          :route="{name: 'contest-submission-list'}"
+        >
+          <Icon type="navicon-round" />
+          {{ $t('m.Submissions') }}
         </VerticalMenu-item>
 
-        <VerticalMenu-item v-if="OIContestRealTimePermission"
-                           :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-rank', params: {contestID: contestID}}">
-          <Icon type="stats-bars"></Icon>
-          {{$t('m.Rankings')}}
+        <VerticalMenu-item
+          v-if="OIContestRealTimePermission"
+          :disabled="contestMenuDisabled"
+          :route="{name: 'contest-rank', params: {contestID: contestID}}"
+        >
+          <Icon type="stats-bars" />
+          {{ $t('m.Rankings') }}
         </VerticalMenu-item>
       </VerticalMenu>
     </div>

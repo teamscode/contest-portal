@@ -3,98 +3,136 @@
     <Panel :title="$t('m.General_Announcement')">
       <div class="list">
         <el-table
+          ref="table"
           v-loading="loading"
           element-loading-text="loading"
-          ref="table"
           :data="announcementList"
-          style="width: 100%">
+          style="width: 100%"
+        >
           <el-table-column
             width="100"
             prop="id"
-            label="ID">
-          </el-table-column>
+            label="ID"
+          />
           <el-table-column
             prop="title"
-            label="Title">
-          </el-table-column>
+            label="Title"
+          />
           <el-table-column
             prop="create_time"
-            label="CreateTime">
+            label="CreateTime"
+          >
             <template slot-scope="scope">
               {{ scope.row.create_time | localtime }}
             </template>
           </el-table-column>
           <el-table-column
             prop="last_update_time"
-            label="LastUpdateTime">
+            label="LastUpdateTime"
+          >
             <template slot-scope="scope">
-              {{scope.row.last_update_time | localtime }}
+              {{ scope.row.last_update_time | localtime }}
             </template>
           </el-table-column>
           <el-table-column
             prop="created_by.username"
-            label="Author">
-          </el-table-column>
+            label="Author"
+          />
           <el-table-column
             width="100"
             prop="visible"
-            label="Visible">
+            label="Visible"
+          >
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.visible"
-                         active-text=""
-                         inactive-text=""
-                         @change="handleVisibleSwitch(scope.row)">
-              </el-switch>
+              <el-switch
+                v-model="scope.row.visible"
+                active-text=""
+                inactive-text=""
+                @change="handleVisibleSwitch(scope.row)"
+              />
             </template>
           </el-table-column>
           <el-table-column
             fixed="right"
-            width="200">
+            width="200"
+          >
             <div slot-scope="scope">
-              <icon-btn name="Edit" icon="edit" @click.native="openAnnouncementDialog(scope.row.id)"></icon-btn>
-              <icon-btn name="Delete" icon="trash" @click.native="deleteAnnouncement(scope.row.id)"></icon-btn>
+              <icon-btn
+                name="Edit"
+                icon="edit"
+                @click.native="openAnnouncementDialog(scope.row.id)"
+              />
+              <icon-btn
+                name="Delete"
+                icon="trash"
+                @click.native="deleteAnnouncement(scope.row.id)"
+              />
             </div>
           </el-table-column>
         </el-table>
         <div class="panel-options">
-          <el-button type="primary" size="small" @click="openAnnouncementDialog(null)" icon="el-icon-plus">Create</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="openAnnouncementDialog(null)"
+          >
+            Create
+          </el-button>
           <el-pagination
             v-if="!contestID"
             class="page"
             layout="prev, pager, next"
-            @current-change="currentChange"
             :page-size="pageSize"
-            :total="total">
-          </el-pagination>
+            :total="total"
+            @current-change="currentChange"
+          />
         </div>
       </div>
     </Panel>
     <!--对话框-->
-    <el-dialog :title="announcementDialogTitle" :visible.sync="showEditAnnouncementDialog"
-               @open="onOpenEditDialog" :close-on-click-modal="false">
+    <el-dialog
+      :title="announcementDialogTitle"
+      :visible.sync="showEditAnnouncementDialog"
+      :close-on-click-modal="false"
+      @open="onOpenEditDialog"
+    >
       <el-form label-position="top">
-        <el-form-item :label="$t('m.Announcement_Title')" required>
+        <el-form-item
+          :label="$t('m.Announcement_Title')"
+          required
+        >
           <el-input
             v-model="announcement.title"
-            :placeholder="$t('m.Announcement_Title')" class="title-input">
-          </el-input>
+            :placeholder="$t('m.Announcement_Title')"
+            class="title-input"
+          />
         </el-form-item>
-        <el-form-item :label="$t('m.Announcement_Content')" required>
-          <Simditor v-model="announcement.content"></Simditor>
+        <el-form-item
+          :label="$t('m.Announcement_Content')"
+          required
+        >
+          <Simditor v-model="announcement.content" />
         </el-form-item>
         <div class="visible-box">
-          <span>{{$t('m.Announcement_visible')}}</span>
+          <span>{{ $t('m.Announcement_visible') }}</span>
           <el-switch
             v-model="announcement.visible"
             active-text=""
-            inactive-text="">
-          </el-switch>
+            inactive-text=""
+          />
         </div>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-          <cancel @click.native="showEditAnnouncementDialog = false"></cancel>
-          <save type="primary" @click.native="submitAnnouncement"></save>
-        </span>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <cancel @click.native="showEditAnnouncementDialog = false" />
+        <save
+          type="primary"
+          @click.native="submitAnnouncement"
+        />
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -134,6 +172,11 @@
         loading: true,
         // 当前页码
         currentPage: 0
+      }
+    },
+    watch: {
+      $route () {
+        this.init()
       }
     },
     mounted () {
@@ -257,11 +300,6 @@
           content: row.content,
           visible: row.visible
         })
-      }
-    },
-    watch: {
-      $route () {
-        this.init()
       }
     }
   }

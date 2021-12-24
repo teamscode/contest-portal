@@ -1,42 +1,92 @@
 <template>
-  <Panel :padding="30" class="container">
-    <div slot="title" class="center">{{$t('m.Reset_Password')}}</div>
+  <Panel
+    :padding="30"
+    class="container"
+  >
+    <div
+      slot="title"
+      class="center"
+    >
+      {{ $t('m.Reset_Password') }}
+    </div>
     <template v-if="!resetSuccess">
-    <Form :model=formResetPassword ref="formResetPassword" :rules="ruleResetPassword">
-      <Form-item prop="password">
-        <Input type="password" v-model="formResetPassword.password" :placeholder="$t('m.RPassword')" size="large">
-        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-        </Input>
-      </Form-item>
-      <Form-item prop="passwordAgain">
-        <Input type="password" v-model="formResetPassword.passwordAgain" :placeholder="$t('m.RPassword_Again')" size="large">
-        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-        </Input>
-      </Form-item>
-      <Form-item prop="captcha" style="margin-bottom:10px">
-        <div id="captcha">
-          <div id="captchaCode">
-            <Input v-model="formResetPassword.captcha" :placeholder="$t('m.RCaptcha')" size="large">
-            <Icon type="ios-lightbulb-outline" slot="prepend"></Icon>
-            </Input>
+      <Form
+        ref="formResetPassword"
+        :model="formResetPassword"
+        :rules="ruleResetPassword"
+      >
+        <Form-item prop="password">
+          <Input
+            v-model="formResetPassword.password"
+            type="password"
+            :placeholder="$t('m.RPassword')"
+            size="large"
+          >
+            <Icon
+              slot="prepend"
+              type="ios-locked-outline"
+            />
+          </Input>
+        </Form-item>
+        <Form-item prop="passwordAgain">
+          <Input
+            v-model="formResetPassword.passwordAgain"
+            type="password"
+            :placeholder="$t('m.RPassword_Again')"
+            size="large"
+          >
+            <Icon
+              slot="prepend"
+              type="ios-locked-outline"
+            />
+          </Input>
+        </Form-item>
+        <Form-item
+          prop="captcha"
+          style="margin-bottom:10px"
+        >
+          <div id="captcha">
+            <div id="captchaCode">
+              <Input
+                v-model="formResetPassword.captcha"
+                :placeholder="$t('m.RCaptcha')"
+                size="large"
+              >
+                <Icon
+                  slot="prepend"
+                  type="ios-lightbulb-outline"
+                />
+              </Input>
+            </div>
+            <div id="captchaImg">
+              <Tooltip
+                content="Click to refresh"
+                placement="top"
+              >
+                <img
+                  :src="captchaSrc"
+                  @click="getCaptchaSrc"
+                >
+              </Tooltip>
+            </div>
           </div>
-          <div id="captchaImg">
-            <Tooltip content="Click to refresh" placement="top">
-              <img :src="captchaSrc" @click="getCaptchaSrc"/>
-            </Tooltip>
-          </div>
-        </div>
-      </Form-item>
-    </Form>
-    <Button type="primary"
-            @click="resetPassword"
-            class="btn" long
-            :loading="btnLoading">{{$t('m.Reset_Password')}}
-    </Button>
+        </Form-item>
+      </Form>
+      <Button
+        type="primary"
+        class="btn"
+        long
+        :loading="btnLoading"
+        @click="resetPassword"
+      >
+        {{ $t('m.Reset_Password') }}
+      </Button>
     </template>
 
     <template v-else>
-      <Alert type="success">{{$t('m.Your_password_has_been_reset')}}</Alert>
+      <Alert type="success">
+        {{ $t('m.Your_password_has_been_reset') }}
+      </Alert>
     </template>
   </Panel>
 </template>
@@ -46,7 +96,7 @@
   import api from '@oj/api'
 
   export default {
-    name: 'reset-password',
+    name: 'ResetPassword',
     mixins: [FormMixin],
     data () {
       const CheckPassword = (rule, value, callback) => {

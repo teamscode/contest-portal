@@ -1,38 +1,82 @@
 <template>
   <div style="margin: 0px 0px 15px 0px">
-    <Row type="flex" justify="space-between" class="header">
-      <Col :span=12>
-      <div>
-        <span>{{$t('m.Language')}}:</span>
-        <Select :value="language" @on-change="onLangChange" class="adjust">
-          <Option v-for="item in languages" :key="item" :value="item">{{item}}
-          </Option>
-        </Select>
+    <Row
+      type="flex"
+      justify="space-between"
+      class="header"
+    >
+      <Col :span="12">
+        <div>
+          <span>{{ $t('m.Language') }}:</span>
+          <Select
+            :value="language"
+            class="adjust"
+            @on-change="onLangChange"
+          >
+            <Option
+              v-for="item in languages"
+              :key="item"
+              :value="item"
+            >
+              {{ item }}
+            </Option>
+          </Select>
 
-        <Tooltip :content="this.$i18n.t('m.Reset_to_default_code_definition')" placement="top" style="margin-left: 10px">
-          <Button icon="refresh" @click="onResetClick"></Button>
-        </Tooltip>
+          <Tooltip
+            :content="$i18n.t('m.Reset_to_default_code_definition')"
+            placement="top"
+            style="margin-left: 10px"
+          >
+            <Button
+              icon="refresh"
+              @click="onResetClick"
+            />
+          </Tooltip>
 
-        <Tooltip :content="this.$i18n.t('m.Upload_file')" placement="top" style="margin-left: 10px">
-          <Button icon="upload" @click="onUploadFile"></Button>
-        </Tooltip>
+          <Tooltip
+            :content="$i18n.t('m.Upload_file')"
+            placement="top"
+            style="margin-left: 10px"
+          >
+            <Button
+              icon="upload"
+              @click="onUploadFile"
+            />
+          </Tooltip>
 
-        <input type="file" id="file-uploader" style="display: none" @change="onUploadFileDone">
-
-      </div>
+          <input
+            id="file-uploader"
+            type="file"
+            style="display: none"
+            @change="onUploadFileDone"
+          >
+        </div>
       </Col>
-      <Col :span=12>
-      <div class="fl-right">
-        <span>{{$t('m.Theme')}}:</span>
-        <Select :value="theme" @on-change="onThemeChange" class="adjust">
-          <Option v-for="item in themes" :key="item.label" :value="item.value">{{item.label}}
-          </Option>
-        </Select>
-      </div>
+      <Col :span="12">
+        <div class="fl-right">
+          <span>{{ $t('m.Theme') }}:</span>
+          <Select
+            :value="theme"
+            class="adjust"
+            @on-change="onThemeChange"
+          >
+            <Option
+              v-for="item in themes"
+              :key="item.label"
+              :value="item.value"
+            >
+              {{ item.label }}
+            </Option>
+          </Select>
+        </div>
       </Col>
     </Row>
-    <codemirror :value="value" :options="options" @change="onEditorCodeChange" ref="myEditor">
-    </codemirror>
+    <codemirror
+      ref="myEditor"
+      :value="value"
+      :options="options"
+      @change="onEditorCodeChange"
+    />
   </div>
 </template>
 <script>
@@ -109,6 +153,17 @@
         ]
       }
     },
+    computed: {
+      editor () {
+        // get current editor object
+        return this.$refs.myEditor.editor
+      }
+    },
+    watch: {
+      'theme' (newVal, oldVal) {
+        this.editor.setOption('theme', newVal)
+      }
+    },
     mounted () {
       utils.getLanguages().then(languages => {
         let mode = {}
@@ -148,17 +203,6 @@
           document.getElementById('file-uploader').value = ''
         }
         fileReader.readAsText(f, 'UTF-8')
-      }
-    },
-    computed: {
-      editor () {
-        // get current editor object
-        return this.$refs.myEditor.editor
-      }
-    },
-    watch: {
-      'theme' (newVal, oldVal) {
-        this.editor.setOption('theme', newVal)
       }
     }
   }

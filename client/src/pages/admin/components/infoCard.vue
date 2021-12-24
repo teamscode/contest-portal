@@ -1,12 +1,32 @@
 <template>
-  <el-card :body-style="{padding: 0, height: '100%'}" class="info-card">
-    <el-row type="flex" class="info-card-container">
-      <el-col :span="8" :style="{'background-color': color}" class="height-100">
-        <i :class="['info-card-icon', icon]" :style="{'font-size': iconSize}"></i>
+  <el-card
+    :body-style="{padding: 0, height: '100%'}"
+    class="info-card"
+  >
+    <el-row
+      type="flex"
+      class="info-card-container"
+    >
+      <el-col
+        :span="8"
+        :style="{'background-color': color}"
+        class="height-100"
+      >
+        <i
+          :class="['info-card-icon', icon]"
+          :style="{'font-size': iconSize}"
+        />
       </el-col>
-      <el-col :span="16" class="info-card-text">
-        <p :style="textStyle">{{value}}</p>
-        <p style="font-weight: 300;">{{message}}</p>
+      <el-col
+        :span="16"
+        class="info-card-text"
+      >
+        <p :style="textStyle">
+          {{ value }}
+        </p>
+        <p style="font-weight: 300;">
+          {{ message }}
+        </p>
       </el-col>
     </el-row>
   </el-card>
@@ -14,7 +34,7 @@
 
 <script>
   export default {
-    name: 'inforCard',
+    name: 'InforCard',
     props: {
       value: [String, Number],
       color: String,
