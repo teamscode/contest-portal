@@ -110,7 +110,7 @@
                   display: 'inline-block',
                   'max-width': '150px'
                 }
-              }, params.row.user.username)
+              }, params.row.user.team_name)
             }
           },
           {

@@ -74,7 +74,7 @@ export default {
             fixed: 'left',
             minWidth: 220,
             render: (h, {row}) => {
-              return h('span', row.user.team_members)
+              return h('span', row.user.team_members.map(member => member.name).join(', '))
             }
           })
         } else {
