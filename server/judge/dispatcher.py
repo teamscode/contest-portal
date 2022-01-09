@@ -137,16 +137,10 @@ class JudgeDispatcher(DispatcherBase):
         else:
             code = self.submission.code
 
-        adjusted_time_limit = self.problem.time_limit
-        if sub_config["name"] == "Java":
-            adjusted_time_limit *= 2
-        elif sub_config["name"] == "Python 2" or sub_config["name"] == "Python 3":
-            adjusted_time_limit *= 4
-
         data = {
             "language_config": sub_config["config"],
             "src": code,
-            "max_cpu_time": adjusted_time_limit,
+            "max_cpu_time": self.problem.time_limit * sub_config["multiplier"],
             "max_memory": 1024 * 1024 * self.problem.memory_limit,
             "test_case_id": self.problem.test_case_id,
             "output": False,

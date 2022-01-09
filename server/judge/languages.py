@@ -207,12 +207,12 @@ _py3_lang_config = {
 }
 
 languages = [
-    {"config": _c_lang_config, "spj": {"compile": _c_lang_spj_compile, "config": _c_lang_spj_config},
+    {"config": _c_lang_config, "multiplier": 1, "spj": {"compile": _c_lang_spj_compile, "config": _c_lang_spj_config},
      "name": "C", "description": "GCC 10.2", "content_type": "text/x-csrc"},
-    {"config": _cpp_lang_config, "spj": {"compile": _cpp_lang_spj_compile, "config": _cpp_lang_spj_config},
+    {"config": _cpp_lang_config, "multiplier": 1, "spj": {"compile": _cpp_lang_spj_compile, "config": _cpp_lang_spj_config},
      "name": "C++11", "description": "G++ 10.2", "content_type": "text/x-c++src"},
-    {"config": _cpp17_lang_config, "name": "C++17", "description": "G++ 10.2", "content_type": "text/x-c++src"},
-    {"config": _java_lang_config, "name": "Java", "description": "OpenJDK 11", "content_type": "text/x-java"},
-    {"config": _py2_lang_config, "name": "Python 2", "description": "Python 2.7", "content_type": "text/x-python"},
-    {"config": _py3_lang_config, "name": "Python 3", "description": "Python 3.9", "content_type": "text/x-python"},
+    {"config": _cpp17_lang_config, "multiplier": 1, "name": "C++17", "description": "G++ 10.2", "content_type": "text/x-c++src"},
+    {"config": _java_lang_config, "multiplier": 2, "name": "Java", "description": "OpenJDK 11", "content_type": "text/x-java"},
+    {"config": _py2_lang_config, "multiplier": 4, "name": "Python 2", "description": "Python 2.7", "content_type": "text/x-python"},
+    {"config": _py3_lang_config, "multiplier": 4, "name": "Python 3", "description": "Python 3.9", "content_type": "text/x-python"},
 ]
