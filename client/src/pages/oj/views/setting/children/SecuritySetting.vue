@@ -1,109 +1,112 @@
 <template>
-  <div class="setting-main">
-    <p class="section-title">
-      {{ $t('m.Sessions') }}
-    </p>
-    <div class="flex-container setting-content">
-      <template v-for="session in sessions">
-        <Card
-          :padding="20"
-          class="flex-child"
-        >
-          <span
-            slot="title"
-            style="line-height: 20px"
-          >{{ session.ip }}</span>
-          <div slot="extra">
-            <Tag
-              v-if="session.current_session"
-              color="green"
+  <div>
+    <div class="setting-main">
+      <p class="section-title">
+        {{ $t('m.Sessions') }}
+      </p>
+      <div class="flex-container setting-content">
+        <template v-for="session in sessions">
+          <Card
+            :key="session.ip"
+            :padding="20"
+            class="flex-child"
+          >
+            <span
+              slot="title"
+              style="line-height: 20px"
+            >{{ session.ip }}</span>
+            <div slot="extra">
+              <Tag
+                v-if="session.current_session"
+                color="green"
+              >
+                Current
+              </Tag>
+              <Button
+                v-else
+                type="warning"
+                size="small"
+                @click="deleteSession(session.session_key)"
+              >
+                Revoke
+              </Button>
+            </div>
+            <Form :label-width="100">
+              <FormItem
+                label="OS :"
+                class="item"
+              >
+                {{ session.user_agent | platform }}
+              </FormItem>
+              <FormItem
+                label="Browser :"
+                class="item"
+              >
+                {{ session.user_agent | browser }}
+              </FormItem>
+              <FormItem
+                label="Last Activity :"
+                class="item"
+              >
+                {{ session.last_activity | localtime }}
+              </FormItem>
+            </Form>
+          </Card>
+        </template>
+      </div>
+
+      <p class="section-title">
+        {{ $t('m.Two_Factor_Authentication') }}
+      </p>
+      <div class="mini-container setting-content">
+        <Form>
+          <Alert
+            v-if="TFAOpened"
+            type="success"
+            class="notice"
+            show-icon
+          >
+            You have enabled two-factor authentication.
+          </Alert>
+          <FormItem v-if="!TFAOpened">
+            <div class="oj-relative">
+              <img
+                id="qr-img"
+                :src="qrcodeSrc"
+              >
+              <Spin
+                v-if="loadingQRcode"
+                size="large"
+                fix
+              />
+            </div>
+          </FormItem>
+          <template v-if="!loadingQRcode">
+            <FormItem style="width: 250px">
+              <Input
+                v-model="formTwoFactor.code"
+                placeholder="Enter the code from your application"
+              />
+            </FormItem>
+            <Button
+              v-if="!TFAOpened"
+              type="primary"
+              :loading="loadingBtn"
+              @click="updateTFA(false)"
             >
-              Current
-            </Tag>
+              Enable TFA
+            </Button>
             <Button
               v-else
-              type="warning"
-              size="small"
-              @click="deleteSession(session.session_key)"
+              type="error"
+              :loading="loadingBtn"
+              @click="closeTFA"
             >
-              Revoke
+              Disable TFA
             </Button>
-          </div>
-          <Form :label-width="100">
-            <FormItem
-              label="OS :"
-              class="item"
-            >
-              {{ session.user_agent | platform }}
-            </FormItem>
-            <FormItem
-              label="Browser :"
-              class="item"
-            >
-              {{ session.user_agent | browser }}
-            </FormItem>
-            <FormItem
-              label="Last Activity :"
-              class="item"
-            >
-              {{ session.last_activity | localtime }}
-            </FormItem>
-          </Form>
-        </Card>
-      </template>
-    </div>
-
-    <p class="section-title">
-      {{ $t('m.Two_Factor_Authentication') }}
-    </p>
-    <div class="mini-container setting-content">
-      <Form>
-        <Alert
-          v-if="TFAOpened"
-          type="success"
-          class="notice"
-          show-icon
-        >
-          You have enabled two-factor authentication.
-        </Alert>
-        <FormItem v-if="!TFAOpened">
-          <div class="oj-relative">
-            <img
-              id="qr-img"
-              :src="qrcodeSrc"
-            >
-            <Spin
-              v-if="loadingQRcode"
-              size="large"
-              fix
-            />
-          </div>
-        </FormItem>
-        <template v-if="!loadingQRcode">
-          <FormItem style="width: 250px">
-            <Input
-              v-model="formTwoFactor.code"
-              placeholder="Enter the code from your application"
-            />
-          </FormItem>
-          <Button
-            v-if="!TFAOpened"
-            type="primary"
-            :loading="loadingBtn"
-            @click="updateTFA(false)"
-          >
-            Enable TFA
-          </Button>
-          <Button
-            v-else
-            type="error"
-            :loading="loadingBtn"
-            @click="closeTFA"
-          >
-            Disable TFA
-          </Button>
-        </template>
-      </Form>
+          </template>
+        </Form>
+      </div>
     </div>
   </div>
 </template>

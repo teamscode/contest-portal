@@ -37,6 +37,7 @@ export default {
   },
   // 注册
   register (data) {
+    delete data.membersCount
     return ajax('register', 'post', {
       data
     })

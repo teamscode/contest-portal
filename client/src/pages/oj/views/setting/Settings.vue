@@ -57,9 +57,7 @@
           </Menu>
         </div>
         <div class="panel">
-          <transition name="fadeInUp">
-            <router-view />
-          </transition>
+          <router-view />
         </div>
       </div>
     </Card>

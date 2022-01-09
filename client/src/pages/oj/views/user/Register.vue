@@ -5,7 +5,7 @@
       :model="formRegister"
       :rules="ruleRegister"
     >
-      <Row>
+      <Row type="flex" align="middle">
         <Col
           span="12"
           style="padding-right: 10px"
@@ -66,6 +66,18 @@
               />
             </Input>
           </FormItem>
+          <FormItem prop="membersCount">
+            <span>Number of Team Members</span>
+            <InputNumber
+              v-model="formRegister.membersCount"
+              style="position: absolute; right: 0px"
+              :max="4"
+              :min="1"
+              size="large"
+              @on-enter="handleRegister"
+              @on-change="changeMembersCount"
+            />
+          </FormItem>
           <FormItem
             prop="captcha"
             style="margin-bottom: 10px"
@@ -99,18 +111,6 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem prop="membersCount">
-            <span>Number of Team Members</span>
-            <InputNumber
-              v-model="formRegister.membersCount"
-              style="position: absolute; right: 0px"
-              :max="4"
-              :min="1"
-              size="large"
-              @on-enter="handleRegister"
-              @on-change="changeMembersCount"
-            />
-          </FormItem>
           <div
             v-for="(member, index) in formRegister.team_members"
             :key="index"

@@ -1,111 +1,113 @@
 <template>
-  <div class="setting-main">
-    <div class="flex-container">
-      <div class="left">
-        <p class="section-title">
-          {{ $t('m.ChangePassword') }}
-        </p>
-        <Form
-          ref="formPassword"
-          class="setting-content"
-          :model="formPassword"
-          :rules="rulePassword"
-        >
-          <FormItem
-            label="Current Password"
-            prop="old_password"
+  <div>
+    <div class="setting-main">
+      <div class="flex-container">
+        <div class="left">
+          <p class="section-title">
+            {{ $t('m.ChangePassword') }}
+          </p>
+          <Form
+            ref="formPassword"
+            class="setting-content"
+            :model="formPassword"
+            :rules="rulePassword"
           >
-            <Input
-              v-model="formPassword.old_password"
-              type="password"
-            />
-          </FormItem>
-          <FormItem
-            label="New Password"
-            prop="new_password"
-          >
-            <Input
-              v-model="formPassword.new_password"
-              type="password"
-            />
-          </FormItem>
-          <FormItem
-            label="Confirm New Password"
-            prop="again_password"
-          >
-            <Input
-              v-model="formPassword.again_password"
-              type="password"
-            />
-          </FormItem>
-          <FormItem
-            v-if="visible.tfaRequired"
-            label="Two Factor Auth"
-            prop="tfa_code"
-          >
-            <Input v-model="formPassword.tfa_code" />
-          </FormItem>
-          <FormItem v-if="visible.passwordAlert">
-            <Alert type="success">
-              You will need to login again after 5 seconds..
-            </Alert>
-          </FormItem>
-          <Button
-            type="primary"
-            @click="changePassword"
-          >
-            {{ $t('m.Update_Password') }}
-          </Button>
-        </Form>
-      </div>
+            <FormItem
+              label="Current Password"
+              prop="old_password"
+            >
+              <Input
+                v-model="formPassword.old_password"
+                type="password"
+              />
+            </FormItem>
+            <FormItem
+              label="New Password"
+              prop="new_password"
+            >
+              <Input
+                v-model="formPassword.new_password"
+                type="password"
+              />
+            </FormItem>
+            <FormItem
+              label="Confirm New Password"
+              prop="again_password"
+            >
+              <Input
+                v-model="formPassword.again_password"
+                type="password"
+              />
+            </FormItem>
+            <FormItem
+              v-if="visible.tfaRequired"
+              label="Two Factor Auth"
+              prop="tfa_code"
+            >
+              <Input v-model="formPassword.tfa_code" />
+            </FormItem>
+            <FormItem v-if="visible.passwordAlert">
+              <Alert type="success">
+                You will need to login again after 5 seconds..
+              </Alert>
+            </FormItem>
+            <Button
+              type="primary"
+              @click="changePassword"
+            >
+              {{ $t('m.Update_Password') }}
+            </Button>
+          </Form>
+        </div>
 
-      <div class="middle separator" />
+        <div class="middle separator" />
 
-      <div class="right">
-        <p class="section-title">
-          {{ $t('m.ChangeEmail') }}
-        </p>
-        <Form
-          ref="formEmail"
-          class="setting-content"
-          :model="formEmail"
-          :rules="ruleEmail"
-        >
-          <FormItem
-            label="Current Password"
-            prop="password"
-          >
-            <Input
-              v-model="formEmail.password"
-              type="password"
-            />
-          </FormItem>
-          <FormItem label="Current Email">
-            <Input
-              v-model="formEmail.old_email"
-              disabled
-            />
-          </FormItem>
-          <FormItem
-            label="New Email"
-            prop="new_email"
-          >
-            <Input v-model="formEmail.new_email" />
-          </FormItem>
-          <FormItem
-            v-if="visible.tfaRequired"
-            label="Two Factor Auth"
-            prop="tfa_code"
-          >
-            <Input v-model="formEmail.tfa_code" />
-          </FormItem>
-          <Button
-            type="primary"
-            @click="changeEmail"
-          >
+        <div class="right">
+          <p class="section-title">
             {{ $t('m.ChangeEmail') }}
-          </Button>
-        </Form>
+          </p>
+          <Form
+            ref="formEmail"
+            class="setting-content"
+            :model="formEmail"
+            :rules="ruleEmail"
+          >
+            <FormItem
+              label="Current Password"
+              prop="password"
+            >
+              <Input
+                v-model="formEmail.password"
+                type="password"
+              />
+            </FormItem>
+            <FormItem label="Current Email">
+              <Input
+                v-model="user.email"
+                disabled
+              />
+            </FormItem>
+            <FormItem
+              label="New Email"
+              prop="new_email"
+            >
+              <Input v-model="formEmail.new_email" />
+            </FormItem>
+            <FormItem
+              v-if="visible.tfaRequired"
+              label="Two Factor Auth"
+              prop="tfa_code"
+            >
+              <Input v-model="formEmail.tfa_code" />
+            </FormItem>
+            <Button
+              type="primary"
+              @click="changeEmail"
+            >
+              {{ $t('m.ChangeEmail') }}
+            </Button>
+          </Form>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +115,7 @@
 
 <script>
   import api from '@oj/api'
+  import { mapGetters, mapActions } from 'vuex'
   import { FormMixin } from '@oj/components/mixins'
 
   export default {
@@ -156,7 +159,6 @@
         formEmail: {
           tfa_code: '',
           password: '',
-          old_email: this.$store.getters.user.email,
           new_email: ''
         },
         rulePassword: {
@@ -178,6 +180,7 @@
       }
     },
     methods: {
+      ...mapActions(['getProfile']),
       changePassword () {
         this.validateForm('formPassword').then(valid => {
           this.loading.btnPassword = true
@@ -213,6 +216,7 @@
             this.loading.btnEmail = false
             this.visible.emailAlert = true
             this.$success('Change email successfully')
+            this.getProfile()
             this.$refs.formEmail.resetFields()
           }, res => {
             if (res.data.data === 'tfa_required') {
@@ -221,6 +225,9 @@
           })
         })
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
     }
   }
 </script>
