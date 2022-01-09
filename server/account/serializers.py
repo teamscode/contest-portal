@@ -81,6 +81,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     team_members = serializers.SerializerMethodField()
+    team_name = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -92,6 +93,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_team_members(self, obj):
         return obj.team_members if self.show_team_members else None
+
+    def get_team_name(self, obj):
+        return obj.team_name
 
 
 class EditUserSerializer(serializers.Serializer):
@@ -111,6 +115,7 @@ class EditUserSerializer(serializers.Serializer):
 
 class EditUserProfileSerializer(serializers.Serializer):
     team_members = TeamMemberSerializer(many=True)
+    team_name = serializers.CharField(max_length=128)
     avatar = serializers.CharField(max_length=256, allow_blank=True, required=False)
     language = serializers.CharField(max_length=32, allow_blank=True, required=False)
 

@@ -53,8 +53,17 @@ class UserProfileAPI(APIView):
     @validate_serializer(EditUserProfileSerializer)
     @login_required
     def put(self, request):
+        if not SysOptions.allow_register:
+            return self.error("Registration has closed, no profile editing allowed")
+
         data = request.data
+        data["team_name"] = data["team_name"].strip()
+
         user_profile = request.user.userprofile
+        if data["team_name"] != getattr(user_profile, "team_name"):
+            if UserProfile.objects.filter(team_name=data["team_name"]).exists():
+                return self.error("Team name already exists")
+
         for k, v in data.items():
             setattr(user_profile, k, v)
         user_profile.save()
@@ -186,10 +195,12 @@ class UserRegisterAPI(APIView):
         User register api
         """
         if not SysOptions.allow_register:
-            return self.error("Register function has been disabled by admin")
+            return self.error("Registration has closed")
 
         data = request.data
-        data["email"] = data["email"].lower()
+        data["email"] = data["email"].strip().lower()
+        data["username"] = data["username"].strip().lower()
+        data["team_name"] = data["team_name"].strip()
         captcha = Captcha(request)
         if not captcha.check(data["captcha"]):
             return self.error("Invalid captcha")
@@ -257,7 +268,7 @@ class ApplyResetPasswordAPI(APIView):
     @validate_serializer(ApplyResetPasswordSerializer)
     def post(self, request):
         if request.user.is_authenticated:
-            return self.error("You have already logged in, are you kidding me? ")
+            return self.error("You have already logged in")
         data = request.data
         captcha = Captcha(request)
         if not captcha.check(data["captcha"]):
