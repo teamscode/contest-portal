@@ -14,6 +14,7 @@ class UserLoginSerializer(serializers.Serializer):
 class UsernameOrEmailCheckSerializer(serializers.Serializer):
     username = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
+    team_name = serializers.CharField(required=False)
 
 
 class TeamMemberSerializer(serializers.Serializer):

@@ -27,11 +27,12 @@ export default {
       data
     })
   },
-  checkUsernameOrEmail (username, email) {
+  checkUsernameOrEmail (username, email, team_name) {
     return ajax('check_username_or_email', 'post', {
       data: {
         username,
-        email
+        email,
+        team_name
       }
     })
   },

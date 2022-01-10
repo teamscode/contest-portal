@@ -115,7 +115,7 @@
             v-for="(member, index) in formRegister.team_members"
             :key="index"
           >
-            <div style="margin-bottom: 30px; margin-top: 40px">
+            <div style="margin-bottom: 10px; margin-top: 10px">
               Team Member #{{ index + 1 }} Information
             </div>
             <FormItem
@@ -225,7 +225,8 @@ export default {
           { required: true, type: 'number', trigger: 'blur', min: 1, max: 4 }
         ],
         team_name: [
-          { required: true, trigger: 'blur', max: 128 }
+          { required: true, trigger: 'blur', max: 128 },
+          { validator: this.CheckTeamnameNotExist, trigger: 'blur' }
         ]
       }
     }
@@ -236,7 +237,7 @@ export default {
   methods: {
     ...mapActions(['changeModalStatus', 'getProfile']),
     CheckEmailNotExist (rule, value, callback) {
-      api.checkUsernameOrEmail(undefined, value).then(
+      api.checkUsernameOrEmail(undefined, value, undefined).then(
         (res) => {
           if (res.data.data.email === true) {
             callback(new Error(this.$i18n.t('m.The_email_already_exists')))
@@ -248,10 +249,22 @@ export default {
       )
     },
     CheckUsernameNotExist (rule, value, callback) {
-      api.checkUsernameOrEmail(value, undefined).then(
+      api.checkUsernameOrEmail(value, undefined, undefined).then(
         (res) => {
           if (res.data.data.username === true) {
             callback(new Error(this.$i18n.t('m.The_username_already_exists')))
+          } else {
+            callback()
+          }
+        },
+        (_) => callback()
+      )
+    },
+    CheckTeamnameNotExist (rule, value, callback) {
+      api.checkUsernameOrEmail(undefined, undefined, value).then(
+        (res) => {
+          if (res.data.data.team_name === true) {
+            callback(new Error('This team name already exists'))
           } else {
             callback()
           }

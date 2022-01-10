@@ -179,12 +179,15 @@ class UsernameOrEmailCheck(APIView):
         # True means already exist.
         result = {
             "username": False,
-            "email": False
+            "email": False,
+            "team_name": False
         }
         if data.get("username"):
-            result["username"] = User.objects.filter(username=data["username"]).exists()
+            result["username"] = User.objects.filter(username=data["username"].strip().lower()).exists()
         if data.get("email"):
-            result["email"] = User.objects.filter(email=data["email"].lower()).exists()
+            result["email"] = User.objects.filter(email=data["email"].strip().lower()).exists()
+        if data.get("team_name"):
+            result["team_name"] = UserProfile.objects.filter(team_name=data["team_name"].strip().lower()).exists()
         return self.success(result)
 
 
