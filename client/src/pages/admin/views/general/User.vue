@@ -279,10 +279,11 @@
       :title="$t('m.User_Info')"
       :visible.sync="showUserDialog"
       :close-on-click-modal="false"
+      width="900px"
     >
       <el-form
         :model="user"
-        label-width="120px"
+        label-width="160px"
         label-position="left"
       >
         <el-row :gutter="20">
