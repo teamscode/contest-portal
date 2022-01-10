@@ -66,7 +66,11 @@
         <el-table-column
           prop="team_members"
           label="Team Members"
-        />
+        >
+          <template slot-scope="scope">
+            {{ scope.row.team_members.map(member=>member.name).join(", ") }}
+          </template>
+        </el-table-column>
 
         <el-table-column
           prop="email"
@@ -297,10 +301,29 @@
           </el-col>
           <el-col :span="12">
             <el-form-item
-              :label="$t('m.User_Team_Members')"
+              label="Team Size"
               required
             >
-              <el-input v-model="user.team_members" />
+              <el-input-number v-model="user.membersCount" @change="changeMembersCount" :min="1" :max="4"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              label="Team Name"
+              required
+            >
+              <el-input v-model="user.team_name" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              v-for="(member, index) in user.team_members"
+              :key="index"
+              :label="'Member #'+(index+1)"
+              required
+            >
+              <el-input placeholder="Name" v-model="member.name" />
+              <el-input placeholder="Email" style="margin-top: 10px" v-model="member.email" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -481,9 +504,18 @@
         this.showUserDialog = true
         api.getUser(id).then(res => {
           this.user = res.data.data
+          this.user.membersCount = this.user.team_members.length
           this.user.password = ''
           this.user.real_tfa = this.user.two_factor_auth
         })
+      },
+      changeMembersCount () {
+        this.user.team_members.splice(this.user.membersCount)
+        while (
+          this.user.team_members.length < this.user.membersCount
+        ) {
+          this.user.team_members.push({ name: '', email: '' })
+        }
       },
       // 获取用户列表
       getUserList (page) {

@@ -20,7 +20,6 @@
                 :max="4"
                 :min="1"
                 :rules="{ required: true, trigger: 'blur', min: 1, max: 4 }"
-                @on-enter="handleRegister"
                 @on-change="changeMembersCount"
               />
             </FormItem>
@@ -43,7 +42,6 @@
                 <Input
                   v-model="formProfile.team_members[index].name"
                   type="text"
-                  @on-enter="handleRegister"
                 >
                 </Input>
               </FormItem>
@@ -54,7 +52,6 @@
                   index === 0
                     ? [
                       { required: true, type: 'email', trigger: 'blur', max: 64 },
-                      { validator: CheckEmailNotExist, trigger: 'blur' },
                     ]
                     : { required: true, type: 'email', trigger: 'blur', max: 64}
                 "
@@ -62,7 +59,6 @@
                 <Input
                   v-model="formProfile.team_members[index].email"
                   type="text"
-                  @on-enter="handleRegister"
                 >
                 </Input>
               </FormItem>
