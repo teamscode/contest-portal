@@ -7,8 +7,8 @@ DATABASES = {
         'PORT': get_env("POSTGRES_PORT", "5432"),
         'NAME': get_env("POSTGRES_DB"),
         'USER': get_env("POSTGRES_USER"),
-        'PASSWORD': get_env("POSTGRES_PASSWORD")
-        'OPTIONS': {'sslmode': get_env("DB_SSL_MODE", "allow")}
+        'PASSWORD': get_env("POSTGRES_PASSWORD"),
+        'OPTIONS': {'sslmode': 'get_env("DB_SSL_MODE", "allow")'}
     }
 }
 
