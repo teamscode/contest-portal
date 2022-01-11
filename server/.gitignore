@@ -77,3 +77,4 @@ http_locations.conf
 https_locations.conf
 
 venv/
+dev_settings.py

@@ -190,8 +190,6 @@ REST_FRAMEWORK = {
     )
 }
 
-REDIS_URL = "redis://%s:%s" % (REDIS_CONF["host"], REDIS_CONF["port"])
-
 
 def redis_config(db):
     def make_key(key, key_prefix, version):

@@ -8,13 +8,11 @@ DATABASES = {
         'NAME': get_env("POSTGRES_DB"),
         'USER': get_env("POSTGRES_USER"),
         'PASSWORD': get_env("POSTGRES_PASSWORD")
+        'OPTIONS': {'sslmode': get_env("DB_SSL_MODE", "allow")}
     }
 }
 
-REDIS_CONF = {
-    "host": get_env("REDIS_HOST", "oj-redis"),
-    "port": get_env("REDIS_PORT", "6379")
-}
+REDIS_URL = get_env("REDIS_URL", "redis://oj-redis:6379")
 
 DEBUG = False
 
