@@ -182,7 +182,7 @@ class UserRegisterAPITest(CaptchaTest):
     def test_website_config_limit(self):
         SysOptions.allow_register = False
         resp = self.client.post(self.register_url, data=self.data)
-        self.assertDictEqual(resp.data, {"error": "error", "data": "Register function has been disabled by admin"})
+        self.assertDictEqual(resp.data, {"error": "error", "data": "Registration has closed"})
 
     def test_invalid_captcha(self):
         self.data["captcha"] = "****"
