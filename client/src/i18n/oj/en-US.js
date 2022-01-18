@@ -152,7 +152,7 @@ export const m = {
   Security: 'Security',
   // AccoutSetting.vue
   ChangePassword: 'Change Password',
-  ChangeEmail: 'Change Email',
+  ChangeEmail: 'Change Captain\'s Email',
   Update_Password: 'Update Password',
   // ProfileSetting.vue
   Avatar_Setting: 'Avatar Setting',

@@ -66,7 +66,9 @@
             class="notice"
             show-icon
           >
-            You have enabled two-factor authentication.
+            <div>
+              You have enabled two-factor authentication.
+            </div>
           </Alert>
           <FormItem v-if="!TFAOpened">
             <div class="oj-relative">

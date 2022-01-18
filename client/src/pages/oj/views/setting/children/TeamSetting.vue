@@ -48,19 +48,15 @@
               <FormItem
                 :prop="'team_members.' + index + '.email'"
                 :label="'Team Member ' + (index + 1) + ' Email'"
-                :rules="
-                  index === 0
-                    ? [
-                      { required: true, type: 'email', trigger: 'blur', max: 64 },
-                    ]
-                    : { required: true, type: 'email', trigger: 'blur', max: 64}
-                "
+                :rules="{ required: true, type: 'email', trigger: 'blur', max: 64}"
               >
                 <Input
                   v-model="formProfile.team_members[index].email"
+                  :disabled="index===0"
                   type="text"
                 >
                 </Input>
+                <div v-if="index===0">Captain's email can be changed in the Account tab</div>
               </FormItem>
             </div>
           </Col>
@@ -120,7 +116,7 @@
           this.loadingSaveBtn = true
           let updateData = utils.filterEmptyValue(Object.assign({}, this.formProfile))
           api.updateProfile(updateData).then(res => {
-            this.$success('Success')
+            this.$success('Saved')
             this.$store.commit(types.CHANGE_PROFILE, {profile: res.data.data})
             this.loadingSaveBtn = false
           }, _ => {

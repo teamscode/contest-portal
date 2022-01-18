@@ -53,6 +53,7 @@
             </FormItem>
             <Button
               type="primary"
+              :loading="loading.btnPassword"
               @click="changePassword"
             >
               {{ $t('m.Update_Password') }}
@@ -103,6 +104,7 @@
             <Button
               type="primary"
               @click="changeEmail"
+              :loading="loading.btnEmail"
             >
               {{ $t('m.ChangeEmail') }}
             </Button>
@@ -192,7 +194,7 @@
           api.changePassword(data).then(res => {
             this.loading.btnPassword = false
             this.visible.passwordAlert = true
-            this.$success('Update password successfully')
+            this.$success('Password Updated')
             setTimeout(() => {
               this.visible.passwordAlert = false
               this.$router.push({name: 'logout'})
@@ -215,7 +217,7 @@
           api.changeEmail(data).then(res => {
             this.loading.btnEmail = false
             this.visible.emailAlert = true
-            this.$success('Change email successfully')
+            this.$success('Email Updated')
             this.getProfile()
             this.$refs.formEmail.resetFields()
           }, res => {

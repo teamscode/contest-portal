@@ -64,6 +64,7 @@ class UserProfileAPI(APIView):
             if UserProfile.objects.filter(team_name=data["team_name"]).exists():
                 return self.error("Team name already exists")
 
+        data["team_members"][0]["email"] = getattr(user_profile, "team_members")[0]["email"]
         for k, v in data.items():
             setattr(user_profile, k, v)
         user_profile.save()
@@ -239,6 +240,11 @@ class UserChangeEmailAPI(APIView):
                 return self.error("The email is owned by other account")
             user.email = data["new_email"]
             user.save()
+            user_profile = request.user.userprofile
+            team_members = getattr(user_profile, "team_members")
+            team_members[0]["email"] = data["new_email"]
+            setattr(user_profile, "team_members", team_members)
+            user_profile.save()
             return self.success("Succeeded")
         else:
             return self.error("Wrong password")
@@ -384,7 +390,7 @@ class OpenAPIAppkeyAPI(APIView):
     def post(self, request):
         user = request.user
         if not user.open_api:
-            return self.error("OpenAPI function is truned off for you")
+            return self.error("OpenAPI function is not available")
         api_appkey = rand_str()
         user.open_api_appkey = api_appkey
         user.save()
