@@ -1,79 +1,98 @@
 <template>
-  <Row
-    type="flex"
-    justify="space-around"
-  >
-    <Col
-      id="status"
-      :span="20"
+  <div style="margin-bottom: 20px">
+    <Row
+      type="flex"
+      justify="space-around"
     >
-      <Alert
-        :type="status.type"
-        show-icon
+      <Col
+        id="status"
+        :span="20"
       >
-        <span class="title">{{ $t('m.' + status.statusName.replace(/ /g, "_")) }}</span>
-        <div
-          slot="desc"
-          class="content"
+        <Alert
+          :type="status.type"
+          v-if="status.statusName==='Submitting'||status.statusName==='Pending'||status.statusName==='Judging'"
+          show-icon
         >
-          <template v-if="isCE">
-            <pre>{{ submission.statistic_info.err_info }}</pre>
-          </template>
-          <template v-else>
-            <span>{{ $t('m.Time') }}: {{ submission.statistic_info.time_cost | submissionTime }}</span>
-            <span>{{ $t('m.Memory') }}: {{ submission.statistic_info.memory_cost | submissionMemory }}</span>
-            <span>{{ $t('m.Lang') }}: {{ submission.language }}</span>
-            <span>{{ $t('m.Author') }}: {{ submission.username }}</span>
-          </template>
-        </div>
-      </Alert>
-    </Col>
-
-    <!--后台返info就显示出来， 权限控制放后台 -->
-    <Col
-      v-if="submission.info && !isCE"
-      :span="20"
-    >
-      <Table
-        stripe
-        :loading="loading"
-        :disabled-hover="true"
-        :columns="columns"
-        :data="submission.info.data"
-      />
-    </Col>
-
-    <Col :span="20">
-      <Highlight
-        :code="submission.code"
-        :language="submission.language"
-        :border-color="status.color"
-      />
-    </Col>
-    <Col
-      v-if="submission.can_unshare"
-      :span="20"
-    >
-      <div id="share-btn">
-        <Button
-          v-if="submission.shared"
-          type="warning"
-          size="large"
-          @click="shareSubmission(false)"
-        >
-          {{ $t('m.UnShare') }}
-        </Button>
-        <Button
+          <span class="title">{{ $t('m.' + status.statusName.replace(/ /g, "_")) }}</span>
+          <div
+            slot="desc"
+            class="content"
+          >
+            <template>
+              <span>{{ $t('m.Lang') }}: {{ submission.language }}</span>
+              <span>{{ $t('m.Author') }}: {{ submission.username }}</span>
+            </template>
+          </div>
+        </Alert>
+        <Alert
+          :type="status.type"
           v-else
-          type="primary"
-          size="large"
-          @click="shareSubmission(true)"
+          show-icon
         >
-          {{ $t('m.Share') }}
-        </Button>
-      </div>
-    </Col>
-  </Row>
+          <span class="title">{{ $t('m.' + status.statusName.replace(/ /g, "_")) }}</span>
+          <div
+            slot="desc"
+            class="content"
+          >
+            <template v-if="isCE">
+              <pre>{{ submission.statistic_info.err_info }}</pre>
+            </template>
+            <template v-else>
+              <span>{{ $t('m.Time') }}: {{ submission.statistic_info.time_cost | submissionTime }}</span>
+              <span>{{ $t('m.Memory') }}: {{ submission.statistic_info.memory_cost | submissionMemory }}</span>
+              <span>{{ $t('m.Lang') }}: {{ submission.language }}</span>
+              <span>{{ $t('m.Author') }}: {{ submission.username }}</span>
+            </template>
+          </div>
+        </Alert>
+      </Col>
+
+      <!--后台返info就显示出来， 权限控制放后台 -->
+      <Col
+        v-if="submission.info && !isCE"
+        :span="20"
+      >
+        <Table
+          stripe
+          :loading="loading"
+          :disabled-hover="true"
+          :columns="columns"
+          :data="submission.info.data"
+        />
+      </Col>
+
+      <Col :span="20">
+        <Highlight
+          :code="submission.code"
+          :language="submission.language"
+          :border-color="status.color"
+        />
+      </Col>
+      <Col
+        v-if="submission.can_unshare"
+        :span="20"
+      >
+        <div id="share-btn">
+          <Button
+            v-if="submission.shared"
+            type="warning"
+            size="large"
+            @click="shareSubmission(false)"
+          >
+            {{ $t('m.UnShare') }}
+          </Button>
+          <Button
+            v-else
+            type="primary"
+            size="large"
+            @click="shareSubmission(true)"
+          >
+            {{ $t('m.Share') }}
+          </Button>
+        </div>
+      </Col>
+    </Row>
+  </div>
 </template>
 
 <script>
@@ -122,7 +141,7 @@
           }
         ],
         submission: {
-          result: '0',
+          result: '6',
           code: '',
           info: {
             data: []
@@ -133,7 +152,8 @@
           }
         },
         isConcat: false,
-        loading: false
+        loading: false,
+        statusChecker: null
       }
     },
     computed: {
@@ -153,12 +173,15 @@
     },
     mounted () {
       this.getSubmission()
+      this.statusChecker = setInterval(() => { this.getSubmission() }, 1000)
+    },
+    beforeDestroy () {
+      clearInterval(this.statusChecker)
     },
     methods: {
       getSubmission () {
         this.loading = true
         api.getSubmission(this.$route.params.id).then(res => {
-          this.loading = false
           let data = res.data.data
           if (data.info && data.info.data && !this.isConcat) {
             // score exist means the submission is OI problem submission
@@ -191,8 +214,14 @@
               this.columns = this.columns.concat(adminColumn)
             }
           }
+          if (data.result !== 6 && data.result !== 7 && data.result !== 9) {
+            console.log(data.result)
+            this.loading = false
+            clearInterval(this.statusChecker)
+          }
           this.submission = data
         }, () => {
+          clearInterval(this.statusChecker)
           this.loading = false
         })
       },

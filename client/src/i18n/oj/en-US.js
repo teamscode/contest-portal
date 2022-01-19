@@ -208,7 +208,7 @@ export const m = {
   // Simditor.vue
   Uploading_is_in_progress: 'Uploading is in progress, are you sure to leave this page?',
   // SubmissionDetails.vue
-  Lang: 'Lang',
+  Lang: 'Language',
   Share: 'Share',
   UnShare: 'Unshare',
   Succeeded: 'Succeeded',

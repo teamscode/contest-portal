@@ -1,8 +1,5 @@
 <template>
-  <pre v-highlight="code"><code
-:class="language"
-                                :style="styleObject"
-  /></pre>
+  <pre v-highlight="code"><code :class="language" :style="styleObject"/></pre>
 </template>
 
 <script>
@@ -24,7 +21,7 @@
     data () {
       return {
         styleObject: {
-          'border-left': '2px solid green'
+          'border-left': '2px solid ' + this.borderColor
         }
       }
     },
