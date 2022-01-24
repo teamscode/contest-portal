@@ -1,4 +1,4 @@
-FROM node:14-alpine AS frontend-build-env
+FROM mirror.gcr.io/library/node:14-alpine AS frontend-build-env
 
 WORKDIR /build
 COPY client/. .
@@ -11,7 +11,7 @@ RUN yarn install --frozen-lockfile && \
     yarn build
 
 
-FROM python:3-alpine
+FROM mirror.gcr.io/library/python:3-alpine
 
 ENV OJ_ENV production
 
