@@ -1,0 +1,43 @@
+version: "3"
+services:
+
+  redis:
+    image: mirror.gcr.io/library/redis:4.0-alpine
+    container_name: redis
+    restart: always
+    volumes:
+      - /data/redis:/data
+  
+  postgres:
+    image: mirror.gcr.io/library/postgres:10-alpine
+    container_name: postgres
+    restart: always
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=contestportal
+      - POSTGRES_USER=contestportal
+      - POSTGRES_PASSWORD=portalpassword
+  
+  backend:
+    image: quay.io/teamscode/contest-server
+    container_name: backend
+    restart: always
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - /data/backend:/data
+    environment:
+      - POSTGRES_HOST=postgres
+      - DB_SSL_MODE=disable
+      - POSTGRES_DB=contestportal
+      - POSTGRES_USER=contestportal
+      - POSTGRES_PASSWORD=portalpassword
+      - REDIS_URL=redis://redis:6379
+      - JUDGE_SERVER_TOKEN=CHANGE_THIS
+      - FORCE_HTTPS=1
+      # - STATIC_CDN_HOST=cdn.oj.com
+    ports:
+      - "0.0.0.0:80:8000"
+      - "0.0.0.0:443:1443"
