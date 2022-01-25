@@ -9,7 +9,8 @@ import {
   ResetPassword,
   SubmissionDetails,
   SubmissionList,
-  ProblemList
+  ProblemList,
+  ApplyResetPassword
 } from '../views'
 
 import * as Contest from '@oj/views/contest'
@@ -27,6 +28,12 @@ export default [
     path: '/logout',
     meta: {title: 'Logout'},
     component: Logout
+  },
+  {
+    name: 'apply-reset-password',
+    path: '/apply-reset-password',
+    meta: {title: 'Apply Reset Password'},
+    component: ApplyResetPassword
   },
   {
     name: 'reset-password',

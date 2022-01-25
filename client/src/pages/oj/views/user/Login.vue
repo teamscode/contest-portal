@@ -62,6 +62,7 @@
         v-if="website.allow_register"
         @click.stop="handleBtnClick('register')"
       >{{ $t('m.No_Account') }}</a>
+      <a @click.stop="goResetPassword" style="float: right">{{$t('m.Forget_Password')}}</a>
     </div>
   </div>
 </template>
@@ -126,6 +127,10 @@
             this.btnLoginLoading = false
           })
         })
+      },
+      goResetPassword () {
+        this.changeModalStatus({visible: false})
+        this.$router.push({name: 'apply-reset-password'})
       }
     },
     computed: {

@@ -164,8 +164,8 @@ export const m = {
   LoginUsername: 'Username',
   LoginPassword: 'Password',
   TFA_Code: 'Code from your TFA app',
-  No_Account: 'No account? Register now!',
-  Forget_Password: 'Forget Password',
+  No_Account: 'No account? Register one!',
+  Forget_Password: 'Forgot Password?',
   UserLogin: 'Login',
   Welcome_back: 'You\'ve logged in to TeamsCode Contest Portal',
   // OIRank.vue
@@ -196,11 +196,11 @@ export const m = {
   password_does_not_match: 'password does not match',
   Thanks_for_registering: 'Thanks for your registering, you can login now',
   // ResetPassword.vue and ApplyResetPassword.vue
-  Reset_Password: 'Lost Password',
+  Reset_Password: 'Reset Password',
   RPassword: 'Password',
   RPassword_Again: 'Password Again',
   RCaptcha: 'Captcha',
-  ApplyEmail: 'Your Email Address',
+  ApplyEmail: 'Captain\'s Email',
   Send_Password_Reset_Email: 'Send Password Reset Email',
   Your_password_has_been_reset: 'Your password has been reset',
   // Save.vue
