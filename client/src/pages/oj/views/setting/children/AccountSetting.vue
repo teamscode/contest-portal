@@ -48,7 +48,7 @@
             </FormItem>
             <FormItem v-if="visible.passwordAlert">
               <Alert type="success">
-                You will need to login again after 5 seconds..
+                You will need to login again with the new credential after 5 seconds.
               </Alert>
             </FormItem>
             <Button

@@ -284,6 +284,21 @@ class UserChangePasswordAPI(APIView):
                     return self.error("Invalid two factor verification code")
             user.set_password(data["new_password"])
             user.save()
+            user_profile = request.user.userprofile
+            for team_member in getattr(user_profile, "team_members"):
+                render_data = {
+                    "username": request.user.username,
+                    "name": team_member["name"],
+                    "website_name": SysOptions.website_name,
+                    "password": data["new_password"],
+                    "team_name": getattr(user_profile, "team_name")
+                }
+                email_html = render_to_string("new_password_notification.html", render_data)
+                send_email_async.send(from_name=SysOptions.website_name,
+                                      to_email=team_member["email"],
+                                      to_name=team_member["name"],
+                                      subject="Your TeamsCode account login has been updated",
+                                      content=email_html)
             return self.success("Succeeded")
         else:
             return self.error("Invalid old password")
@@ -339,6 +354,21 @@ class ResetPasswordAPI(APIView):
         user.two_factor_auth = False
         user.set_password(data["password"])
         user.save()
+        user_profile = user.userprofile
+        for team_member in getattr(user_profile, "team_members"):
+            render_data = {
+                "username": request.user.username,
+                "name": team_member["name"],
+                "website_name": SysOptions.website_name,
+                "password": data["password"],
+                "team_name": getattr(user_profile, "team_name")
+            }
+            email_html = render_to_string("new_password_notification.html", render_data)
+            send_email_async.send(from_name=SysOptions.website_name,
+                                  to_email=team_member["email"],
+                                  to_name=team_member["name"],
+                                  subject="Your TeamsCode account login has been updated",
+                                  content=email_html)
         return self.success("Succeeded")
 
 
