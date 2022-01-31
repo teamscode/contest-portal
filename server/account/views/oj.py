@@ -220,22 +220,23 @@ class UserRegisterAPI(APIView):
         user.set_password(data["password"])
         user.save()
         UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"])
-        render_data = {
-            "username": user.username,
-            "website_name": SysOptions.website_name,
-            "website_link": f"{SysOptions.website_base_url}",
-            "captain_name": data["team_members"][0]["name"],
-            "password": data["password"],
-            "team_name": data["team_name"]
-        }
-        email_html = render_to_string("registration_confirmation_email.html", render_data)
         for team_member in data["team_members"]:
+            render_data = {
+                "username": user.username,
+                "name": team_member["name"],
+                "website_name": SysOptions.website_name,
+                "website_link": f"{SysOptions.website_base_url}",
+                "captain_name": data["team_members"][0]["name"],
+                "password": data["password"],
+                "team_name": data["team_name"]
+            }
+            email_html = render_to_string("registration_confirmation_email.html", render_data)
             send_email_async.send(from_name=SysOptions.website_name,
                                   to_email=team_member["email"],
                                   to_name=team_member["name"],
-                                  subject="TeamsCode Registration Confirmation",
+                                  subject="Welcome to TeamsCode Contests",
                                   content=email_html)
-        return self.success("Succeeded")
+            return self.success("Succeeded")
 
 
 class UserChangeEmailAPI(APIView):
