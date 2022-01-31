@@ -220,6 +220,21 @@ class UserRegisterAPI(APIView):
         user.set_password(data["password"])
         user.save()
         UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"])
+        render_data = {
+            "username": user.username,
+            "website_name": SysOptions.website_name,
+            "website_link": f"{SysOptions.website_base_url}",
+            "captain_name": data["team_members"][0]["name"],
+            "password": data["password"],
+            "team_name": data["team_name"]
+        }
+        email_html = render_to_string("registration_confirmation_email.html", render_data)
+        for team_member in data["team_members"]:
+            send_email_async.send(from_name=SysOptions.website_name,
+                                  to_email=team_member["email"],
+                                  to_name=team_member["name"],
+                                  subject="TeamsCode Registration Confirmation",
+                                  content=email_html)
         return self.success("Succeeded")
 
 
@@ -298,10 +313,10 @@ class ApplyResetPasswordAPI(APIView):
             "link": f"{SysOptions.website_base_url}/reset-password/{user.reset_password_token}"
         }
         email_html = render_to_string("reset_password_email.html", render_data)
-        send_email_async.send(from_name=SysOptions.website_name_shortcut,
+        send_email_async.send(from_name=SysOptions.website_name,
                               to_email=user.email,
                               to_name=user.username,
-                              subject="Reset your password",
+                              subject="Reset Your TeamsCode Password",
                               content=email_html)
         return self.success("Succeeded")
 

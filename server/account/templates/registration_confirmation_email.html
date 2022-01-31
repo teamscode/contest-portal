@@ -10,19 +10,23 @@
             <tr>
                 <td>
                     <div style="padding:20px 35px 40px;">
-                        <h2 style="font-weight:bold;margin-bottom:5px;font-size:14px;">Hello, captain of {{ username }},
+                        <h2 style="font-weight:bold;margin-bottom:5px;font-size:14px;">Hello, {{ name }},
                         </h2>
                         <p style="margin-top:20px">
-                            Please click on this link <a href="{{ link }}">{{ link }}</a> to reset your password within
-                            the next 20 minutes.
+                            Your team cpatain, {{captain_name}}, has signed you up as a member of {{team_name}} to
+                            participate in TeamsCode contests.
                         </p>
                         <p style="margin-top:20px">
-                            Please provide your teammates with
-                            the new password otherwise they won't be able to access the account and participate in
-                            contests.
+                            You can access TeamsCode contest portal at <a href="{{website_link}}">{{website_link}}</a>
+                            with your new team account using the following credential:
                         </p>
+                        <p>
+                            Username: <b>{{username}}</b><br>
+                            Password: <b>{{password}}</b>
+                        </p>
+                        <p style="margin-top:20px">Please save this email as a reference.</p>
                         <p style="margin-top:20px">
-                            If you still have any questions, please reply to this email or contact us at <a
+                            If you have any questions, please reply to this email or contact us at <a
                                 href="mailto:contact@teamscode.org">contact@teamscode.org</a>.
                         </p>
                         <p style="margin-top:20px">
