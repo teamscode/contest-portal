@@ -61,7 +61,7 @@ export const m = {
   // ApplyResetPassword.vue
   The_email_doesnt_exist: 'The email doesn\'t exist',
   Success: 'Success',
-  Password_reset_mail_sent: 'Password reset mail has been sent to your email，',
+  Password_reset_mail_sent: 'Password reset email has been sent, please follow the directions there.',
   // FAQ.vue
   Frequently_Asked_Questions: 'Frequently Asked Questions',
   Where_is_the_input_and_the_output: 'Where is the input and the output?',

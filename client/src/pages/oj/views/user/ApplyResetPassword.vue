@@ -33,7 +33,7 @@
       <template v-else>
         <Alert type="success" show-icon>
           {{$t('Success')}}
-          <span slot="desc"> {{$t('Password_reset_mail_sent')}}</span>
+          <span slot="desc"> {{$t('m.Password_reset_mail_sent')}}</span>
         </Alert>
       </template>
     </Panel>
