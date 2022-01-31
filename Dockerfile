@@ -11,7 +11,7 @@ RUN yarn install --frozen-lockfile && \
     yarn build
 
 
-FROM mirror.gcr.io/library/python:3-alpine
+FROM mirror.gcr.io/library/python:alpine
 
 ENV OJ_ENV production
 
