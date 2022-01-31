@@ -8,12 +8,20 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--username", type=str)
         parser.add_argument("--password", type=str)
+        parser.add_argument("--name", type=str)
+        parser.add_argument("--email", type=str)
+        parser.add_argument("--teamname", type=str)
         parser.add_argument("--action", type=str)
 
     def handle(self, *args, **options):
         username = options["username"]
         password = options["password"]
+        name = options["name"]
+        email = options["email"]
+        team_name = options["teamname"]
         action = options["action"]
+
+        team_members = [{"name": name, "email": email}]
 
         if not(username and password and action):
             self.stdout.write(self.style.ERROR("Invalid args"))
@@ -24,11 +32,10 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"User {username} exists, operation ignored"))
                 exit()
 
-            user = User.objects.create(username=username, admin_type=AdminType.SUPER_ADMIN,
-                                       problem_permission=ProblemPermission.ALL)
+            user = User.objects.create(username=username, email=email, admin_type=AdminType.SUPER_ADMIN, problem_permission=ProblemPermission.ALL)
             user.set_password(password)
             user.save()
-            UserProfile.objects.create(user=user)
+            UserProfile.objects.create(user=user, team_members=team_members, team_name=team_name)
 
             self.stdout.write(self.style.SUCCESS("User created"))
         elif action == "reset":
