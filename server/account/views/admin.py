@@ -61,6 +61,7 @@ class UserAdminAPI(APIView):
         data = request.data
         try:
             user = User.objects.get(id=data["id"])
+            user_profile = UserProfile.objects.get(user=user)
         except User.DoesNotExist:
             return self.error("User does not exist")
         if User.objects.filter(username=data["username"].strip().lower()).exclude(id=user.id).exists():
@@ -72,6 +73,8 @@ class UserAdminAPI(APIView):
 
         pre_username = user.username
         user.username = data["username"].strip().lower()
+        user_profile.team_name = data["team_name"].strip()
+        user_profile.team_members = data["team_members"]
         user.email = data["email"].strip().lower()
         user.admin_type = data["admin_type"]
         user.is_disabled = data["is_disabled"]
@@ -104,10 +107,10 @@ class UserAdminAPI(APIView):
         user.two_factor_auth = data["two_factor_auth"]
 
         user.save()
+        user_profile.save()
         if pre_username != user.username:
             Submission.objects.filter(username=pre_username).update(username=user.username)
 
-        UserProfile.objects.filter(user=user).update(team_members=data["team_members"])
         return self.success(UserAdminSerializer(user).data)
 
     @super_admin_required
