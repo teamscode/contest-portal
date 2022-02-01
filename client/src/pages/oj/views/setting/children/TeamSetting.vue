@@ -12,6 +12,12 @@
               >
               </Input>
             </FormItem>
+            <FormItem prop="division">
+              <span>Contest Division</span>
+              <Select v-model="formProfile.division" style="max-width: 120px; position: absolute; right: 0px">
+                <Option v-for="item in CONTEST_DIVISIONS" :value="item" :key="item">{{ item }}</Option>
+              </Select>
+            </FormItem>
             <FormItem prop="membersCount">
               <span>Number of Team Members</span>
               <InputNumber
@@ -74,6 +80,7 @@
   import {languages} from '@/i18n'
   import { FormMixin } from '@oj/components/mixins'
   import { mapGetters } from 'vuex'
+  import { CONTEST_DIVISIONS } from '@/utils/constants'
 
   export default {
     mixins: [FormMixin],
@@ -89,11 +96,15 @@
         formProfile: {
           team_name: '',
           team_members: [],
-          membersCount: 1
+          membersCount: 1,
+          division: ''
         },
         ruleProfile: {
           team_name: [
             { required: true, trigger: 'blur', max: 128 }
+          ],
+          division: [
+            { required: true }
           ]
         }
       }
@@ -107,6 +118,7 @@
       loadProfile () {
         let loadedProfile = {}
         loadedProfile.team_name = this.profile.team_name
+        loadedProfile.division = this.profile.division
         loadedProfile.team_members = JSON.parse(JSON.stringify(this.profile.team_members))
         loadedProfile.membersCount = this.profile.team_members.length
         this.formProfile = loadedProfile
@@ -134,7 +146,10 @@
       }
     },
     computed: {
-      ...mapGetters(['profile'])
+      ...mapGetters(['profile']),
+      CONTEST_DIVISIONS () {
+        return CONTEST_DIVISIONS
+      }
     },
     watch: {
       profile () {

@@ -196,7 +196,7 @@
     margin-bottom: 10px;
   }
   hr.rounded {
-    border: 1px solid #bbb;
+    border: 0.5px solid rgb(201, 201, 202);
     width: 80%;
     margin-left: 10%;
     border-radius: 1px;

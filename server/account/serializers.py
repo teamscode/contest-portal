@@ -2,7 +2,7 @@ from django import forms
 
 from utils.api import serializers, UsernameSerializer
 
-from .models import AdminType, ProblemPermission, User, UserProfile
+from .models import AdminType, ProblemPermission, ContestDivision, User, UserProfile
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -28,6 +28,7 @@ class UserRegisterSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6)
     email = serializers.EmailField(max_length=64)
     team_members = TeamMemberSerializer(many=True)
+    division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     captcha = serializers.CharField()
 
 
@@ -59,17 +60,21 @@ class ImportUserSeralizer(serializers.Serializer):
 class UserAdminSerializer(serializers.ModelSerializer):
     team_members = serializers.SerializerMethodField()
     team_name = serializers.SerializerMethodField()
+    division = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ["id", "username", "email", "admin_type", "problem_permission", "team_members", "team_name",
-                  "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled"]
+                  "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled", "division"]
 
     def get_team_members(self, obj):
         return obj.userprofile.team_members
 
     def get_team_name(self, obj):
         return obj.userprofile.team_name
+
+    def get_division(self, obj):
+        return obj.userprofile.division
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -83,6 +88,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     team_members = serializers.SerializerMethodField()
     team_name = serializers.SerializerMethodField()
+    division = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -98,12 +104,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_team_name(self, obj):
         return obj.team_name
 
+    def get_division(self, obj):
+        return obj.division
+
 
 class EditUserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     username = serializers.CharField(max_length=64)
     team_name = serializers.CharField(max_length=128)
     team_members = TeamMemberSerializer(many=True)
+    division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     password = serializers.CharField(min_length=6, allow_blank=True, required=False, default=None)
     email = serializers.EmailField(max_length=64)
     admin_type = serializers.ChoiceField(choices=(AdminType.REGULAR_USER, AdminType.ADMIN, AdminType.SUPER_ADMIN))
@@ -116,6 +126,7 @@ class EditUserSerializer(serializers.Serializer):
 
 class EditUserProfileSerializer(serializers.Serializer):
     team_members = TeamMemberSerializer(many=True)
+    division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     team_name = serializers.CharField(max_length=128)
     avatar = serializers.CharField(max_length=256, allow_blank=True, required=False)
     language = serializers.CharField(max_length=32, allow_blank=True, required=False)
@@ -138,19 +149,3 @@ class SSOSerializer(serializers.Serializer):
 
 class TwoFactorAuthCodeSerializer(serializers.Serializer):
     code = serializers.IntegerField()
-
-
-class ImageUploadForm(forms.Form):
-    image = forms.FileField()
-
-
-class FileUploadForm(forms.Form):
-    file = forms.FileField()
-
-
-class RankInfoSerializer(serializers.ModelSerializer):
-    user = UsernameSerializer()
-
-    class Meta:
-        model = UserProfile
-        fields = "__all__"

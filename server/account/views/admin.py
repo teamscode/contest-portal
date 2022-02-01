@@ -75,6 +75,7 @@ class UserAdminAPI(APIView):
         user.username = data["username"].strip().lower()
         user_profile.team_name = data["team_name"].strip()
         user_profile.team_members = data["team_members"]
+        user_profile.division = data["division"]
         user.email = data["email"].strip().lower()
         user.admin_type = data["admin_type"]
         user.is_disabled = data["is_disabled"]

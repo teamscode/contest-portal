@@ -62,9 +62,15 @@
             >
               <Icon
                 slot="prepend"
-                type="ios-person-outline"
+                type="ios-people-outline"
               />
             </Input>
+          </FormItem>
+          <FormItem prop="division">
+            <span>Contest Division (can be changed later)</span>
+            <Select v-model="formRegister.division" size="large" style="max-width: 120px; position: absolute; right: 0px">
+              <Option v-for="item in CONTEST_DIVISIONS" :value="item" :key="item">{{ item }}</Option>
+            </Select>
           </FormItem>
           <FormItem prop="membersCount">
             <span>Number of Team Members</span>
@@ -189,6 +195,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import api from '@oj/api'
 import { FormMixin } from '@oj/components/mixins'
+import { CONTEST_DIVISIONS } from '@/utils/constants'
 
 export default {
   mixins: [FormMixin],
@@ -202,6 +209,7 @@ export default {
         membersCount: 1,
         passwordAgain: '',
         captcha: '',
+        division: '',
         team_members: [{ name: '', email: '' }]
       },
       ruleRegister: {
@@ -227,6 +235,9 @@ export default {
         team_name: [
           { required: true, trigger: 'blur', max: 128 },
           { validator: this.CheckTeamnameNotExist, trigger: 'blur' }
+        ],
+        division: [
+          { required: true }
         ]
       }
     }
@@ -321,7 +332,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['website', 'modalStatus'])
+    ...mapGetters(['website', 'modalStatus']),
+    CONTEST_DIVISIONS () {
+      return CONTEST_DIVISIONS
+    }
   }
 }
 </script>

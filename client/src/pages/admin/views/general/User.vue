@@ -358,6 +358,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="Division">
+              <el-select v-model="user.division">
+                <el-option
+                  label="Advanced"
+                  value="Advanced"
+                />
+                <el-option
+                  label="Intermediate"
+                  value="Intermediate"
+                />
+                <el-option
+                  label="Novice"
+                  value="Novice"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item :label="$t('m.Problem_Permission')">
               <el-select
                 v-model="user.problem_permission"
@@ -383,22 +401,18 @@
               <el-switch
                 v-model="user.two_factor_auth"
                 :disabled="!user.real_tfa"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="Open Api">
+            <el-form-item label="Open API">
               <el-switch
                 v-model="user.open_api"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="$t('m.Is_Disabled')">
+            <el-form-item label="Disabled">
               <el-switch
                 v-model="user.is_disabled"
               />

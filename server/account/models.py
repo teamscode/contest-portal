@@ -15,6 +15,12 @@ class ProblemPermission(object):
     ALL = "All"
 
 
+class ContestDivision(object):
+    ADVANCED = "Advanced"
+    INTERMEDIATE = "Intermediate"
+    NOVICE = "Novice"
+
+
 class UserManager(models.Manager):
     use_in_migrations = True
 
@@ -70,6 +76,7 @@ class UserProfile(models.Model):
     problems_status = models.JSONField(default=dict)
     team_members = models.JSONField(default=list)
     team_name = models.TextField(null=True)
+    division = models.TextField(null=True)
     avatar = models.TextField(default=f"{settings.AVATAR_URI_PREFIX}/default.png")
     language = models.TextField(null=True)
 

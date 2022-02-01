@@ -96,6 +96,12 @@ export const CONTEST_TYPE = {
   PRIVATE: 'Password Protected'
 }
 
+export const CONTEST_DIVISIONS = [
+  'Advanced',
+  'Intermediate',
+  'Novice'
+]
+
 export const USER_TYPE = {
   REGULAR_USER: 'Regular User',
   ADMIN: 'Admin',

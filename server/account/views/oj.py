@@ -18,13 +18,13 @@ from utils.api import APIView, validate_serializer, CSRFExemptAPIView
 from utils.captcha import Captcha
 from utils.shortcuts import rand_str, img2base64, datetime2str
 from ..decorators import login_required
-from ..models import User, UserProfile, AdminType
+from ..models import User, UserProfile
 from ..serializers import (ApplyResetPasswordSerializer, ResetPasswordSerializer,
                            UserChangePasswordSerializer, UserLoginSerializer,
                            UserRegisterSerializer, UsernameOrEmailCheckSerializer,
-                           RankInfoSerializer, UserChangeEmailSerializer, SSOSerializer)
+                           UserChangeEmailSerializer, SSOSerializer)
 from ..serializers import (TwoFactorAuthCodeSerializer, UserProfileSerializer,
-                           EditUserProfileSerializer, ImageUploadForm)
+                           EditUserProfileSerializer)
 from ..tasks import send_email_async
 
 
@@ -219,7 +219,7 @@ class UserRegisterAPI(APIView):
         user = User.objects.create(username=data["username"], email=data["email"])
         user.set_password(data["password"])
         user.save()
-        UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"])
+        UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"], division=data["division"])
         for team_member in data["team_members"]:
             render_data = {
                 "username": user.username,
