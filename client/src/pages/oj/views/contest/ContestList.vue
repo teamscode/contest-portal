@@ -96,6 +96,11 @@
                     />
                     {{ getDuration(contest.start_time, contest.end_time) }}
                   </li>
+                  <li>
+                    <Button size="small" shape="circle" style="cursor: default;">
+                      {{contest.division}}
+                    </Button>
+                  </li>
                 </ul>
               </Col>
               <Col
