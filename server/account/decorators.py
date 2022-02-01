@@ -96,6 +96,7 @@ def check_contest_permission(check_type="details"):
             self = args[0]
             request = args[1]
             user = request.user
+            user_profile = user.userprofile
             if request.data.get("contest_id"):
                 contest_id = request.data["contest_id"]
             else:
@@ -122,9 +123,15 @@ def check_contest_permission(check_type="details"):
                 if not check_contest_password(request.session.get(CONTEST_PASSWORD_SESSION_KEY, {}).get(self.contest.id), self.contest.password):
                     return self.error("Wrong password or password expired")
 
+            if user.is_tester() and self.contest.division == "Testing":
+                return func(*args, **kwargs)
+
+            if (not self.contest.division == getattr(user_profile, "division")) and (not self.contest.division == "All"):
+                return self.error("You do not have access to this division")
+
             # regular user get contest problems, ranks etc. before contest started
             if self.contest.status == ContestStatus.CONTEST_NOT_START and check_type != "details":
-                return self.error("Contest has not started yet.")
+                return self.error("Contest has not started yet")
 
             # check does user have permission to get ranks, submissions in OI Contest
             if self.contest.status == ContestStatus.CONTEST_UNDERWAY:

@@ -89,8 +89,12 @@
                   value="Novice"
                 />
                 <el-option
-                  label="Private"
-                  value="Private"
+                  label="Testing"
+                  value="Testing"
+                />
+                <el-option
+                  label="All"
+                  value="All"
                 />
               </el-select>
             </el-form-item>

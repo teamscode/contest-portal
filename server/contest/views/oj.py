@@ -4,6 +4,7 @@ import xlsxwriter
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.core.cache import cache
+from django.db.models import Q
 
 from problem.models import Problem
 from utils.api import APIView, validate_serializer
@@ -61,6 +62,13 @@ class ContestListAPI(APIView):
                 contests = contests.filter(end_time__lt=cur)
             else:
                 contests = contests.filter(start_time__lte=cur, end_time__gte=cur)
+
+        user_profile = request.user.userprofile
+        if request.user.is_tester():
+            contests = contests.filter(Q(division="Testing") | Q(division="All"))
+        elif not request.user.is_admin():
+            contests = contests.filter(Q(division=getattr(user_profile, "division")) | Q(division="All"))
+
         return self.success(self.paginate_data(request, contests, ContestSerializer))
 
 

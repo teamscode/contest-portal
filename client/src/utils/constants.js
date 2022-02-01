@@ -105,7 +105,8 @@ export const CONTEST_DIVISIONS = [
 export const USER_TYPE = {
   REGULAR_USER: 'Regular User',
   ADMIN: 'Admin',
-  SUPER_ADMIN: 'Super Admin'
+  SUPER_ADMIN: 'Super Admin',
+  TESTER: 'Tester'
 }
 
 export const PROBLEM_PERMISSION = {

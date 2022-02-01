@@ -354,6 +354,10 @@
                   label="Super Admin"
                   value="Super Admin"
                 />
+                <el-option
+                  label="Tester"
+                  value="Tester"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -486,7 +490,7 @@
       'user.admin_type' () {
         if (this.user.admin_type === 'Super Admin') {
           this.user.problem_permission = 'All'
-        } else if (this.user.admin_type === 'Regular User') {
+        } else if (this.user.admin_type === 'Regular User' || this.user.admin_type === 'Tester') {
           this.user.problem_permission = 'None'
         }
       },

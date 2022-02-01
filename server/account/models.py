@@ -7,6 +7,7 @@ class AdminType(object):
     REGULAR_USER = "Regular User"
     ADMIN = "Admin"
     SUPER_ADMIN = "Super Admin"
+    TESTER = "Tester"
 
 
 class ProblemPermission(object):
@@ -63,6 +64,9 @@ class User(AbstractBaseUser):
 
     def can_mgmt_all_problem(self):
         return self.problem_permission == ProblemPermission.ALL
+
+    def is_tester(self):
+        return self.admin_type == AdminType.TESTER
 
     def is_contest_admin(self, contest):
         return self.is_authenticated and (contest.created_by == self or self.admin_type == AdminType.SUPER_ADMIN)

@@ -116,7 +116,7 @@ class EditUserSerializer(serializers.Serializer):
     division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     password = serializers.CharField(min_length=6, allow_blank=True, required=False, default=None)
     email = serializers.EmailField(max_length=64)
-    admin_type = serializers.ChoiceField(choices=(AdminType.REGULAR_USER, AdminType.ADMIN, AdminType.SUPER_ADMIN))
+    admin_type = serializers.ChoiceField(choices=(AdminType.REGULAR_USER, AdminType.ADMIN, AdminType.SUPER_ADMIN, AdminType.TESTER))
     problem_permission = serializers.ChoiceField(choices=(ProblemPermission.NONE, ProblemPermission.OWN,
                                                           ProblemPermission.ALL))
     open_api = serializers.BooleanField()
