@@ -48,6 +48,7 @@ class ContestAPI(APIView):
 
 
 class ContestListAPI(APIView):
+    @login_required
     def get(self, request):
         contests = Contest.objects.select_related("created_by").filter(visible=True)
         keyword = request.GET.get("keyword")
