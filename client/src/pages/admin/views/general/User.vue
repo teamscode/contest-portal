@@ -323,6 +323,7 @@
               required
             >
               <el-input placeholder="Name" v-model="member.name" />
+              <el-input placeholder="Class" style="margin-top: 10px" v-model="member.year" />
               <el-input placeholder="Email" style="margin-top: 10px" v-model="member.email" />
             </el-form-item>
           </el-col>

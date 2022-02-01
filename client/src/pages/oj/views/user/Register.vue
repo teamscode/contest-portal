@@ -124,25 +124,49 @@
             <div style="margin-bottom: 10px; margin-top: 10px">
               Team Member #{{ index + 1 }} Information
             </div>
-            <FormItem
-              :prop="'team_members.' + index + '.name'"
-              :rules="{ required: true, trigger: 'blur', max: 64 }"
-            >
-              <Input
-                v-model="formRegister.team_members[index].name"
-                type="text"
-                :placeholder="'Team Member ' + (index + 1) + ' Name'"
-                size="large"
-                @on-enter="handleRegister"
-              >
-                <Icon
-                  slot="prepend"
-                  type="ios-person-outline"
-                />
-              </Input>
-            </FormItem>
+            <Row>
+                <Col span="18">
+                  <FormItem
+                    :prop="'team_members.' + index + '.name'"
+                    :rules="{ required: true, trigger: 'blur', max: 64 }"
+                  >
+                    <Input
+                      v-model="formRegister.team_members[index].name"
+                      type="text"
+                      :placeholder="'Name'"
+                      size="large"
+                      @on-enter="handleRegister"
+                    >
+                      <Icon
+                        slot="prepend"
+                        type="ios-person-outline"
+                      />
+                    </Input>
+                  </FormItem>
+                </Col>
+                <Col span="5" offset="1">
+                    <FormItem
+                    :prop="'team_members.' + index + '.year'"
+                    :rules="{ required: true }"
+                  >
+                    <Tooltip content="High school graduation year">
+                      <InputNumber
+                        v-model="formRegister.team_members[index].year"
+                        type="text"
+                        min="1900"
+                        max="2100"
+                        :placeholder="'Class'"
+                        size="large"
+                        @on-enter="handleRegister"
+                      >
+                      </InputNumber>
+                    </Tooltip>
+                    </FormItem>
+                </Col>
+            </Row>
             <FormItem
               :prop="'team_members.' + index + '.email'"
+              style="padding-top: 0px"
               :rules="
                 index === 0
                   ? [
@@ -210,7 +234,7 @@ export default {
         passwordAgain: '',
         captcha: '',
         division: '',
-        team_members: [{ name: '', email: '' }]
+        team_members: [{ name: '', email: '', year: null }]
       },
       ruleRegister: {
         username: [
@@ -307,7 +331,7 @@ export default {
       while (
         this.formRegister.team_members.length < this.formRegister.membersCount
       ) {
-        this.formRegister.team_members.push({ name: '', email: '' })
+        this.formRegister.team_members.push({ name: '', email: '', year: null })
       }
     },
     handleRegister () {

@@ -52,6 +52,20 @@
                 </Input>
               </FormItem>
               <FormItem
+                :prop="'team_members.' + index + '.year'"
+                :label="'Team Member ' + (index + 1) + ' Year of Graduation'"
+                :rules="{ required: true }"
+              >
+                <InputNumber
+                  style="position: absolute; right: 0px"
+                  v-model="formProfile.team_members[index].year"
+                  min="1900"
+                  max="2100"
+                  type="text"
+                >
+                </InputNumber>
+              </FormItem>
+              <FormItem
                 :prop="'team_members.' + index + '.email'"
                 :label="'Team Member ' + (index + 1) + ' Email'"
                 :rules="{ required: true, type: 'email', trigger: 'blur', max: 64}"

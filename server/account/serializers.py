@@ -20,6 +20,7 @@ class UsernameOrEmailCheckSerializer(serializers.Serializer):
 class TeamMemberSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=64)
     email = serializers.EmailField(max_length=64)
+    year = serializers.IntegerField(min_value=1900, max_value=2100)
 
 
 class UserRegisterSerializer(serializers.Serializer):
