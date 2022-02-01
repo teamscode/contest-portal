@@ -58,8 +58,6 @@
             <el-form-item :label="$t('m.Real_Time_Rank')">
               <el-switch
                 v-model="contest.real_time_rank"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
               />
             </el-form-item>
           </el-col>
@@ -70,6 +68,31 @@
                 active-text=""
                 inactive-text=""
               />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="Division" required>
+              <el-select
+                v-model="contest.division"
+                placeholder="Division"
+              >
+                <el-option
+                  label="Advanced"
+                  value="Advanced"
+                />
+                <el-option
+                  label="Intermediate"
+                  value="Intermediate"
+                />
+                <el-option
+                  label="Novice"
+                  value="Novice"
+                />
+                <el-option
+                  label="Private"
+                  value="Private"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">

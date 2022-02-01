@@ -95,7 +95,6 @@
               <el-select
                 v-model="problem.difficulty"
                 class="difficulty-select"
-                size="small"
                 :placeholder="$t('m.Difficulty')"
               >
                 <el-option

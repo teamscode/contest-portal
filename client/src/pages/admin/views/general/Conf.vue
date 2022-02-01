@@ -128,8 +128,6 @@
               >
                 <el-switch
                   v-model="websiteConfig.allow_register"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
                 />
               </el-form-item>
             </el-col>
