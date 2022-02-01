@@ -503,9 +503,10 @@
       openUserDialog (id) {
         this.showUserDialog = true
         api.getUser(id).then(res => {
-          this.user = res.data.data
+          const userData = res.data.data
+          userData.password = ''
+          this.user = userData
           this.user.membersCount = this.user.team_members.length
-          this.user.password = ''
           this.user.real_tfa = this.user.two_factor_auth
         })
       },
