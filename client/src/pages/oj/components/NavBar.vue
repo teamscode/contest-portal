@@ -17,7 +17,7 @@
         <span>{{ website.website_name }}</span>
       </div>
       <Menu-item name="/">
-        <Icon type="home" />
+        <Icon type="md-home" />
         {{ $t('m.Home') }}
       </Menu-item>
       <Submenu
@@ -36,12 +36,12 @@
         </Menu-item>
       </Submenu>
       <Menu-item name="/contest">
-        <Icon type="trophy" />
+        <Icon type="md-trophy" />
         {{ $t('m.Contests') }}
       </Menu-item>
       <Submenu name="about">
         <template slot="title">
-          <Icon type="information-circled" />
+          <Icon type="md-information-circle" />
           {{ $t('m.About') }}
         </template>
         <Menu-item name="/judger">
@@ -55,7 +55,6 @@
         <div class="btn-menu">
           <Button
             ref="loginBtn"
-            type="ghost"
             shape="circle"
             @click="handleBtnClick('login')"
           >
@@ -63,7 +62,6 @@
           </Button>
           <Button
             v-if="website.allow_register"
-            type="ghost"
             shape="circle"
             style="margin-left: 5px;"
             @click="handleBtnClick('register')"
@@ -84,7 +82,7 @@
             class="drop-menu-title"
           >
             {{ user.username }}
-            <Icon type="arrow-down-b" />
+            <Icon style="margin-bottom: 4px" size="21" type="md-arrow-dropdown" />
           </Button>
           <Dropdown-menu slot="list">
             <Dropdown-item name="/setting/account">
@@ -108,7 +106,7 @@
     </Menu>
     <Modal
       v-model="modalVisible"
-      :width="modalStatus.mode==='register'?800:400"
+      :width="modalStatus.mode==='register'?900:400"
     >
       <div
         slot="header"
@@ -187,6 +185,7 @@
     background-color: #fff;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
     .oj-menu {
+      font-size: 15px;
       background: #fdfdfd;
     }
 
@@ -216,7 +215,7 @@
       }
     }
     .btn-menu {
-      font-size: 16px;
+      font-size: 15px;
       float: right;
       margin-right: 10px;
     }

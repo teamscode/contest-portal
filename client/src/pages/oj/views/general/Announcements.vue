@@ -18,7 +18,6 @@
         </Button>
         <Button
           v-else
-          type="ghost"
           icon="ios-undo"
           @click="goBack"
         >
@@ -69,7 +68,6 @@
         />
         <Button
           v-else
-          type="ghost"
           style="margin-left: 10px;"
           @click="$Notice.destroy"
         >

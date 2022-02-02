@@ -34,7 +34,7 @@
             >
               <Icon
                 slot="prepend"
-                type="ios-locked-outline"
+                type="ios-lock-outline"
               />
             </Input>
           </FormItem>
@@ -48,7 +48,7 @@
             >
               <Icon
                 slot="prepend"
-                type="ios-locked-outline"
+                type="ios-lock-outline"
               />
             </Input>
           </FormItem>
@@ -98,7 +98,7 @@
                 >
                   <Icon
                     slot="prepend"
-                    type="ios-lightbulb-outline"
+                    type="ios-bulb-outline"
                   />
                 </Input>
               </div>
@@ -144,7 +144,7 @@
                     </Input>
                   </FormItem>
                 </Col>
-                <Col span="5" offset="1">
+                <Col span="5" offset="1" style="padding-left: 9px">
                     <FormItem
                     :prop="'team_members.' + index + '.year'"
                     :rules="{ required: true }"
@@ -185,7 +185,7 @@
               >
                 <Icon
                   slot="prepend"
-                  type="ios-email-outline"
+                  type="ios-mail-outline"
                 />
               </Input>
             </FormItem>
@@ -204,7 +204,6 @@
         {{ $t("m.UserRegister") }}
       </Button>
       <Button
-        type="ghost"
         class="btn"
         long
         @click="switchMode('login')"

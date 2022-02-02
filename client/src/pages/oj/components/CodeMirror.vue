@@ -28,7 +28,7 @@
             style="margin-left: 10px"
           >
             <Button
-              icon="refresh"
+              icon="md-refresh"
               @click="onResetClick"
             />
           </Tooltip>
@@ -39,7 +39,7 @@
             style="margin-left: 10px"
           >
             <Button
-              icon="upload"
+              icon="ios-cloud-upload"
               @click="onUploadFile"
             />
           </Tooltip>

@@ -52,7 +52,7 @@
                     v-clipboard:error="onCopyError"
                     class="copy"
                   >
-                    <Icon type="clipboard" />
+                    <Icon type="md-clipboard" />
                   </a>
                 </p>
                 <pre>{{ sample.input }}</pre>
@@ -176,7 +176,7 @@
             </template>
             <Button
               type="warning"
-              icon="edit"
+              icon="md-create"
               :loading="submitting"
               :disabled="problemSubmitDisabled || submitted"
               class="fl-right"
@@ -203,7 +203,7 @@
           v-if="!contestID || OIContestRealTimePermission"
           :route="submissionRoute"
         >
-          <Icon type="navicon-round" />
+          <Icon type="md-list" />
           {{ $t('m.Submissions') }}
         </VerticalMenu-item>
 
@@ -212,11 +212,11 @@
             v-if="!contestID || OIContestRealTimePermission"
             :route="{name: 'contest-rank', params: {contestID: contestID}}"
           >
-            <Icon type="stats-bars" />
+            <Icon type="ios-stats" />
             {{ $t('m.Rankings') }}
           </VerticalMenu-item>
           <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
-            <Icon type="home" />
+            <Icon type="md-home" />
             {{ $t('m.View_Contest') }}
           </VerticalMenu-item>
         </template>
@@ -227,7 +227,7 @@
           slot="title"
           class="header"
         >
-          <Icon type="information-circled" />
+          <Icon type="md-information-circle" />
           <span class="card-title">Limits</span>
         </div>
         <ul>
@@ -254,7 +254,7 @@
           slot="title"
           class="header"
         >
-          <Icon type="information-circled" />
+          <Icon type="md-information-circle" />
           <span class="card-title">{{ $t('m.Information') }}</span>
         </div>
         <ul>

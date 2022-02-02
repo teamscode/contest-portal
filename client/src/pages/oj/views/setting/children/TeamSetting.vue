@@ -7,6 +7,7 @@
           <Col :span="11">
             <FormItem prop="team_name" label="Team Name">
               <Input
+                :disabled="!website.allow_register"
                 v-model="formProfile.team_name"
                 type="text"
               >
@@ -14,13 +15,14 @@
             </FormItem>
             <FormItem prop="division">
               <span>Contest Division</span>
-              <Select v-model="formProfile.division" style="max-width: 120px; position: absolute; right: 0px">
+              <Select :disabled="!website.allow_register" v-model="formProfile.division" style="max-width: 120px; position: absolute; right: 0px">
                 <Option v-for="item in CONTEST_DIVISIONS" :value="item" :key="item">{{ item }}</Option>
               </Select>
             </FormItem>
             <FormItem prop="membersCount">
               <span>Number of Team Members</span>
               <InputNumber
+                :disabled="!website.allow_register"
                 v-model="formProfile.membersCount"
                 style="position: absolute; right: 0px"
                 :max="4"
@@ -30,7 +32,7 @@
               />
             </FormItem>
             <Form-item>
-              <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
+              <Button :disabled="!website.allow_register" type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
             </Form-item>
           </Col>
 
@@ -40,31 +42,39 @@
               v-for="(member, index) in formProfile.team_members"
               :key="index"
             >
-              <FormItem
-                :prop="'team_members.' + index + '.name'"
-                :label="'Team Member ' + (index + 1) + ' Name'"
-                :rules="{ required: true, trigger: 'blur', max: 64 }"
-              >
-                <Input
-                  v-model="formProfile.team_members[index].name"
-                  type="text"
-                >
-                </Input>
-              </FormItem>
-              <FormItem
-                :prop="'team_members.' + index + '.year'"
-                :label="'Team Member ' + (index + 1) + ' Year of Graduation'"
-                :rules="{ required: true }"
-              >
-                <InputNumber
-                  style="position: absolute; right: 0px"
-                  v-model="formProfile.team_members[index].year"
-                  min="1900"
-                  max="2100"
-                  type="text"
-                >
-                </InputNumber>
-              </FormItem>
+              <Row>
+                <Col span="16">
+                  <FormItem
+                    :prop="'team_members.' + index + '.name'"
+                    :label="'Team Member ' + (index + 1) + ' Name'"
+                    :rules="{ required: true, trigger: 'blur', max: 64 }"
+                  >
+                    <Input
+                      :disabled="!website.allow_register"
+                      v-model="formProfile.team_members[index].name"
+                      type="text"
+                    >
+                    </Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem
+                    :prop="'team_members.' + index + '.year'"
+                    :label="'Year of Graduation'"
+                    :rules="{ required: true }"
+                  >
+                    <InputNumber
+                      :disabled="!website.allow_register"
+                      style="position: absolute; right: 0px"
+                      v-model="formProfile.team_members[index].year"
+                      min="1900"
+                      max="2100"
+                      type="text"
+                    >
+                    </InputNumber>
+                  </FormItem>
+                </Col>
+              </Row>
               <FormItem
                 :prop="'team_members.' + index + '.email'"
                 :label="'Team Member ' + (index + 1) + ' Email'"
@@ -160,7 +170,7 @@
       }
     },
     computed: {
-      ...mapGetters(['profile']),
+      ...mapGetters(['profile', 'website']),
       CONTEST_DIVISIONS () {
         return CONTEST_DIVISIONS
       }

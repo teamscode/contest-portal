@@ -13,7 +13,7 @@
             <li>
               <Dropdown @on-click="onStatusChange">
                 <span>{{ query.status === '' ? $i18n.t('m.Status') : $i18n.t('m.' + CONTEST_STATUS_REVERSE[query.status].name.replace(/ /g,"_")) }}
-                  <Icon type="arrow-down-b" />
+                  <Icon size="20" type="md-arrow-dropdown" />
                 </span>
                 <Dropdown-menu slot="list">
                   <Dropdown-item name="">
@@ -35,7 +35,7 @@
               <Input
                 id="keyword"
                 v-model="query.keyword"
-                icon="ios-search-strong"
+                icon="ios-search"
                 placeholder="Keyword"
                 @on-enter="changeRoute"
                 @on-click="changeRoute"
@@ -76,7 +76,7 @@
                   </a>
                   <template v-if="contest.contest_type != 'Public'">
                     <Icon
-                      type="ios-locked-outline"
+                      type="ios-lock-outline"
                       size="20"
                     />
                   </template>
@@ -84,22 +84,22 @@
                 <ul class="detail">
                   <li>
                     <Icon
-                      type="calendar"
+                      type="md-calendar"
                       color="#3091f2"
                     />
                     {{ contest.start_time | localtime('YYYY-M-D HH:mm') }}
                   </li>
                   <li>
                     <Icon
-                      type="android-time"
+                      type="md-time"
                       color="#3091f2"
                     />
                     {{ getDuration(contest.start_time, contest.end_time) }}
                   </li>
                   <li>
-                    <Button size="small" shape="circle" style="cursor: default;">
+                    <Tag size="small">
                       {{contest.division}}
-                    </Button>
+                    </Tag>
                   </li>
                 </ul>
               </Col>

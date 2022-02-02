@@ -12,7 +12,6 @@
           <Button
             size="large"
             style="width: 200px;"
-            type="ghost"
             @click="goHome"
           >
             {{ $t('m.Go_Home') }}

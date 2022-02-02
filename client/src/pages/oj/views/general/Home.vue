@@ -35,7 +35,7 @@
                   type="info"
                   shape="circle"
                   size="small"
-                  icon="calendar"
+                  icon="ios-calendar"
                 >
                   {{ contest.start_time | localtime('YYYY-M-D HH:mm') }}
                 </Button>
@@ -43,7 +43,7 @@
                   type="success"
                   shape="circle"
                   size="small"
-                  icon="android-time"
+                  icon="md-time"
                 >
                   {{ getDuration(contest.start_time, contest.end_time) }}
                 </Button>

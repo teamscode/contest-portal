@@ -71,7 +71,7 @@
     >
       <VerticalMenu @on-click="handleRoute">
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
-          <Icon type="home" />
+          <Icon type="md-home" />
           {{ $t('m.Home') }}
         </VerticalMenu-item>
 
@@ -88,7 +88,7 @@
           :disabled="contestMenuDisabled"
           :route="{name: 'contest-submission-list'}"
         >
-          <Icon type="navicon-round" />
+          <Icon type="md-list" />
           {{ $t('m.Submissions') }}
         </VerticalMenu-item>
 
@@ -97,7 +97,7 @@
           :disabled="contestMenuDisabled"
           :route="{name: 'contest-rank', params: {contestID: contestID}}"
         >
-          <Icon type="stats-bars" />
+          <Icon type="ios-stats" />
           {{ $t('m.Rankings') }}
         </VerticalMenu-item>
       </VerticalMenu>

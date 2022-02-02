@@ -10,7 +10,7 @@
             <li>
               <Dropdown @on-click="handleResultChange">
                 <span>{{ status }}
-                  <Icon type="arrow-down-b" />
+                  <Icon size="20" type="md-arrow-dropdown" />
                 </span>
                 <Dropdown-menu slot="list">
                   <Dropdown-item name="">
@@ -38,7 +38,7 @@
             <li>
               <Button
                 type="info"
-                icon="refresh"
+                icon="md-refresh"
                 @click="getSubmissions"
               >
                 {{ $t('m.Refresh') }}

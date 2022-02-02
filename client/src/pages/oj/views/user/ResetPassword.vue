@@ -26,7 +26,7 @@
             >
               <Icon
                 slot="prepend"
-                type="ios-locked-outline"
+                type="ios-lock-outline"
               />
             </Input>
           </Form-item>
@@ -39,7 +39,7 @@
             >
               <Icon
                 slot="prepend"
-                type="ios-locked-outline"
+                type="ios-lock-outline"
               />
             </Input>
           </Form-item>
@@ -56,7 +56,7 @@
                 >
                   <Icon
                     slot="prepend"
-                    type="ios-lightbulb-outline"
+                    type="ios-bulb-outline"
                   />
                 </Input>
               </div>

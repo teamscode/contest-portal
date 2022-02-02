@@ -13,7 +13,7 @@
             <li>
               <Dropdown @on-click="filterByDifficulty">
                 <span>{{ query.difficulty === '' ? $i18n.t('m.Difficulty') : $i18n.t('m.' + query.difficulty) }}
-                  <Icon type="arrow-down-b" />
+                  <Icon size="20" type="md-arrow-dropdown" />
                 </span>
                 <Dropdown-menu slot="list">
                   <Dropdown-item name="">
@@ -35,7 +35,7 @@
               <Input
                 v-model="query.keyword"
                 placeholder="keyword"
-                icon="ios-search-strong"
+                icon="ios-search"
                 @on-enter="filterByKeyword"
                 @on-click="filterByKeyword"
               />
@@ -45,7 +45,7 @@
                 type="info"
                 @click="onReset"
               >
-                <Icon type="refresh" />
+                <Icon type="md-refresh" />
                 {{ $t('m.Reset') }}
               </Button>
             </li>
@@ -80,7 +80,6 @@
         <Button
           v-for="tag in tagList"
           :key="tag.name"
-          type="ghost"
           :disabled="query.tag === tag.name"
           shape="circle"
           class="tag-btn"

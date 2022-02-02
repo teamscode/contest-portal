@@ -15,7 +15,7 @@
           placement="left-start"
         >
           <Icon
-            type="android-settings"
+            type="md-settings"
             size="20"
           />
           <div
