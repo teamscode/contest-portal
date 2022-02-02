@@ -67,7 +67,7 @@ class ContestListAPI(APIView):
         user_profile = request.user.userprofile
         if request.user.is_tester():
             contests = contests.filter(Q(division="Testing") | Q(division="All"))
-        elif not request.user.is_admin():
+        elif not request.user.is_admin_role():
             contests = contests.filter(Q(division=getattr(user_profile, "division")) | Q(division="All"))
 
         return self.success(self.paginate_data(request, contests, ContestSerializer))

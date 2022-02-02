@@ -243,6 +243,9 @@ class UserChangeEmailAPI(APIView):
     @validate_serializer(UserChangeEmailSerializer)
     @login_required
     def post(self, request):
+        if not SysOptions.allow_register:
+            return self.error("Registration has closed, no account modification allowed")
+
         data = request.data
         user = auth.authenticate(username=request.user.username, password=data["password"])
         if user:
