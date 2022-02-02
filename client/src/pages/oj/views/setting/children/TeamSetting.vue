@@ -68,9 +68,7 @@
                       <InputNumber
                         style="width: 96%; margin-right: 3px"
                         :disabled="!website.allow_register"
-                        v-model="formProfile.team_members[index].year"
-                        min="1900"
-                        max="2100"
+                        v-model.number="formProfile.team_members[index].year"
                         type="text"
                       >
                       </InputNumber>
@@ -148,9 +146,6 @@
         loadedProfile.division = this.profile.division
         loadedProfile.team_members = JSON.parse(JSON.stringify(this.profile.team_members))
         loadedProfile.membersCount = this.profile.team_members.length
-        for (let index = 0; index < loadedProfile.membersCount; index++) {
-          loadedProfile.team_members[index].year = parseInt(loadedProfile.team_members[index].year, 10)
-        }
         this.formProfile = loadedProfile
       },
       updateProfile () {

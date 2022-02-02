@@ -151,10 +151,8 @@
                   >
                     <Tooltip content="High school graduation year">
                       <InputNumber
-                        v-model="formRegister.team_members[index].year"
+                        v-model.number="formRegister.team_members[index].year"
                         type="text"
-                        min="1900"
-                        max="2100"
                         :placeholder="'Class'"
                         size="large"
                         @on-enter="handleRegister"
