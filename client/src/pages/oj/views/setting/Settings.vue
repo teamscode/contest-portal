@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="team-name">
-              <b>{{profile.team_name}} ({{ user.username }})</b>
+              {{profile.team_name}} <br><b>{{ user.username }}</b>
             </div>
             <div
               v-if="teamMembers"
@@ -35,13 +35,13 @@
                   :key="index"
                   :span="11"
                 >
-                  <div class="team-member">
+                  <div class="team-member" style="white-space: nowrap">
                     {{ name }}
                   </div>
                 </Col>
               </Row>
             </div>
-            <hr class="rounded">
+            <Divider />
             <Menu-item
               style="margin-top:10px"
               name="/setting/account"
@@ -194,11 +194,5 @@
   .team-member-section {
     margin-top: 10px;
     margin-bottom: 10px;
-  }
-  hr.rounded {
-    border: 0.5px solid rgb(201, 201, 202);
-    width: 80%;
-    margin-left: 10%;
-    border-radius: 1px;
   }
 </style>

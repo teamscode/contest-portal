@@ -6,7 +6,6 @@
         <router-view />
         <div v-if="route_name === 'contest-details'">
           <Announcements
-            v-if="contestStatus !== CONTEST_STATUS.NOT_START"
             :contest-btn-loading="announcementBtnLoading"
             style="margin-bottom: 20px;"
             @refreshAnnouncements="getContestAnnouncementList"

@@ -2,6 +2,7 @@
   <div>
     <div class="setting-main">
       <div class="section-title">Team Profile</div>
+      <Alert show-icon v-if="!website.allow_register">Cannot modify team after registration deadline</Alert>
       <Form ref="formProfile" :model="formProfile" :rules="ruleProfile">
         <Row type="flex" :gutter="30" justify="space-around">
           <Col :span="11">
@@ -46,7 +47,7 @@
                 <Col span="16">
                   <FormItem
                     :prop="'team_members.' + index + '.name'"
-                    :label="'Team Member ' + (index + 1) + ' Name'"
+                    :label="index==0 ? 'Team Member ' + (index + 1) + ' Name' : 'Captain\'s Name'"
                     :rules="{ required: true, trigger: 'blur', max: 64 }"
                   >
                     <Input
@@ -60,18 +61,20 @@
                 <Col span="8">
                   <FormItem
                     :prop="'team_members.' + index + '.year'"
-                    :label="'Year of Graduation'"
+                    :label="'Class'"
                     :rules="{ required: true }"
                   >
-                    <InputNumber
-                      :disabled="!website.allow_register"
-                      style="position: absolute; right: 0px"
-                      v-model="formProfile.team_members[index].year"
-                      min="1900"
-                      max="2100"
-                      type="text"
-                    >
-                    </InputNumber>
+                    <Tooltip content="High school graduation year" style="margin-left: 8px; width: 100%">
+                      <InputNumber
+                        style="width: 96%; margin-right: 3px"
+                        :disabled="!website.allow_register"
+                        v-model="formProfile.team_members[index].year"
+                        min="1900"
+                        max="2100"
+                        type="text"
+                      >
+                      </InputNumber>
+                    </Tooltip>
                   </FormItem>
                 </Col>
               </Row>
@@ -145,6 +148,9 @@
         loadedProfile.division = this.profile.division
         loadedProfile.team_members = JSON.parse(JSON.stringify(this.profile.team_members))
         loadedProfile.membersCount = this.profile.team_members.length
+        for (let index = 0; index < loadedProfile.membersCount; index++) {
+          loadedProfile.team_members[index].year = parseInt(loadedProfile.team_members[index].year, 10)
+        }
         this.formProfile = loadedProfile
       },
       updateProfile () {
@@ -165,7 +171,7 @@
         while (
         this.formProfile.team_members.length < this.formProfile.membersCount
       ) {
-          this.formProfile.team_members.push({ name: '', email: '' })
+          this.formProfile.team_members.push({ name: '', email: '', year: null })
         }
       }
     },

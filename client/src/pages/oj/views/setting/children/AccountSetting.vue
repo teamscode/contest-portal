@@ -67,6 +67,7 @@
           <p class="section-title">
             {{ $t('m.ChangeEmail') }}
           </p>
+          <Alert show-icon v-if="!website.allow_register">Cannot update email after registration deadline</Alert>
           <Form
             ref="formEmail"
             class="setting-content"
@@ -79,6 +80,7 @@
             >
               <Input
                 v-model="formEmail.password"
+                :disabled="!website.allow_register"
                 type="password"
               />
             </FormItem>
@@ -92,7 +94,7 @@
               label="New Email"
               prop="new_email"
             >
-              <Input v-model="formEmail.new_email" />
+              <Input :disabled="!website.allow_register" v-model="formEmail.new_email" />
             </FormItem>
             <FormItem
               v-if="visible.tfaRequired"
@@ -104,6 +106,7 @@
             <Button
               type="primary"
               @click="changeEmail"
+              :disabled="!website.allow_register"
               :loading="loading.btnEmail"
             >
               {{ $t('m.ChangeEmail') }}
@@ -229,7 +232,7 @@
       }
     },
     computed: {
-      ...mapGetters(['user'])
+      ...mapGetters(['user', 'website'])
     }
   }
 </script>

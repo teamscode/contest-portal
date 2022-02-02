@@ -65,6 +65,7 @@
   import api from '@oj/api'
   import time from '@/utils/time'
   import { CONTEST_STATUS } from '@/utils/constants'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'Home',
@@ -77,12 +78,6 @@
         index: 0
       }
     },
-    mounted () {
-      let params = {status: CONTEST_STATUS.NOT_START}
-      api.getContestList(0, 5, params).then(res => {
-        this.contests = res.data.data.results
-      })
-    },
     methods: {
       getDuration (startTime, endTime) {
         return time.duration(startTime, endTime)
@@ -92,6 +87,27 @@
           name: 'contest-details',
           params: {contestID: this.contests[this.index].id}
         })
+      }
+    },
+    mounted () {
+      if (this.isAuthenticated) {
+        let params = {status: CONTEST_STATUS.NOT_START}
+        api.getContestList(0, 5, params).then(res => {
+          this.contests = res.data.data.results
+        })
+      }
+    },
+    computed: {
+      ...mapGetters(['isAuthenticated'])
+    },
+    watch: {
+      'isAuthenticated' () {
+        if (this.isAuthenticated) {
+          let params = {status: CONTEST_STATUS.NOT_START}
+          api.getContestList(0, 5, params).then(res => {
+            this.contests = res.data.data.results
+          })
+        }
       }
     }
   }
