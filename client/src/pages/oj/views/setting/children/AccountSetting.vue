@@ -73,6 +73,7 @@
             class="setting-content"
             :model="formEmail"
             :rules="ruleEmail"
+            :disabled="!website.allow_register"
           >
             <FormItem
               label="Current Password"
@@ -80,7 +81,6 @@
             >
               <Input
                 v-model="formEmail.password"
-                :disabled="!website.allow_register"
                 type="password"
               />
             </FormItem>
@@ -94,7 +94,7 @@
               label="New Email"
               prop="new_email"
             >
-              <Input :disabled="!website.allow_register" v-model="formEmail.new_email" />
+              <Input v-model="formEmail.new_email" />
             </FormItem>
             <FormItem
               v-if="visible.tfaRequired"
@@ -106,7 +106,6 @@
             <Button
               type="primary"
               @click="changeEmail"
-              :disabled="!website.allow_register"
               :loading="loading.btnEmail"
             >
               {{ $t('m.ChangeEmail') }}

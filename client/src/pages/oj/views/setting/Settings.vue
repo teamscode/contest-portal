@@ -100,7 +100,7 @@
 
   .flex-container {
     .menu {
-      flex: 1 0 150px;
+      flex: 1 0 250px;
       max-width: 250px;
       .avatar-editor {
         padding: 10% 22%;

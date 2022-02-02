@@ -3,12 +3,11 @@
     <div class="setting-main">
       <div class="section-title">Team Profile</div>
       <Alert show-icon v-if="!website.allow_register">Cannot modify team after registration deadline</Alert>
-      <Form ref="formProfile" :model="formProfile" :rules="ruleProfile">
+      <Form ref="formProfile" :model="formProfile" :rules="ruleProfile" :disabled="!website.allow_register">
         <Row type="flex" :gutter="30" justify="space-around">
           <Col :span="11">
             <FormItem prop="team_name" label="Team Name">
               <Input
-                :disabled="!website.allow_register"
                 v-model="formProfile.team_name"
                 type="text"
               >
@@ -16,14 +15,13 @@
             </FormItem>
             <FormItem prop="division">
               <span>Contest Division</span>
-              <Select :disabled="!website.allow_register" v-model="formProfile.division" style="max-width: 120px; position: absolute; right: 0px">
+              <Select v-model="formProfile.division" style="max-width: 120px; position: absolute; right: 0px">
                 <Option v-for="item in CONTEST_DIVISIONS" :value="item" :key="item">{{ item }}</Option>
               </Select>
             </FormItem>
             <FormItem prop="membersCount">
               <span>Number of Team Members</span>
               <InputNumber
-                :disabled="!website.allow_register"
                 v-model="formProfile.membersCount"
                 style="position: absolute; right: 0px"
                 :max="4"
@@ -33,7 +31,7 @@
               />
             </FormItem>
             <Form-item>
-              <Button :disabled="!website.allow_register" type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
+              <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
             </Form-item>
           </Col>
 
@@ -51,7 +49,6 @@
                     :rules="{ required: true, trigger: 'blur', max: 64 }"
                   >
                     <Input
-                      :disabled="!website.allow_register"
                       v-model="formProfile.team_members[index].name"
                       type="text"
                     >
@@ -67,7 +64,6 @@
                     <Tooltip content="High school graduation year" style="margin-left: 8px; width: 100%">
                       <InputNumber
                         style="width: 96%; margin-right: 3px"
-                        :disabled="!website.allow_register"
                         v-model.number="formProfile.team_members[index].year"
                         type="text"
                       >

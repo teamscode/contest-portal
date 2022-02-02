@@ -4,12 +4,10 @@
       <p class="section-title">
         {{ $t('m.Sessions') }}
       </p>
-      <div class="flex-container setting-content">
-        <template v-for="session in sessions">
+      <Row>
+        <Col v-for="session in sessions" :key="session.session_key" style="padding: 5px">
           <Card
             :key="session.ip"
-            :padding="20"
-            class="flex-child"
           >
             <span
               slot="title"
@@ -52,9 +50,10 @@
               </FormItem>
             </Form>
           </Card>
-        </template>
-      </div>
+        </Col>
+      </Row>
 
+      <Divider />
       <p class="section-title">
         {{ $t('m.Two_Factor_Authentication') }}
       </p>
@@ -66,9 +65,7 @@
             class="notice"
             show-icon
           >
-            <div>
-              You have enabled two-factor authentication.
-            </div>
+            You have enabled two-factor authentication
           </Alert>
           <FormItem v-if="!TFAOpened">
             <div class="oj-relative">
@@ -84,28 +81,33 @@
             </div>
           </FormItem>
           <template v-if="!loadingQRcode">
-            <FormItem style="width: 250px">
-              <Input
-                v-model="formTwoFactor.code"
-                placeholder="Enter the code from your application"
-              />
-            </FormItem>
-            <Button
-              v-if="!TFAOpened"
-              type="primary"
-              :loading="loadingBtn"
-              @click="updateTFA(false)"
-            >
-              Enable TFA
-            </Button>
-            <Button
-              v-else
-              type="error"
-              :loading="loadingBtn"
-              @click="closeTFA"
-            >
-              Disable TFA
-            </Button>
+            <Row>
+              <FormItem style="width: 200px;">
+                <Input
+                  v-model="formTwoFactor.code"
+                  style="margin-bottom: 2px"
+                  placeholder="Code from your TFA app"
+                />
+              </FormItem>
+              <Button
+                v-if="!TFAOpened"
+                type="primary"
+                :loading="loadingBtn"
+                @click="updateTFA(false)"
+                style="margin-left: 10px"
+              >
+                Enable TFA
+              </Button>
+              <Button
+                v-else
+                type="error"
+                style="margin-left: 10px"
+                :loading="loadingBtn"
+                @click="closeTFA"
+              >
+                Disable TFA
+              </Button>
+            </Row>
           </template>
         </Form>
       </div>
@@ -239,7 +241,6 @@
 
 <style lang="less" scoped>
   .notice {
-    font-size: 16px;
     margin-bottom: 20px;
     display: inline-block;
   }
@@ -249,20 +250,6 @@
     #qr-img {
       width: 300px;
       margin: -10px 0 -30px -20px;
-    }
-  }
-
-  .flex-container {
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    .flex-child {
-      flex: 1 0;
-      max-width: 350px;
-      margin-right: 30px;
-      margin-bottom: 30px;
-      .item {
-        margin-bottom: 0;
-      }
     }
   }
 </style>
