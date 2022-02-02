@@ -62,7 +62,7 @@
                   <FormItem
                     :prop="'team_members.' + index + '.year'"
                     :label="'Class'"
-                    :rules="{ required: true }"
+                    :rules="{ required: true, type: 'number', min: 1900, max: 2100 }"
                   >
                     <Tooltip content="High school graduation year" style="margin-left: 8px; width: 100%">
                       <InputNumber

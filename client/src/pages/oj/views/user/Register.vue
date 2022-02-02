@@ -147,7 +147,7 @@
                 <Col span="5" offset="1" style="padding-left: 9px">
                     <FormItem
                     :prop="'team_members.' + index + '.year'"
-                    :rules="{ required: true }"
+                    :rules="{ required: true, type: 'number', min: 1900, max: 2100 }"
                   >
                     <Tooltip content="High school graduation year">
                       <InputNumber
