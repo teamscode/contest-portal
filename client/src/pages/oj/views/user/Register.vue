@@ -147,18 +147,18 @@
                 <Col span="5" offset="1" style="padding-left: 9px">
                     <FormItem
                     :prop="'team_members.' + index + '.year'"
-                    :rules="{ required: true, type: 'number', min: 1900, max: 2100 }"
-                  >
-                    <Tooltip content="High school graduation year">
-                      <InputNumber
-                        v-model.number="formRegister.team_members[index].year"
-                        type="text"
-                        :placeholder="'Class'"
-                        size="large"
-                        @on-enter="handleRegister"
-                      >
-                      </InputNumber>
-                    </Tooltip>
+                    :rules="{ required: true, type: 'number', min: 1900, max: 2100, message: 'invalid' }"
+                    >
+                      <Tooltip content="High school graduation year">
+                        <InputNumber
+                          v-model.number="formRegister.team_members[index].year"
+                          type="text"
+                          :placeholder="'Class'"
+                          size="large"
+                          @on-enter="handleRegister"
+                        >
+                        </InputNumber>
+                      </Tooltip>
                     </FormItem>
                 </Col>
             </Row>
