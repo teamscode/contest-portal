@@ -1,6 +1,23 @@
 {
   "update": [
     {
+      "version": "2022-02-01",
+      "level": "Important",
+      "title": "2022-02-01",
+      "details": [
+        "Feature - Implement integrated registration feature to collect team information automatically.",
+        "Feature - Implement contest announcement notification feature.",
+        "Feature - Implement private problem bank and support import problem bank problems to contests.",
+        "Feature - Allow downloading and uploading problems.",
+        "Feature - Allow restricting access to contests by division.",
+        "Feature - Allow editing team information from settings.",
+        "Feature - Add a new tester role for contest testers.",
+        "Improvement - Rebase backend image on Debian 11.",
+        "Improvement - Upgrade backend dependencies.",
+        "Improvement - Migrate frontend to iView 4."
+      ]
+    },
+    {
       "version": "2021-07-22",
       "level": "Important",
       "title": "2021-07-22",
