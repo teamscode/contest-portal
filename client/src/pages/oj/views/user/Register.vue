@@ -122,7 +122,7 @@
             :key="index"
           >
             <div style="margin-bottom: 10px; margin-top: 10px">
-              Team Member #{{ index + 1 }} Information
+              Team Member #{{ index + 1 }} Information <span v-if="index===0">(captain)</span>
             </div>
             <Row>
                 <Col span="18">

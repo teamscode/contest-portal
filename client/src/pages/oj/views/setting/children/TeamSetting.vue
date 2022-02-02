@@ -47,7 +47,7 @@
                 <Col span="16">
                   <FormItem
                     :prop="'team_members.' + index + '.name'"
-                    :label="index==0 ? 'Team Member ' + (index + 1) + ' Name' : 'Captain\'s Name'"
+                    :label="index === 0 ? 'Captain\'s Name' : 'Team Member ' + (index + 1) + ' Name'"
                     :rules="{ required: true, trigger: 'blur', max: 64 }"
                   >
                     <Input
@@ -80,7 +80,7 @@
               </Row>
               <FormItem
                 :prop="'team_members.' + index + '.email'"
-                :label="'Team Member ' + (index + 1) + ' Email'"
+                :label="index === 0 ? 'Captain\'s Email' : 'Team Member ' + (index + 1) + ' Email'"
                 :rules="{ required: true, type: 'email', trigger: 'blur', max: 64}"
               >
                 <Input
