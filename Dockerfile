@@ -26,4 +26,4 @@ RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor j
 
 COPY --from=frontend-build-env /build/dist ./dist
 
-ENTRYPOINT /app/deploy/entrypoint.sh
+ENTRYPOINT ["sh", "/app/deploy/entrypoint.sh"]
