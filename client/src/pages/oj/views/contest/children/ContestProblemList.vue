@@ -6,18 +6,32 @@
       </div>
       <Table
         v-if="OIContestRealTimePermission"
+        context-menu
+        show-context-menu
         :columns="ACMTableColumns"
         :data="problems"
         :no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
-      />
+        @on-contextmenu="handleContextMenu"
+      >
+        <template slot="contextMenu">
+            <DropdownItem @click.native="openInNewTab">Open in New Tab</DropdownItem>
+        </template>
+      </Table>
       <Table
         v-else
+        context-menu
+        show-context-menu
         :data="problems"
         :columns="OITableColumns"
         no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
-      />
+        @on-contextmenu="handleContextMenu"
+      >
+        <template slot="contextMenu">
+            <DropdownItem @click.native="openInNewTab">Open in New Tab</DropdownItem>
+        </template>
+      </Table>
     </Panel>
   </div>
 </template>
@@ -31,6 +45,7 @@
     mixins: [ProblemMixin],
     data () {
       return {
+        problemId: null,
         ACMTableColumns: [
           {
             title: '#',
@@ -80,25 +95,6 @@
           {
             title: this.$i18n.t('m.Title'),
             key: 'title'
-          },
-          {
-            title: 'Open',
-            render: (h, params) => {
-              const btn1 = h('Button', {
-                on: {
-                  'click': (event) => {
-                    event.stopPropagation()
-                    window.open(`/contest/${this.$route.params.contestID}/problem/${params.row._id}`, '_blank')
-                  }
-                },
-                style: {
-                  'margin-right': '10px'
-                }
-              }, '↗ New Tab')
-              const btn2 = h('Button', {
-              }, '↗ Current Tab')
-              return h('div', [ btn1, btn2 ])
-            }
           }
         ]
       }
@@ -124,6 +120,12 @@
             problemID: row._id
           }
         })
+      },
+      handleContextMenu (row) {
+        this.problemId = row._id
+      },
+      openInNewTab () {
+        window.open(`/contest/${this.$route.params.contestID}/problem/${this.problemId}`, '_blank')
       }
     },
     computed: {
