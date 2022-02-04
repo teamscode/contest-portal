@@ -186,7 +186,7 @@ export const m = {
   // Register.vue
   RegisterUsername: 'Username',
   Email_Address: 'Email Address',
-  RegisterPassword: 'Password',
+  RegisterPassword: 'Password (All team members will see this)',
   Password_Again: 'Password Again',
   Captcha: 'Captcha',
   UserRegister: 'Register',
