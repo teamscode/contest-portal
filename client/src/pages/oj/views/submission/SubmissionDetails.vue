@@ -64,8 +64,8 @@
       <Col :span="20">
         <Highlight
           :code="submission.code"
-          :language="submission.language"
-          :border-color="status.color"
+          :language="submissionLanguage"
+          :border-color="status.highlight"
         />
       </Col>
       <Col
@@ -161,7 +161,15 @@
         return {
           type: JUDGE_STATUS[this.submission.result].type,
           statusName: JUDGE_STATUS[this.submission.result].name,
-          color: JUDGE_STATUS[this.submission.result].color
+          color: JUDGE_STATUS[this.submission.result].color,
+          highlight: JUDGE_STATUS[this.submission.result].highlight
+        }
+      },
+      submissionLanguage () {
+        if (this.submission.language === 'Python 2' || this.submission.language === 'Python 3') {
+          return 'Python'
+        } else {
+          return this.submission.language
         }
       },
       isCE () {

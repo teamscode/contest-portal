@@ -13,6 +13,7 @@
         :no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
         @on-contextmenu="handleContextMenu"
+        class="problemlist"
       >
         <template slot="contextMenu">
             <DropdownItem @click.native="openInNewTab">Open in New Tab</DropdownItem>
@@ -27,6 +28,7 @@
         no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
         @on-contextmenu="handleContextMenu"
+        class="problemlist"
       >
         <template slot="contextMenu">
             <DropdownItem @click.native="openInNewTab">Open in New Tab</DropdownItem>
