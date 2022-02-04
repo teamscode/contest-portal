@@ -96,7 +96,6 @@ def check_contest_permission(check_type="details"):
             self = args[0]
             request = args[1]
             user = request.user
-            user_profile = user.userprofile
             if request.data.get("contest_id"):
                 contest_id = request.data["contest_id"]
             else:
@@ -114,6 +113,7 @@ def check_contest_permission(check_type="details"):
             if not user.is_authenticated:
                 return self.error("Please login first")
 
+            user_profile = user.userprofile
             # creator or owner
             if user.is_contest_admin(self.contest):
                 return func(*args, **kwargs)
