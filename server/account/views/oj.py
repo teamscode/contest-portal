@@ -236,7 +236,8 @@ class UserRegisterAPI(APIView):
                                   to_name=team_member["name"],
                                   subject="Welcome to TeamsCode Contests",
                                   content=email_html)
-            return self.success("Succeeded")
+
+        return self.success("Succeeded")
 
 
 class UserChangeEmailAPI(APIView):
