@@ -36,9 +36,15 @@
     },
     mounted () {
       this.getWebsiteConfig()
+      if (this.$route.query.register === 'direct') {
+        this.changeModalStatus({
+          visible: true,
+          mode: 'register'
+        })
+      }
     },
     methods: {
-      ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
+      ...mapActions(['getWebsiteConfig', 'changeDomTitle', 'changeModalStatus'])
     },
     computed: {
       ...mapState(['website'])
