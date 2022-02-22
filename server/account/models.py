@@ -83,6 +83,7 @@ class UserProfile(models.Model):
     division = models.TextField(null=True)
     avatar = models.TextField(default=f"{settings.AVATAR_URI_PREFIX}/default.png")
     language = models.TextField(null=True)
+    source = models.TextField(null=True)
 
     class Meta:
         db_table = "user_profile"

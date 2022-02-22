@@ -31,6 +31,7 @@ class UserRegisterSerializer(serializers.Serializer):
     team_members = TeamMemberSerializer(many=True)
     division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     captcha = serializers.CharField()
+    source = serializers.CharField(required=False, max_length=128)
 
 
 class UserChangePasswordSerializer(serializers.Serializer):
@@ -62,6 +63,7 @@ class UserAdminSerializer(serializers.ModelSerializer):
     team_members = serializers.SerializerMethodField()
     team_name = serializers.SerializerMethodField()
     division = serializers.SerializerMethodField()
+    source = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -76,6 +78,9 @@ class UserAdminSerializer(serializers.ModelSerializer):
 
     def get_division(self, obj):
         return obj.userprofile.division
+
+    def get_source(self, obj):
+        return obj.userprofile.source
 
 
 class UserSerializer(serializers.ModelSerializer):

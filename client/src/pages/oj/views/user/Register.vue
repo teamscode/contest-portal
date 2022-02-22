@@ -72,6 +72,12 @@
               <Option v-for="item in CONTEST_DIVISIONS" :value="item" :key="item">{{ item }}</Option>
             </Select>
           </FormItem>
+          <FormItem prop="source">
+            <span>How did you first hear about us?</span>
+            <Select v-model="formRegister.source" size="large" style="max-width: 200px; position: absolute; right: 0px">
+              <Option v-for="item in acquisition" :value="item" :key="item">{{ item }}</Option>
+            </Select>
+          </FormItem>
           <FormItem prop="membersCount">
             <span>Number of Team Members</span>
             <InputNumber
@@ -231,8 +237,10 @@ export default {
         passwordAgain: '',
         captcha: '',
         division: '',
+        source: '',
         team_members: [{ name: '', email: '', year: null }]
       },
+      acquisition: ['Discord Announcements', 'Google Search', 'Friends', 'Social Media', 'School Teacher', 'Competitive Programming Initiative', 'Other'],
       ruleRegister: {
         username: [
           { required: true, trigger: 'blur', max: 64 },
@@ -258,6 +266,9 @@ export default {
           { validator: this.CheckTeamnameNotExist, trigger: 'blur' }
         ],
         division: [
+          { required: true }
+        ],
+        source: [
           { required: true }
         ]
       }

@@ -219,7 +219,7 @@ class UserRegisterAPI(APIView):
         user = User.objects.create(username=data["username"], email=data["email"])
         user.set_password(data["password"])
         user.save()
-        UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"], division=data["division"])
+        UserProfile.objects.create(user=user, team_members=data["team_members"], team_name=data["team_name"], division=data["division"], source=data["source"])
         for team_member in data["team_members"]:
             render_data = {
                 "username": user.username,
