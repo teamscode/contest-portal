@@ -68,7 +68,7 @@ class UserAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "admin_type", "problem_permission", "team_members", "team_name",
-                  "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled", "division"]
+                  "create_time", "last_login", "two_factor_auth", "open_api", "is_disabled", "division", "source"]
 
     def get_team_members(self, obj):
         return obj.userprofile.team_members

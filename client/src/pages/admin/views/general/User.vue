@@ -73,6 +73,16 @@
         </el-table-column>
 
         <el-table-column
+          prop="source"
+          label="Acquisition"
+        />
+
+        <el-table-column
+          prop="division"
+          label="Division"
+        />
+
+        <el-table-column
           prop="email"
           label="Email"
         />
