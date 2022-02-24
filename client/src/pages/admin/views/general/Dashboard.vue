@@ -90,10 +90,18 @@
         <info-card
           color="#909399"
           icon="el-icon-fa-users"
-          message="Total Users"
+          message="Total Teams"
           icon-size="30px"
           class="info-item"
           :value="infoData.user_count"
+        />
+        <info-card
+          color="#409EFF"
+          icon="el-icon-fa-user"
+          message="Total People"
+          icon-size="30px"
+          class="info-item"
+          :value="infoData.people_count"
         />
         <info-card
           color="#67C23A"
@@ -101,13 +109,6 @@
           message="Today Submissions"
           class="info-item"
           :value="infoData.today_submission_count"
-        />
-        <info-card
-          color="#409EFF"
-          icon="el-icon-fa-trophy"
-          message="Recent Contests"
-          class="info-item"
-          :value="infoData.recent_contest_count"
         />
       </div>
       <panel style="margin-top: 5px">
@@ -171,6 +172,7 @@
           recent_contest_count: 0,
           today_submission_count: 0,
           judge_server_count: 0,
+          people_count: 0,
           env: {}
         },
         activeNames: [1],

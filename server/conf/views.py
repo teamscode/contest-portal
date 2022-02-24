@@ -14,7 +14,7 @@ from django.utils import timezone
 from requests.exceptions import RequestException
 
 from account.decorators import super_admin_required
-from account.models import User
+from account.models import User, UserProfile
 from contest.models import Contest
 from judge.dispatcher import process_pending_task
 from options.options import SysOptions
@@ -220,17 +220,24 @@ class ReleaseNotesAPI(APIView):
 
 
 class DashboardInfoAPI(APIView):
+    @super_admin_required
     def get(self, request):
         today = datetime.today()
         today_submission_count = Submission.objects.filter(
             create_time__gte=datetime(today.year, today.month, today.day, 0, 0, tzinfo=pytz.UTC)).count()
         recent_contest_count = Contest.objects.exclude(end_time__lt=timezone.now()).count()
         judge_server_count = len(list(filter(lambda x: x.status == "normal", JudgeServer.objects.all())))
+        all_teams = UserProfile.objects.all()
+        people_count = 0
+        for team in all_teams:
+            people_count += len(team.team_members)
+
         return self.success({
             "user_count": User.objects.count(),
             "recent_contest_count": recent_contest_count,
             "today_submission_count": today_submission_count,
             "judge_server_count": judge_server_count,
+            "people_count": people_count,
             "env": {
                 "FORCE_HTTPS": get_env("FORCE_HTTPS", default=False),
                 "STATIC_CDN_HOST": get_env("STATIC_CDN_HOST", default="")
