@@ -240,7 +240,7 @@ export default {
         source: '',
         team_members: [{ name: '', email: '', year: null }]
       },
-      acquisition: ['Discord Announcements', 'Google Search', 'Friends', 'Social Media', 'School Teacher', 'Competitive Programming Initiative', 'Other'],
+      acquisition: ['Discord Announcements', 'Google Search', 'Friends', 'Social Media', 'School Teacher', 'Competitive Programming Initiative', 'Email Announcements', 'Other'],
       ruleRegister: {
         username: [
           { required: true, trigger: 'blur', max: 64 },
