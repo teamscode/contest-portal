@@ -6,6 +6,7 @@
         <router-view />
         <div v-if="route_name === 'contest-details'">
           <Announcements
+            v-if="contestLoaded&&!contestMenuDisabled"
             :contest-btn-loading="announcementBtnLoading"
             style="margin-bottom: 20px;"
             @refreshAnnouncements="getContestAnnouncementList"
@@ -167,7 +168,7 @@
           }, 1000)
         }
       })
-      this.getContestAnnouncementList()
+      setTimeout(() => { this.getContestAnnouncementList() }, 100)
       this.contestChecker = setInterval(() => { this.getContestAnnouncementList() }, 5000)
     },
     methods: {
@@ -190,33 +191,35 @@
         })
       },
       getContestAnnouncementList () {
-        this.announcementBtnLoading = true
-        this.getContestAnnouncements().then(res => {
-          for (let index = 0; index < res.length; index += 1) {
-            const announcement = res[index]
-            this.$Notice.open({
-              title: `Announcement - ${announcement.title}`,
-              desc: ` Announcements tab.`,
-              render: h => {
-                return h('span', [
-                  'A new contest announcement has been posted. View in ',
-                  h('a', {
-                    on: {
-                      click: () => {
-                        this.$router.push({name: 'contest-details', params: {contestID: this.contestID}})
+        if (this.contestLoaded && !this.contestMenuDisabled) {
+          this.announcementBtnLoading = true
+          this.getContestAnnouncements().then(res => {
+            for (let index = 0; index < res.length; index += 1) {
+              const announcement = res[index]
+              this.$Notice.open({
+                title: `Announcement - ${announcement.title}`,
+                desc: ` Announcements tab.`,
+                render: h => {
+                  return h('span', [
+                    'A new contest announcement has been posted. View in ',
+                    h('a', {
+                      on: {
+                        click: () => {
+                          this.$router.push({name: 'contest-details', params: {contestID: this.contestID}})
+                        }
                       }
-                    }
-                  }, 'Home Tab.')
-                ])
-              },
-              name: announcement.id,
-              duration: 0
-            })
-          }
-          setTimeout(() => { this.announcementBtnLoading = false }, 200)
-        }, () => {
-          setTimeout(() => { this.announcementBtnLoading = false }, 200)
-        })
+                    }, 'Home Tab.')
+                  ])
+                },
+                name: announcement.id,
+                duration: 0
+              })
+            }
+            setTimeout(() => { this.announcementBtnLoading = false }, 200)
+          }, () => {
+            setTimeout(() => { this.announcementBtnLoading = false }, 200)
+          })
+        }
       },
       ...mapActions(['getContestAnnouncements'])
     },
@@ -229,7 +232,7 @@
       }),
       ...mapGetters(
         ['contestMenuDisabled', 'contestStatus', 'countdown', 'isContestAdmin',
-          'OIContestRealTimePermission', 'passwordFormVisible']
+          'OIContestRealTimePermission', 'passwordFormVisible', 'contestLoaded']
       ),
       countdownColor () {
         if (this.contestStatus) {
@@ -242,6 +245,11 @@
         this.route_name = newVal.name
         this.contestID = newVal.params.contestID
         this.changeDomTitle({title: this.contest.title})
+      },
+      contestMenuDisabled () {
+        if (this.contestLoaded) {
+          this.getContestAnnouncementList()
+        }
       }
     },
     beforeDestroy () {
