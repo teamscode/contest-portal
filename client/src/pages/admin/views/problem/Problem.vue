@@ -745,7 +745,7 @@
         }
         for (let item of this.problem.test_case_score) {
           try {
-            if (parseInt(item.score) <= 0) {
+            if (parseInt(item.score) < 0) {
               this.$error('Invalid test case score')
               return
             }
