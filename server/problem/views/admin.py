@@ -188,7 +188,7 @@ class ProblemBase(APIView):
 
         total_score = 0
         for item in data["test_case_score"]:
-            if item["score"] <= 0:
+            if item["score"] < 0:
                 return "Invalid score"
             else:
                 total_score += item["score"]
