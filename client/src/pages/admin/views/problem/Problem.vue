@@ -550,7 +550,7 @@
         // We have to move our method to a handler field
         handler () {
           this.count += 1
-          if (this.mode === 'edit' && this.count > 5) {
+          if (this.mode === 'edit' && this.count > 4) {
             this.unsaved = true
             window.addEventListener('beforeunload', this.prevent)
           } else if (this.mode === 'add' && this.count > 1) {
