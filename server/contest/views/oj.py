@@ -110,9 +110,15 @@ class ContestAccessAPI(APIView):
 
 class ContestRankAPI(APIView):
     def get_rank(self):
-        return ContestRank.objects.filter(contest=self.contest, user__is_disabled=False).\
-            exclude(Q(user__admin_type=AdminType.ADMIN) | Q(user__admin_type=AdminType.SUPER_ADMIN)). \
-            select_related("user").order_by("-total_score", "last_submission")
+        if self.contest.division == "Testing":
+            return ContestRank.objects.filter(contest=self.contest,
+                                              user__is_disabled=False). \
+                select_related("user").order_by("-total_score", "last_submission")
+        else:
+            return ContestRank.objects.filter(contest=self.contest,
+                                              user__admin_type=AdminType.REGULAR_USER,
+                                              user__is_disabled=False). \
+                select_related("user").order_by("-total_score", "last_submission")
 
     def column_string(self, n):
         string = ""
