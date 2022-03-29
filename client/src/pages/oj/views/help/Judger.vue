@@ -5,7 +5,7 @@
       shadow
     >
       <div slot="title">
-        {{ $t('m.Compiler') }} & {{ $t('m.Judger') }}
+        {{ $t('m.Compiler') }} & {{ $t('m.Judger') }} (on x86_64)
       </div>
       <div class="content markdown-body">
         <ul>
