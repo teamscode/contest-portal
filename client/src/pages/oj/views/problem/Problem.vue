@@ -341,7 +341,7 @@
         problemID: '',
         submitting: false,
         code: '',
-        language: '',
+        language: 'C++17',
         theme: 'solarized',
         submissionId: '',
         submitted: false,
