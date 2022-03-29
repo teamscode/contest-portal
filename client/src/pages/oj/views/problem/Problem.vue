@@ -341,7 +341,7 @@
         problemID: '',
         submitting: false,
         code: '',
-        language: 'C++',
+        language: '',
         theme: 'solarized',
         submissionId: '',
         submitted: false,
@@ -381,7 +381,6 @@
           api.submissionExists(problem.id).then(res => {
             this.submissionExists = res.data.data
           })
-          problem.languages = problem.languages.sort()
           this.problem = problem
 
           // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template
@@ -389,7 +388,19 @@
             return
           }
           // try to load problem template
-          this.language = this.problem.languages[0]
+          if (this.problem.languages.includes('C++17')) {
+            this.language = 'C++17'
+          } else if (this.problem.languages.includes('C++11')) {
+            this.language = 'C++11'
+          } else if (this.problem.languages.includes('Java')) {
+            this.language = 'Java'
+          } else if (this.problem.languages.includes('Python 3')) {
+            this.language = 'Python 3'
+          } else if (this.problem.languages.includes('Python 2')) {
+            this.language = 'Python 2'
+          } else {
+            this.language = this.probelm.languages[0]
+          }
           let template = this.problem.template
           if (template && template[this.language]) {
             this.code = template[this.language]

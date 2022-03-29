@@ -562,7 +562,8 @@
       'problem.languages' (newVal) {
         let data = {}
         // use deep copy to avoid infinite loop
-        let languages = JSON.parse(JSON.stringify(newVal)).sort()
+        let languages = JSON.parse(JSON.stringify(newVal))
+        console.log(this.languages)
         for (let item of languages) {
           if (this.template[item] === undefined) {
             let langConfig = this.allLanguage.languages.find(lang => {

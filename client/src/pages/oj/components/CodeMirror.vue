@@ -51,6 +51,7 @@
             @change="onUploadFileDone"
           >
         </div>
+        <Alert v-if="language === 'Java'" show-icon style="margin-top: 10px; width: 530px">The public class containing your main method must be named "Main"</Alert>
       </Col>
       <Col :span="12">
         <div class="fl-right">
