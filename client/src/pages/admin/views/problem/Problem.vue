@@ -1,5 +1,11 @@
 <template>
-  <div class="problem">
+  <div id="problem" class="problem">
+    <el-alert v-if="unsaved" style="position: fixed;z-index:99;bottom:42px;left: 220px;width: 220px;"
+    title="Changes Unsaved"
+    show-icon
+    :closable="false"
+    type="warning">
+    </el-alert>
     <Panel :title="title">
       <el-form
         ref="form"
@@ -458,11 +464,11 @@
             :placeholder="$t('m.Source')"
           />
         </el-form-item>
-        <save @click.native="submit()">
-          Save
-        </save>
       </el-form>
     </Panel>
+    <el-button :type="unsaved?'primary':''" @click.native="submit()" style="position:fixed; bottom:40px; right:40px;z-index:99">
+      {{unsaved?'Save':'Saved'}}
+    </el-button>
   </div>
 </template>
 
@@ -471,6 +477,7 @@
   import Accordion from '../../components/Accordion'
   import CodeMirror from '../../components/CodeMirror'
   import api from '../../api'
+  import { Loading } from 'element-ui'
 
   export default {
     name: 'Problem',
@@ -491,11 +498,29 @@
         mode: '',
         contest: {},
         problem: {
+          _id: null,
+          title: '',
+          description: '',
+          input_description: '',
+          output_description: '',
+          time_limit: 2000,
+          memory_limit: 256,
+          difficulty: 'Low',
+          visible: true,
+          share_submission: false,
+          tags: [],
           languages: [],
-          io_mode: {'io_mode': 'Standard IO', 'input': 'input.txt', 'output': 'output.txt'}
-        },
-        reProblem: {
-          languages: [],
+          template: {},
+          samples: [{input: '', output: ''}],
+          spj: false,
+          spj_language: '',
+          spj_code: '',
+          spj_compile_ok: false,
+          test_case_id: '',
+          test_case_score: [],
+          hint: '',
+          source: '',
+          contest_id: null,
           io_mode: {'io_mode': 'Standard IO', 'input': 'input.txt', 'output': 'output.txt'}
         },
         testCaseUploaded: false,
@@ -512,13 +537,27 @@
           languages: '',
           testCase: ''
         },
-        casesScore: null
+        casesScore: null,
+        count: 0,
+        unsaved: false
       }
     },
     watch: {
-      '$route' () {
-        this.$refs.form.resetFields()
-        this.problem = this.reProblem
+      problem: {
+        // This will let Vue know to look inside the array
+        deep: true,
+
+        // We have to move our method to a handler field
+        handler () {
+          this.count += 1
+          if (this.mode === 'edit' && this.count > 5) {
+            this.unsaved = true
+            window.addEventListener('beforeunload', this.prevent)
+          } else if (this.mode === 'add' && this.count > 1) {
+            this.unsaved = true
+            window.addEventListener('beforeunload', this.prevent)
+          }
+        }
       },
       'problem.languages' (newVal) {
         let data = {}
@@ -547,6 +586,7 @@
       }
     },
     mounted () {
+      const loading = Loading.service()
       this.routeName = this.$route.name
       if (this.routeName === 'edit-problem' || this.routeName === 'edit-contest-problem') {
         this.mode = 'edit'
@@ -554,39 +594,6 @@
         this.mode = 'add'
       }
       api.getLanguages().then(res => {
-        this.problem = this.reProblem = {
-          _id: '',
-          title: '',
-          description: '',
-          input_description: '',
-          output_description: '',
-          time_limit: 2000,
-          memory_limit: 256,
-          difficulty: 'Low',
-          visible: true,
-          share_submission: false,
-          tags: [],
-          languages: [],
-          template: {},
-          samples: [{input: '', output: ''}],
-          spj: false,
-          spj_language: '',
-          spj_code: '',
-          spj_compile_ok: false,
-          test_case_id: '',
-          test_case_score: [],
-          hint: '',
-          source: '',
-          io_mode: {'io_mode': 'Standard IO', 'input': 'input.txt', 'output': 'output.txt'}
-        }
-        let contestID = this.$route.params.contestId
-        if (contestID) {
-          this.problem.contest_id = this.reProblem.contest_id = contestID
-          api.getContest(contestID).then(res => {
-            this.contest = res.data.data
-          })
-        }
-
         this.problem.spj_language = 'C'
 
         let allLanguage = res.data.data
@@ -604,16 +611,30 @@
             data.spj_language = data.spj_language || 'C'
             this.problem = data
             this.testCaseUploaded = true
+            loading.close()
           })
         } else {
           this.title = this.$i18n.t('m.Add_Problem')
           for (let item of allLanguage.languages) {
             this.problem.languages.push(item.name)
           }
+          loading.close()
+        }
+        let contestID = this.$route.params.contestId
+        this.problem.contest_id = contestID
+        if (contestID) {
+          api.getContest(contestID).then(res => {
+            this.contest = res.data.data
+          })
         }
       })
     },
     methods: {
+      prevent (e) {
+        e.preventDefault() // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+                // Chrome requires returnValue to be set
+        e.returnValue = ''
+      },
       switchSpj () {
         if (this.testCaseUploaded) {
           this.$confirm('If you change problem judge method, you need to re-upload test cases', 'Warning', {
@@ -712,7 +733,7 @@
         }
         for (let sample of this.problem.samples) {
           if (!sample.input || !sample.output) {
-            this.$error('Sample input and output is required')
+            this.$error('Sample input and output are required')
             return
           }
         }
@@ -723,10 +744,10 @@
         }
         if (this.problem.spj) {
           if (!this.problem.spj_code) {
-            this.error.spj = 'Spj code is required'
+            this.error.spj = 'SPJ code is required'
             this.$error(this.error.spj)
           } else if (!this.problem.spj_compile_ok) {
-            this.error.spj = 'SPJ code has not been successfully compiled'
+            this.error.spj = 'Failed to compile SPJ code'
           }
           if (this.error.spj) {
             this.$error(this.error.spj)
@@ -734,12 +755,12 @@
           }
         }
         if (!this.problem.languages.length) {
-          this.error.languages = 'Please choose at least one language for problem'
+          this.error.languages = 'Please allow at least one language for this problem'
           this.$error(this.error.languages)
           return
         }
         if (!this.testCaseUploaded) {
-          this.error.testCase = 'Test case is not uploaded yet'
+          this.error.testCase = 'Test case has not been uploaded'
           this.$error(this.error.testCase)
           return
         }
@@ -772,10 +793,15 @@
           this.problem.contest_id = this.contest.id
         }
         api[funcName](this.problem).then(res => {
-          if (this.routeName === 'create-contest-problem' || this.routeName === 'edit-contest-problem') {
+          if (this.routeName === 'create-contest-problem') {
+            window.removeEventListener('beforeunload', this.prevent)
             this.$router.push({name: 'contest-problem-list', params: {contestId: this.$route.params.contestId}})
-          } else {
+          } else if (this.routeName === 'create-problem') {
+            window.removeEventListener('beforeunload', this.prevent)
             this.$router.push({name: 'problem-list'})
+          } else {
+            this.unsaved = false
+            window.removeEventListener('beforeunload', this.prevent)
           }
         }).catch(() => {
         })
@@ -786,6 +812,18 @@
           testcase.score = this.casesScore
         }
         this.problem.test_case_score = testcasesScore
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      if (this.unsaved) {
+        const answer = window.confirm('Do you really want to leave? All unsaved changes will be discarded!')
+        if (answer) {
+          next()
+        } else {
+          next(false)
+        }
+      } else {
+        next()
       }
     }
   }
