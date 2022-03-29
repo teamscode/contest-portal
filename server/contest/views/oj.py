@@ -160,9 +160,15 @@ class ContestRankAPI(APIView):
             for item in range(contest_problems.count()):
                 worksheet.write(self.column_string(5 + item) + "1", f"{contest_problems[item].title}")
             for index, item in enumerate(data):
+                serialized_team_members = ""
+                for member in item["user"]["team_members"]:
+                    serialized_team_members += member["name"]
+                    serialized_team_members += ";"
+                    serialized_team_members += member["email"]
+                    serialized_team_members += ";"
                 worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
                 worksheet.write_string(index + 1, 1, item["user"]["username"])
-                worksheet.write_string(index + 1, 2, item["user"]["team_members"] or "")
+                worksheet.write_string(index + 1, 2, serialized_team_members)
                 worksheet.write_string(index + 1, 3, str(item["total_score"]))
                 worksheet.write_string(index + 1, 4, str(item["last_submission"]))
                 for k, v in item["submission_info"].items():
