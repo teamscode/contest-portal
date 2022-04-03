@@ -167,7 +167,7 @@ class ContestRankAPI(APIView):
                     serialized_team_members += member["email"]
                     serialized_team_members += ";"
                 worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
-                worksheet.write_string(index + 1, 1, item["user"]["username"])
+                worksheet.write_string(index + 1, 1, item["user"]["team_name"])
                 worksheet.write_string(index + 1, 2, serialized_team_members)
                 worksheet.write_string(index + 1, 3, str(item["total_score"]))
                 worksheet.write_string(index + 1, 4, str(item["last_submission"]))
