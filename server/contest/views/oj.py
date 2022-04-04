@@ -143,7 +143,7 @@ class ContestRankAPI(APIView):
                 qs = self.get_rank()
                 cache.set(cache_key, qs)
 
-        if download_csv:
+        if download_csv and request.user.is_contest_admin(self.contest):
             data = serializer(qs, many=True, is_contest_admin=is_contest_admin).data
             contest_problems = Problem.objects.filter(contest=self.contest, visible=True).order_by("_id")
             problem_ids = [item.id for item in contest_problems]
@@ -165,6 +165,8 @@ class ContestRankAPI(APIView):
                     serialized_team_members += member["name"]
                     serialized_team_members += ";"
                     serialized_team_members += member["email"]
+                    serialized_team_members += ";"
+                    serialized_team_members += member["year"]
                     serialized_team_members += ";"
                 worksheet.write_string(index + 1, 0, str(item["user"]["id"]))
                 worksheet.write_string(index + 1, 1, item["user"]["team_name"])
