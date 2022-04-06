@@ -41,8 +41,8 @@
         />
 
         <el-table-column
-          prop="username"
-          label="Username"
+          prop="team_name"
+          label="Team Name"
         />
 
         <el-table-column
