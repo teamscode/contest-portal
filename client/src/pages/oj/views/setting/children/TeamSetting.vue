@@ -85,6 +85,18 @@
                 </Input>
                 <div v-if="index===0">Captain's email can be changed in the Account tab</div>
               </FormItem>
+              <FormItem
+                :prop="'team_members.' + index + '.parent_email'"
+                :label="index === 0 ? 'Captain\'s Parent Email' : 'Team Member ' + (index + 1) + ' Parent Email'"
+                :rules="{ required: true, type: 'email', trigger: 'blur', max: 64}"
+              >
+                <Input
+                  v-model="formProfile.team_members[index].parent_email"
+                  :disabled="index===0"
+                  type="text"
+                >
+                </Input>
+              </FormItem>
             </div>
           </Col>
         </Row>
@@ -162,7 +174,7 @@
         while (
         this.formProfile.team_members.length < this.formProfile.membersCount
       ) {
-          this.formProfile.team_members.push({ name: '', email: '', year: null })
+          this.formProfile.team_members.push({ name: '', email: '', year: null, parent_email: '' })
         }
       }
     },

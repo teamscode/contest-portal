@@ -21,6 +21,7 @@ class TeamMemberSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=64)
     email = serializers.EmailField(max_length=64)
     year = serializers.IntegerField(min_value=1900, max_value=2100)
+    parent_email = serializers.EmailField(max_length=64)
 
 
 class UserRegisterSerializer(serializers.Serializer):

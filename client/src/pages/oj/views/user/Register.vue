@@ -193,6 +193,26 @@
                 />
               </Input>
             </FormItem>
+            <FormItem
+              :prop="'team_members.' + index + '.parent_email'"
+              style="padding-top: 0px"
+              :rules="
+                  { required: true, type: 'email', trigger: 'blur', max: 64}
+              "
+            >
+              <Input
+                v-model="formRegister.team_members[index].parent_email"
+                type="text"
+                :placeholder="'Email of Team Member ' + (index + 1) + '\'s Parent'"
+                size="large"
+                @on-enter="handleRegister"
+              >
+                <Icon
+                  slot="prepend"
+                  type="ios-mail-outline"
+                />
+              </Input>
+            </FormItem>
           </div>
         </Col>
       </Row>
@@ -238,7 +258,7 @@ export default {
         captcha: '',
         division: '',
         source: '',
-        team_members: [{ name: '', email: '', year: null }]
+        team_members: [{ name: '', email: '', year: null, parent_email: '' }]
       },
       acquisition: ['Discord Announcements', 'Google Search', 'Friends', 'Social Media', 'School Teacher', 'Competitive Programming Initiative', 'Email Announcements', 'Other'],
       ruleRegister: {
@@ -339,7 +359,7 @@ export default {
       while (
         this.formRegister.team_members.length < this.formRegister.membersCount
       ) {
-        this.formRegister.team_members.push({ name: '', email: '', year: null })
+        this.formRegister.team_members.push({ name: '', email: '', year: null, parent_email: '' })
       }
     },
     handleRegister () {

@@ -335,6 +335,7 @@
               <el-input placeholder="Name" v-model="member.name" />
               <el-input placeholder="Class" style="margin-top: 10px" v-model.number="member.year" />
               <el-input placeholder="Email" style="margin-top: 10px" v-model="member.email" />
+              <el-input placeholder="Parent Email" style="margin-top: 10px" v-model="member.parent_email" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
