@@ -166,6 +166,7 @@ class ContestRankAPI(APIView):
                     serialized_team_members += ";"
                     serialized_team_members += member["email"]
                     serialized_team_members += ";"
+                    # convert
                     serialized_team_members += str(member["year"])
                     serialized_team_members += ";"
                     serialized_team_members += member["parent_email"]
