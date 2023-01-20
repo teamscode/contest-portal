@@ -1,4 +1,3 @@
-import random
 from django.db.models import Q, Count
 from utils.api import APIView
 from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by

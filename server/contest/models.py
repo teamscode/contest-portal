@@ -5,7 +5,6 @@ from django.utils.timezone import now
 from utils.constants import ContestStatus, ContestType
 from account.models import User
 from utils.models import RichTextField
-from datetime import date, datetime
 
 
 class Contest(models.Model):

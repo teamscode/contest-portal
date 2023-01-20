@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 import os
 import raven
-from copy import deepcopy
 from utils.shortcuts import get_env
 
 production_env = get_env("OJ_ENV", "dev") == "production"
