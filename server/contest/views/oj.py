@@ -13,7 +13,7 @@ from utils.shortcuts import datetime2str, check_is_id
 from account.models import AdminType
 from account.decorators import login_required, check_contest_permission, check_contest_password
 
-from utils.constants import ContestRuleType, ContestStatus
+from utils.constants import ContestStatus
 from ..models import ContestAnnouncement, Contest, ContestRank
 from ..serializers import ContestAnnouncementSerializer
 from ..serializers import ContestSerializer, ContestPasswordVerifySerializer

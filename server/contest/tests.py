@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from utils.api.tests import APITestCase
 
-from .models import ContestAnnouncement, ContestRuleType, Contest
+from .models import ContestAnnouncement, Contest
 
 DEFAULT_CONTEST_DATA = {"title": "test title", "description": "test description",
                         "start_time": timezone.localtime(timezone.now()),

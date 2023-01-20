@@ -1,7 +1,7 @@
 import ipaddress
 
 from account.decorators import login_required, check_contest_permission, ensure_created_by, problem_permission_required
-from contest.models import ContestStatus, ContestRuleType
+from contest.models import ContestStatus
 from judge.tasks import judge_task
 from options.options import SysOptions
 # from judge.dispatcher import JudgeDispatcher

@@ -1,4 +1,3 @@
-from utils.constants import ContestRuleType  # noqa
 from django.db import models
 from django.utils.timezone import now
 
@@ -13,7 +12,6 @@ class Contest(models.Model):
     # show real time rank or cached rank
     real_time_rank = models.BooleanField()
     password = models.TextField(null=True)
-    # enum of ContestRuleType
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     create_time = models.DateTimeField(auto_now_add=True)

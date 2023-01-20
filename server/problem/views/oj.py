@@ -3,7 +3,6 @@ from utils.api import APIView
 from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by
 from ..models import ProblemTag, Problem
 from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
-from contest.models import ContestRuleType
 
 
 class ProblemTagAPI(APIView):

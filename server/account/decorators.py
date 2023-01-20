@@ -3,7 +3,7 @@ import hashlib
 import time
 
 from problem.models import Problem
-from contest.models import Contest, ContestType, ContestStatus, ContestRuleType
+from contest.models import Contest, ContestType, ContestStatus
 from utils.api import JSONResponse, APIError
 from utils.constants import CONTEST_PASSWORD_SESSION_KEY
 from .models import ProblemPermission

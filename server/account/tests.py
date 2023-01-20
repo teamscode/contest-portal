@@ -13,7 +13,6 @@ from utils.shortcuts import rand_str
 from options.options import SysOptions
 
 from .models import AdminType, ProblemPermission, User
-from utils.constants import ContestRuleType
 
 
 class PermissionDecoratorTest(APITestCase):

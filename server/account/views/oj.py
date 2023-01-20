@@ -11,7 +11,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from otpauth import OtpAuth
 
 from problem.models import Problem
-from utils.constants import ContestRuleType
 from options.options import SysOptions
 from utils.api import APIView, validate_serializer, CSRFExemptAPIView
 from utils.captcha import Captcha
