@@ -21,9 +21,9 @@ class APITokenAuthMiddleware(MiddlewareMixin):
 
 class SessionRecordMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
         if x_forwarded_for:
-            request.ip = x_forwarded_for.split(',')[-1].strip()
+            request.ip = x_forwarded_for.split(",")[-1].strip()
         else:
             request.ip = request.META.get(settings.IP_HEADER, request.META.get("REMOTE_ADDR"))
 

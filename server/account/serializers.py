@@ -1,6 +1,4 @@
-from django import forms
-
-from utils.api import serializers, UsernameSerializer
+from utils.api import serializers
 
 from .models import AdminType, ProblemPermission, ContestDivision, User, UserProfile
 
@@ -32,7 +30,7 @@ class UserRegisterSerializer(serializers.Serializer):
     team_members = TeamMemberSerializer(many=True)
     division = serializers.ChoiceField(choices=(ContestDivision.ADVANCED, ContestDivision.INTERMEDIATE, ContestDivision.NOVICE))
     captcha = serializers.CharField()
-    source = serializers.CharField(required=False, max_length=128)
+    source = serializers.CharField(required=True, max_length=128)
 
 
 class UserChangePasswordSerializer(serializers.Serializer):

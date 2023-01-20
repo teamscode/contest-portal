@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         team_members = [{"name": name, "email": email}]
 
-        if not(username and password and action):
+        if not (username and password and action):
             self.stdout.write(self.style.ERROR("Invalid args"))
             exit(1)
 

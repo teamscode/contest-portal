@@ -131,7 +131,7 @@ def check_contest_permission(check_type="details"):
 
             # regular user get contest problems, ranks etc. before contest started
             if self.contest.status == ContestStatus.CONTEST_NOT_START and check_type != "details":
-                return self.error("Contest has not started yet")
+                return self.error("Contest has not started yet.")
 
             # check does user have permission to get ranks, submissions in OI Contest
             if self.contest.status == ContestStatus.CONTEST_UNDERWAY:

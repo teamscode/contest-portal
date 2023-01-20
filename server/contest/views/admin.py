@@ -6,7 +6,7 @@ from ipaddress import ip_network
 import dateutil.parser
 from django.http import FileResponse
 
-from account.decorators import check_contest_permission, ensure_created_by
+from account.decorators import ensure_created_by
 from account.models import User
 from submission.models import Submission, JudgeStatus
 from utils.api import APIView, validate_serializer
@@ -18,7 +18,7 @@ from ..models import Contest, ContestAnnouncement
 from ..serializers import (ContestAnnouncementSerializer, ContestAdminSerializer,
                            CreateConetestSeriaizer, CreateContestAnnouncementSerializer,
                            EditConetestSeriaizer, EditContestAnnouncementSerializer,
-                            )
+                           )
 
 
 class ContestAPI(APIView):
@@ -157,6 +157,7 @@ class ContestAnnouncementAPI(APIView):
         if keyword:
             contest_announcements = contest_announcements.filter(title__contains=keyword)
         return self.success(ContestAnnouncementSerializer(contest_announcements, many=True).data)
+
 
 class DownloadContestSubmissions(APIView):
     def _dump_submissions(self, contest, exclude_admin=True):

@@ -35,7 +35,7 @@ class ChooseJudgeServer:
     def __init__(self):
         self.server = None
 
-    def __enter__(self) -> [JudgeServer, None]:
+    def __enter__(self):
         with transaction.atomic():
             servers = JudgeServer.objects.select_for_update().filter(is_disabled=False).order_by("task_number")
             servers = [s for s in servers if s.status == "normal"]
