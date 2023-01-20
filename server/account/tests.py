@@ -175,7 +175,9 @@ class UserRegisterAPITest(CaptchaTest):
         self.captcha = rand_str(4)
 
         self.data = {"username": "test_user", "password": "testuserpassword", "team_name": "test team",
-                     "team_members": [{"name": "test captain", "email": "test@qduoj.com"}], "email": "test@qduoj.com",
+                     "team_members": [{"name": "test captain", "email": "test@qduoj.com", "year": 1950, "parent_email": "aa@a.com"}], "email": "test@qduoj.com",
+                     "division": "Intermediate",
+                     "source": "Other",
                      "captcha": self._set_captcha(self.client.session)}
 
     def test_website_config_limit(self):
@@ -472,8 +474,10 @@ class AdminUserTest(APITestCase):
         self.regular_user = self.create_user(username=self.username, password=self.password, login=False)
         self.url = self.reverse("user_admin_api")
         self.data = {"id": self.regular_user.id, "username": self.username, "team_name": "test team",
-                     "team_members": [{"name": "test captain", "email": "test@qduoj.com"}],
+                     "team_members": [{"name": "test captain", "email": "test@qduoj.com", "year": 1950, "parent_email": "something@a.com"}],
                      "email": "test@qq.com", "admin_type": AdminType.REGULAR_USER,
+                     "division": "Intermediate",
+                     "source": "Other",
                      "problem_permission": ProblemPermission.OWN, "open_api": True,
                      "two_factor_auth": False, "is_disabled": False}
 

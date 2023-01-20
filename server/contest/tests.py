@@ -12,6 +12,7 @@ DEFAULT_CONTEST_DATA = {"title": "test title", "description": "test description"
                         "end_time": timezone.localtime(timezone.now()) + timedelta(days=1),
                         "password": "123",
                         "allowed_ip_ranges": [],
+                        "division": "Intermediate",
                         "visible": True, "real_time_rank": True}
 
 
@@ -36,6 +37,7 @@ class ContestAdminAPITest(APITestCase):
         update_data = {"id": id, "title": "update title",
                        "description": "update description",
                        "password": "12345",
+                       "division": "Intermediate",
                        "visible": False, "real_time_rank": False}
         data = copy.deepcopy(self.data)
         data.update(update_data)

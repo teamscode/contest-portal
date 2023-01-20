@@ -12,7 +12,7 @@ class APITestCase(TestCase):
                     problem_permission=ProblemPermission.NONE):
         user = User.objects.create(username=username, admin_type=admin_type, problem_permission=problem_permission)
         user.set_password(password)
-        UserProfile.objects.create(user=user, team_members=[{"name": "test", "email": "test"}])
+        UserProfile.objects.create(user=user, team_members=[{"name": "test", "email": "test", "year": 1950}], division="Intermediate")
         user.save()
         if login:
             self.client.login(username=username, password=password)

@@ -261,7 +261,7 @@ class ContestProblemTest(ProblemCreateTestBase):
         resp = self.client.get(self.url + "?contest_id=" + str(self.contest["id"]))
         self.assertDictEqual(resp.data, {"error": "error", "data": "Contest has not started yet."})
 
-    def test_reguar_user_get_started_contest_problem(self):
+    def test_regular_user_get_started_contest_problem(self):
         self.create_user("test", "test123")
         contest = Contest.objects.first()
         contest.start_time = contest.start_time - timedelta(hours=1)

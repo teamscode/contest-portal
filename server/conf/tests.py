@@ -176,7 +176,7 @@ class ReleaseNoteAPITest(APITestCase):
 class DashboardInfoAPITest(APITestCase):
     def setUp(self):
         self.url = self.reverse("dashboard_info_api")
-        self.create_admin()
+        self.create_super_admin()
 
     def test_get_info(self):
         resp = self.client.get(self.url)
