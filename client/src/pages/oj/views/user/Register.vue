@@ -196,9 +196,7 @@
             <FormItem
               :prop="'team_members.' + index + '.parent_email'"
               style="padding-top: 0px"
-              :rules="
-                  { required: true, type: 'email', trigger: 'blur', max: 64}
-              "
+              :rules="{ required: true, type: 'email', trigger: 'blur', max: 64}"
             >
               <Input
                 v-model="formRegister.team_members[index].parent_email"
