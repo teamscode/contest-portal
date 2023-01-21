@@ -92,7 +92,6 @@
               >
                 <Input
                   v-model="formProfile.team_members[index].parent_email"
-                  :disabled="index===0"
                   type="text"
                 >
                 </Input>

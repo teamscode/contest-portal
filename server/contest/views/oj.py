@@ -48,7 +48,6 @@ class ContestAPI(APIView):
 
 
 class ContestListAPI(APIView):
-    @login_required
     def get(self, request):
         contests = Contest.objects.select_related("created_by").filter(visible=True)
         keyword = request.GET.get("keyword")
@@ -64,11 +63,13 @@ class ContestListAPI(APIView):
             else:
                 contests = contests.filter(start_time__lte=cur, end_time__gte=cur)
 
-        user_profile = request.user.userprofile
-        if request.user.is_tester():
-            contests = contests.filter(Q(division="Testing") | Q(division="All"))
-        elif not request.user.is_admin_role():
-            contests = contests.filter(Q(division=getattr(user_profile, "division")) | Q(division="All"))
+        if request.user.is_authenticated:
+            if request.user.is_tester():
+                contests = contests.filter(Q(division="Testing") | Q(division="Open"))
+            elif not request.user.is_admin_role():
+                contests = contests.filter(~Q(division="Testing"))
+        else:
+            contests = contests.filter(~Q(division="Testing"))
 
         return self.success(self.paginate_data(request, contests, ContestSerializer))
 

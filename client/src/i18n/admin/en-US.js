@@ -106,7 +106,7 @@ export const m = {
   Contest_Password: 'Password',
   Contest_Rule_Type: 'Contest Rule Type',
   Real_Time_Rank: 'Real Time Rank',
-  Contest_Status: 'Status',
+  Contest_Status: 'Visible to Contestants',
   Allowed_IP_Ranges: 'Allowed IP Ranges',
   CIDR_Network: 'CIDR Network',
   // Dashboard.vue

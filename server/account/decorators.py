@@ -126,7 +126,7 @@ def check_contest_permission(check_type="details"):
             if user.is_tester() and self.contest.division == "Testing":
                 return func(*args, **kwargs)
 
-            if (not self.contest.division == getattr(user_profile, "division")) and (not self.contest.division == "All"):
+            if (not self.contest.division == getattr(user_profile, "division")) and (not self.contest.division == "Open"):
                 return self.error("You do not have access to this division")
 
             # regular user get contest problems, ranks etc. before contest started

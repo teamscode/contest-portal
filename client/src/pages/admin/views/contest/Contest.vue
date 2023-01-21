@@ -77,24 +77,10 @@
                 placeholder="Division"
               >
                 <el-option
-                  label="Advanced"
-                  value="Advanced"
-                />
-                <el-option
-                  label="Intermediate"
-                  value="Intermediate"
-                />
-                <el-option
-                  label="Novice"
-                  value="Novice"
-                />
-                <el-option
-                  label="Testing"
-                  value="Testing"
-                />
-                <el-option
-                  label="All"
-                  value="All"
+                  v-for="division in CONTEST_DIVISIONS"
+                  :key="division"
+                  :label="division"
+                  :value="division"
                 />
               </el-select>
             </el-form-item>
@@ -141,6 +127,7 @@
 <script>
   import api from '../../api.js'
   import Simditor from '../../components/Simditor.vue'
+  import {CONTEST_DIVISIONS} from '@/utils/constants.js'
 
   export default {
     name: 'CreateContest',
@@ -208,6 +195,11 @@
         if (index !== -1) {
           this.contest.allowed_ip_ranges.splice(index, 1)
         }
+      }
+    },
+    computed: {
+      CONTEST_DIVISIONS () {
+        return CONTEST_DIVISIONS.concat('Testing', 'Open')
       }
     }
   }

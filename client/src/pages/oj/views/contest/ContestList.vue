@@ -6,7 +6,7 @@
         shadow
       >
         <div slot="title">
-          TeamsCode {{ $t('m.Contests') }}
+          Upcoming {{ $t('m.Contests') }}
         </div>
         <div slot="extra">
           <ul class="filter">
@@ -54,10 +54,12 @@
             v-for="contest in contests"
             :key="contest.title"
           >
-            <Row
+          <Row
               type="flex"
               justify="space-between"
               align="middle"
+              style="margin-top: 15px;"
+              v-if="profile.division===contest.division||contest.division==='Open'||contest.division==='Testing'"
             >
               <img
                 class="trophy"
@@ -81,6 +83,70 @@
                     />
                   </template>
                 </p>
+                <ul class="detail">
+                  <li>
+                    <Icon
+                      type="md-calendar"
+                      color="#3091f2"
+                    />
+                    {{ contest.start_time | localtime('YYYY-M-D HH:mm') }}
+                  </li>
+                  <li>
+                    <Icon
+                      type="md-time"
+                      color="#3091f2"
+                    />
+                    {{ getDuration(contest.start_time, contest.end_time) }}
+                  </li>
+                  <li>
+                    <Tag size="small">
+                      {{contest.division}}
+                    </Tag>
+                  </li>
+                </ul>
+              </Col>
+              <Col
+                :span="4"
+                style="text-align: center"
+              >
+                <Tag
+                  type="dot"
+                  :color="CONTEST_STATUS_REVERSE[contest.status].color"
+                >
+                  {{ $t('m.' + CONTEST_STATUS_REVERSE[contest.status].name.replace(/ /g, "_")) }}
+                </Tag>
+              </Col>
+            </Row>
+            <Row
+              type="flex"
+              justify="space-between"
+              align="middle"
+              v-else
+              style="filter: grayscale(1); margin-top: 15px;"
+            >
+              <img
+                class="trophy"
+                src="../../../../assets/Cup.png"
+              >
+              <Col
+                :span="18"
+                class="contest-main"
+              >
+                <Tooltip content="You are not registered for this division.  ">
+                  <p class="title">
+                    <span
+                      class="entry"
+                    >
+                      {{ contest.title }}
+                    </span>
+                    <template v-if="contest.contest_type != 'Public'">
+                      <Icon
+                        type="ios-lock-outline"
+                        size="20"
+                      />
+                    </template>
+                  </p>
+                </Tooltip>
                 <ul class="detail">
                   <li>
                     <Icon
@@ -217,7 +283,7 @@
       }
     },
     computed: {
-      ...mapGetters(['isAuthenticated', 'user'])
+      ...mapGetters(['isAuthenticated', 'user', 'profile'])
     },
     watch: {
       '$route' (newVal, oldVal) {

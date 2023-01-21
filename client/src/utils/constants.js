@@ -109,8 +109,7 @@ export const CONTEST_TYPE = {
 
 export const CONTEST_DIVISIONS = [
   'Advanced',
-  'Intermediate',
-  'Novice'
+  'Intermediate'
 ]
 
 export const USER_TYPE = {
