@@ -54,7 +54,7 @@ class TestCaseZipProcessor(object):
             with open(os.path.join(test_case_dir, item), "wb") as f:
                 content = zip_file.read(f"{dir}{item}").replace(b"\r\n", b"\n")
                 size_cache[item] = len(content)
-                if item.endswith(".out"):
+                if item.endswith(".out") or item.endswith(".a"):
                     md5_cache[item] = hashlib.md5(content.rstrip()).hexdigest()
                 f.write(content)
         test_case_info = {"spj": spj, "test_cases": {}}
@@ -89,24 +89,55 @@ class TestCaseZipProcessor(object):
     def filter_name_list(self, name_list, spj, dir=""):
         ret = []
         prefix = 1
+        print(name_list)
         if spj:
             while True:
-                in_name = f"{prefix}.in"
-                if f"{dir}{in_name}" in name_list:
-                    ret.append(in_name)
+                if f"{dir}{prefix}.in" in name_list:
+                    ret.append(f"{dir}{prefix}.in")
                     prefix += 1
-                    continue
+                elif f"{dir}{prefix}" in name_list:
+                    ret.append(f"{dir}{prefix}")
+                    prefix += 1
+                elif f"{dir}{prefix:02d}.in" in name_list:
+                    ret.append(f"{dir}{prefix:02d}.in")
+                    prefix += 1
+                elif f"{dir}{prefix:02d}" in name_list:
+                    ret.append(f"{dir}{prefix:02d}")
+                    prefix += 1
+                elif f"{dir}{prefix:03d}.in" in name_list:
+                    ret.append(f"{dir}{prefix:03d}.in")
+                    prefix += 1
+                elif f"{dir}{prefix:03d}" in name_list:
+                    ret.append(f"{dir}{prefix:03d}")
+                    prefix += 1
                 else:
                     return sorted(ret, key=natural_sort_key)
         else:
             while True:
-                in_name = f"{prefix}.in"
-                out_name = f"{prefix}.out"
-                if f"{dir}{in_name}" in name_list and f"{dir}{out_name}" in name_list:
-                    ret.append(in_name)
-                    ret.append(out_name)
+                if f"{dir}{prefix}.in" in name_list and f"{dir}{prefix}.out" in name_list:
+                    ret.append(f"{dir}{prefix}.in")
+                    ret.append(f"{dir}{prefix}.out")
                     prefix += 1
-                    continue
+                elif f"{dir}{prefix}" in name_list and f"{dir}{prefix}.a" in name_list:
+                    ret.append(f"{dir}{prefix}")
+                    ret.append(f"{dir}{prefix}.a")
+                    prefix += 1
+                elif f"{dir}{prefix:02d}.in" in name_list and f"{dir}{prefix:02d}.out" in name_list:
+                    ret.append(f"{dir}{prefix:02d}.in")
+                    ret.append(f"{dir}{prefix:02d}.out")
+                    prefix += 1
+                elif f"{dir}{prefix:02d}" in name_list and f"{dir}{prefix:02d}.a" in name_list:
+                    ret.append(f"{dir}{prefix:02d}")
+                    ret.append(f"{dir}{prefix:02d}.a")
+                    prefix += 1
+                elif f"{dir}{prefix:03d}.in" in name_list and f"{dir}{prefix:03d}.out" in name_list:
+                    ret.append(f"{dir}{prefix:03d}.in")
+                    ret.append(f"{dir}{prefix:03d}.out")
+                    prefix += 1
+                elif f"{dir}{prefix:03d}" in name_list and f"{dir}{prefix:03d}.a" in name_list:
+                    ret.append(f"{dir}{prefix:03d}")
+                    ret.append(f"{dir}{prefix:03d}.a")
+                    prefix += 1
                 else:
                     return sorted(ret, key=natural_sort_key)
 
