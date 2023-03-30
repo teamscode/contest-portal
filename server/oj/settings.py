@@ -253,3 +253,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://dashboard.teamscode.org",
     "http://localhost:3000",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
