@@ -29,3 +29,4 @@ XlsxWriter==3.0.1
 django-dramatiq==0.10.0
 dramatiq==1.11.0
 django-dbconn-retry==0.1.5
+django-cors-headers==3.14.0

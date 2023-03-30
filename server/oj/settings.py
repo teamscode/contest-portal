@@ -34,6 +34,7 @@ VENDOR_APPS = [
     'rest_framework',
     'django_dramatiq',
     'django_dbconn_retry',
+    'corsheaders'
 ]
 
 if production_env:
@@ -65,6 +66,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'account.middleware.AdminRoleRequiredMiddleware',
     'account.middleware.SessionRecordMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
     # 'account.middleware.LogSqlMiddleware',
 )
 ROOT_URLCONF = 'oj.urls'
@@ -243,3 +245,5 @@ RAVEN_CONFIG = {
 IP_HEADER = "HTTP_X_REAL_IP"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True
