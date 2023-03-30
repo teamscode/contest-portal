@@ -247,16 +247,6 @@ IP_HEADER = "HTTP_X_REAL_IP"
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://contest.teamscode.org",
-    "https://spring23.teamscode.org"
-    "https://dashboard.teamscode.org",
-    "http://dashboard.teamscode.org",
-    "http://localhost:3000",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://contest.teamscode.org",
-    "https://spring23.teamscode.org"
     "https://dashboard.teamscode.org",
     "http://dashboard.teamscode.org",
     "http://localhost:3000",
