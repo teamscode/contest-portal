@@ -254,4 +254,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://contest.teamscode.org",
+    "https://spring23.teamscode.org"
+    "https://dashboard.teamscode.org",
+    "http://dashboard.teamscode.org",
+    "http://localhost:3000",
+]
+
 CORS_ALLOW_CREDENTIALS = True
