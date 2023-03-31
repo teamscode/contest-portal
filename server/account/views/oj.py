@@ -435,7 +435,7 @@ class ProfileProblemDisplayIDRefreshAPI(APIView):
 
 class OpenAPIAppkeyAPI(APIView):
     @login_required
-    def post(self, request):
+    def get(self, request):
         user = request.user
         if not user.open_api:
             return self.error("OpenAPI function is not available")
