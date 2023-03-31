@@ -263,7 +263,7 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'HTTP_APPKEY'
+    'APPKEY'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
