@@ -121,7 +121,7 @@ class APIView(View):
             limit = int(request.GET.get("limit", "10"))
         except ValueError:
             limit = 10
-        if limit < 0 or limit > 250:
+        if limit < 0 or limit > 1000:
             limit = 10
         try:
             offset = int(request.GET.get("offset", "0"))
