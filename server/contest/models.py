@@ -40,12 +40,6 @@ class Contest(models.Model):
             return ContestType.PASSWORD_PROTECTED_CONTEST
         return ContestType.PUBLIC_CONTEST
 
-    # 是否有权查看problem 的一些统计信息 诸如submission_number, accepted_number 等
-    def problem_details_permission(self, user):
-        return self.status == ContestStatus.CONTEST_ENDED or \
-            user.is_authenticated and user.is_contest_admin(self) or \
-            self.real_time_rank
-
     class Meta:
         db_table = "contest"
         ordering = ("-start_time",)

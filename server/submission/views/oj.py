@@ -49,14 +49,6 @@ class SubmissionAPI(APIView):
     @login_required
     def post(self, request):
         data = request.data
-        hide_id = False
-        if data.get("contest_id"):
-            error = self.check_contest_permission(request)
-            if error:
-                return error
-            contest = self.contest
-            if not contest.problem_details_permission(request.user):
-                hide_id = True
 
         if data.get("captcha"):
             if not Captcha(request).check(data["captcha"]):
@@ -85,10 +77,8 @@ class SubmissionAPI(APIView):
         # use this for debug
         # JudgeDispatcher(submission.id, problem.id).judge()
         judge_task.send(submission.id, problem.id)
-        if hide_id:
-            return self.success()
-        else:
-            return self.success({"submission_id": submission.id})
+
+        return self.success({"submission_id": submission.id})
 
     @login_required
     def get(self, request):

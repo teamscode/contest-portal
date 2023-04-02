@@ -93,17 +93,11 @@ class ContestProblemAPI(APIView):
                                                                            visible=True)
             except Problem.DoesNotExist:
                 return self.error("Problem does not exist.")
-            if self.contest.problem_details_permission(request.user):
-                problem_data = ProblemSerializer(problem).data
-                self._add_problem_status(request, [problem_data, ])
-            else:
-                problem_data = ProblemSafeSerializer(problem).data
+            problem_data = ProblemSerializer(problem).data
+            self._add_problem_status(request, [problem_data, ])
             return self.success(problem_data)
 
         contest_problems = Problem.objects.select_related("created_by").filter(contest=self.contest, visible=True)
-        if self.contest.problem_details_permission(request.user):
-            data = ProblemSerializer(contest_problems, many=True).data
-            self._add_problem_status(request, data)
-        else:
-            data = ProblemSafeSerializer(contest_problems, many=True).data
+        data = ProblemSerializer(contest_problems, many=True).data
+        self._add_problem_status(request, data)
         return self.success(data)

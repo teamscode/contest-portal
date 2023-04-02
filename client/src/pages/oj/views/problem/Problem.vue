@@ -110,7 +110,7 @@
               v-if="statusVisible"
               class="status"
             >
-              <template v-if="!contestID || (contestID)">
+              <template>
                 <span>{{ $t('m.Status') }}</span>
                 <Tag
                   type="dot"
@@ -184,7 +184,6 @@
         </template>
 
         <VerticalMenu-item
-          v-if="!contestID"
           :route="submissionRoute"
         >
           <Icon type="md-list" />
@@ -487,6 +486,8 @@
             this.statusVisible = false
           })
         }
+
+        submitFunc(data, true)
       },
       onCopy (event) {
         this.$success('Copied!')
