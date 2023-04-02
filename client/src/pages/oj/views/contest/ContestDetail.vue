@@ -84,7 +84,6 @@
         </VerticalMenu-item>
 
         <VerticalMenu-item
-          v-if="OIContestRealTimePermission"
           :disabled="contestMenuDisabled"
           :route="{name: 'contest-submission-list'}"
         >

@@ -89,9 +89,8 @@
       getContestProblems () {
         this.$store.dispatch('getContestProblems').then(res => {
           if (this.isAuthenticated) {
-            if (this.OIContestRealTimePermission) {
-              this.addStatusColumn(this.ACMTableColumns, res.data.data)
-            }
+            this.addStatusColumn(this.ACMTableColumns, res.data.data)
+            this.addStatusColumn(this.OITableColumns, res.data.data)
           }
         })
       },

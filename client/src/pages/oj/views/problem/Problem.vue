@@ -110,7 +110,7 @@
               v-if="statusVisible"
               class="status"
             >
-              <template v-if="!contestID || (contestID && OIContestRealTimePermission)">
+              <template v-if="!contestID || (contestID)">
                 <span>{{ $t('m.Status') }}</span>
                 <Tag
                   type="dot"
@@ -120,14 +120,6 @@
                   {{ $t('m.' + submissionStatus.text.replace(/ /g, "_")) }}
                 </Tag>
               </template>
-              <template v-else-if="contestID && !OIContestRealTimePermission">
-                <Alert
-                  type="success"
-                  show-icon
-                >
-                  {{ $t('m.Submitted_successfully') }}
-                </Alert>
-              </template>
             </div>
             <div v-else-if="problem.my_status === 0">
               <Alert
@@ -135,14 +127,6 @@
                 show-icon
               >
                 {{ $t('m.You_have_solved_the_problem') }}
-              </Alert>
-            </div>
-            <div v-else-if="contestID && !OIContestRealTimePermission && submissionExists">
-              <Alert
-                type="success"
-                show-icon
-              >
-                {{ $t('m.You_have_submitted_a_solution') }}
               </Alert>
             </div>
             <div v-if="contestEnded">
@@ -200,7 +184,7 @@
         </template>
 
         <VerticalMenu-item
-          v-if="!contestID || OIContestRealTimePermission"
+          v-if="!contestID"
           :route="submissionRoute"
         >
           <Icon type="md-list" />
@@ -502,28 +486,6 @@
             this.submitting = false
             this.statusVisible = false
           })
-        }
-
-        if (!this.OIContestRealTimePermission) {
-          if (this.submissionExists) {
-            this.$Modal.confirm({
-              title: '',
-              content: '<h3>' + this.$i18n.t('m.You_have_submission_in_this_problem_sure_to_cover_it') + '<h3>',
-              onOk: () => {
-                // 暂时解决对话框与后面提示对话框冲突的问题(否则一闪而过）
-                setTimeout(() => {
-                  submitFunc(data, false)
-                }, 1000)
-              },
-              onCancel: () => {
-                this.submitting = false
-              }
-            })
-          } else {
-            submitFunc(data, false)
-          }
-        } else {
-          submitFunc(data, true)
         }
       },
       onCopy (event) {
