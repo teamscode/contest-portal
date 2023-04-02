@@ -5,11 +5,27 @@
         {{ $t('m.Problems_List') }}
       </div>
       <Table
+        v-if="OIContestRealTimePermission"
         context-menu
         show-context-menu
         :columns="ACMTableColumns"
         :data="problems"
         :no-data-text="$t('m.No_Problems')"
+        @on-row-click="goContestProblem"
+        @on-contextmenu="handleContextMenu"
+        class="problemlist"
+      >
+        <template slot="contextMenu">
+            <DropdownItem @click.native="openInNewTab">Open in New Tab</DropdownItem>
+        </template>
+      </Table>
+      <Table
+        v-else
+        context-menu
+        show-context-menu
+        :data="problems"
+        :columns="OITableColumns"
+        no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
         @on-contextmenu="handleContextMenu"
         class="problemlist"
@@ -73,7 +89,12 @@
       getContestProblems () {
         this.$store.dispatch('getContestProblems').then(res => {
           if (this.isAuthenticated) {
-            this.addStatusColumn(this.ACMTableColumns, res.data.data)
+            if (this.OIContestRealTimePermission) {
+              this.addStatusColumn(this.ACMTableColumns, res.data.data)
+            } else {
+              this.addStatusColumn(this.OITableColumns, res.data.data)
+            }
+            console.log(this.OITableColumns)
           }
         })
       },
