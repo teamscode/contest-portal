@@ -67,6 +67,11 @@ class SubmissionAPI(APIView):
 
         if data["language"] not in problem.languages:
             return self.error(f"{data['language']} is now allowed in the problem")
+        
+        # Make sure to modify CreateSubmissionSerializer as well
+        if len(data["code"].encode("utf-8")) > 50000:
+            return self.error("Submitted code must not exceed 50KB")
+        
         submission = Submission.objects.create(user_id=request.user.id,
                                                username=request.user.username,
                                                language=data["language"],
