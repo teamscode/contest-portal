@@ -93,50 +93,50 @@ class TestCaseZipProcessor(object):
         if spj:
             while True:
                 if f"{dir}{prefix}.in" in name_list:
-                    ret.append(f"{dir}{prefix}.in")
+                    ret.append(f"{prefix}.in")
                     prefix += 1
                 elif f"{dir}{prefix}" in name_list:
-                    ret.append(f"{dir}{prefix}")
+                    ret.append(f"{prefix}")
                     prefix += 1
                 elif f"{dir}{prefix:02d}.in" in name_list:
-                    ret.append(f"{dir}{prefix:02d}.in")
+                    ret.append(f"{prefix:02d}.in")
                     prefix += 1
                 elif f"{dir}{prefix:02d}" in name_list:
-                    ret.append(f"{dir}{prefix:02d}")
+                    ret.append(f"{prefix:02d}")
                     prefix += 1
                 elif f"{dir}{prefix:03d}.in" in name_list:
-                    ret.append(f"{dir}{prefix:03d}.in")
+                    ret.append(f"{prefix:03d}.in")
                     prefix += 1
                 elif f"{dir}{prefix:03d}" in name_list:
-                    ret.append(f"{dir}{prefix:03d}")
+                    ret.append(f"{prefix:03d}")
                     prefix += 1
                 else:
                     return sorted(ret, key=natural_sort_key)
         else:
             while True:
                 if f"{dir}{prefix}.in" in name_list and f"{dir}{prefix}.out" in name_list:
-                    ret.append(f"{dir}{prefix}.in")
-                    ret.append(f"{dir}{prefix}.out")
+                    ret.append(f"{prefix}.in")
+                    ret.append(f"{prefix}.out")
                     prefix += 1
                 elif f"{dir}{prefix}" in name_list and f"{dir}{prefix}.a" in name_list:
-                    ret.append(f"{dir}{prefix}")
-                    ret.append(f"{dir}{prefix}.a")
+                    ret.append(f"{prefix}")
+                    ret.append(f"{prefix}.a")
                     prefix += 1
                 elif f"{dir}{prefix:02d}.in" in name_list and f"{dir}{prefix:02d}.out" in name_list:
-                    ret.append(f"{dir}{prefix:02d}.in")
-                    ret.append(f"{dir}{prefix:02d}.out")
+                    ret.append(f"{prefix:02d}.in")
+                    ret.append(f"{prefix:02d}.out")
                     prefix += 1
                 elif f"{dir}{prefix:02d}" in name_list and f"{dir}{prefix:02d}.a" in name_list:
-                    ret.append(f"{dir}{prefix:02d}")
-                    ret.append(f"{dir}{prefix:02d}.a")
+                    ret.append(f"{prefix:02d}")
+                    ret.append(f"{prefix:02d}.a")
                     prefix += 1
                 elif f"{dir}{prefix:03d}.in" in name_list and f"{dir}{prefix:03d}.out" in name_list:
-                    ret.append(f"{dir}{prefix:03d}.in")
-                    ret.append(f"{dir}{prefix:03d}.out")
+                    ret.append(f"{prefix:03d}.in")
+                    ret.append(f"{prefix:03d}.out")
                     prefix += 1
                 elif f"{dir}{prefix:03d}" in name_list and f"{dir}{prefix:03d}.a" in name_list:
-                    ret.append(f"{dir}{prefix:03d}")
-                    ret.append(f"{dir}{prefix:03d}.a")
+                    ret.append(f"{prefix:03d}")
+                    ret.append(f"{prefix:03d}.a")
                     prefix += 1
                 else:
                     return sorted(ret, key=natural_sort_key)
@@ -621,6 +621,7 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                                                              time_limit=problem_info["time_limit"],
                                                              memory_limit=problem_info["memory_limit"],
                                                              samples=problem_info["samples"],
+                                                             template=problem_info["template"],
                                                              source=problem_info["source"],
                                                              spj=spj,
                                                              spj_code=problem_info["spj"]["code"] if spj else None,
