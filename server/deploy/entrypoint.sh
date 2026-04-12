@@ -62,6 +62,7 @@ do
     python3 manage.py inituser --username root --password rootroot --name "TeamsCode Admin" --email exec@teamscode.org --teamname "TeamsCode Admin" --action create_super_admin &&
     echo "from options.options import SysOptions; SysOptions.judge_server_token='$JUDGE_SERVER_TOKEN'" | python manage.py shell &&
     echo "from conf.models import JudgeServer; JudgeServer.objects.update(task_number=0)" | python manage.py shell &&
+    echo "from options.options import SysOptions; SysOptions.reset_languages()" | python manage.py shell &&
     break
     n=$(($n+1))
     echo "Failed to migrate, going to retry..."
