@@ -16,14 +16,16 @@ FROM mirror.gcr.io/library/python:3.11-alpine
 ENV OJ_ENV production
 
 WORKDIR /app
-COPY server/. .
 
 HEALTHCHECK --interval=5s --retries=3 CMD python3 /app/deploy/health_check.py
 
-RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor jpeg-dev zlib-dev postgresql-dev freetype-dev && \
-    pip install --no-cache-dir -r /app/deploy/requirements.txt && \
-    apk del build-base --purge
+RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor jpeg-dev zlib-dev postgresql-dev freetype-dev
+RUN mkdir /app/deploy
+COPY server/deploy/requirements.txt /app/deploy/requirements.txt
+RUN pip install --no-cache-dir -r /app/deploy/requirements.txt
+RUN apk del build-base --purge
 
+COPY server/. .
 COPY --from=frontend-build-env /build/dist ./dist
 
 ENTRYPOINT ["sh", "/app/deploy/entrypoint.sh"]
