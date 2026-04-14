@@ -20,6 +20,7 @@ WORKDIR /app
 HEALTHCHECK --interval=5s --retries=3 CMD python3 /app/deploy/health_check.py
 
 RUN apk add --update --no-cache build-base nginx openssl curl unzip supervisor jpeg-dev zlib-dev postgresql-dev freetype-dev
+RUN curl -fsSL https://raw.githubusercontent.com/MikeMirzayanov/testlib/master/testlib.h -o /usr/include/testlib.h
 RUN mkdir /app/deploy
 COPY server/deploy/requirements.txt /app/deploy/requirements.txt
 RUN pip install --no-cache-dir -r /app/deploy/requirements.txt
