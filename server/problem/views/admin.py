@@ -630,7 +630,7 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                                                              spj_version=rand_str(8) if spj else "",
                                                              languages=SysOptions.language_names,
                                                              created_by=request.user,
-                                                             visible=False,
+                                                             visible=True,
                                                              difficulty=Difficulty.MID,
                                                              total_score=sum(item["score"] for item in test_case_score),
                                                              test_case_id=test_case_id
