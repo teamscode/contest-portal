@@ -47,7 +47,7 @@ _c_lang_spj_compile = {
 
 _c_lang_spj_config = {
     "exe_name": "spj-{spj_version}",
-    "command": "{exe_path} {in_file_path} {user_out_file_path} {in_file_path}",
+    "command": "{exe_path} {in_file_path} {user_out_file_path} {ans_file_path}",
     "seccomp_rule": "general"
 }
 
@@ -128,7 +128,7 @@ _cpp_lang_spj_compile = {
 
 _cpp_lang_spj_config = {
     "exe_name": "spj-{spj_version}",
-    "command": "{exe_path} {in_file_path} {user_out_file_path} {in_file_path}",
+    "command": "{exe_path} {in_file_path} {user_out_file_path} {ans_file_path}",
     "seccomp_rule": "general"
 }
 
