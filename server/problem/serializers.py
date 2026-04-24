@@ -135,6 +135,16 @@ class ProblemSafeSerializer(BaseProblemSerializer):
                    "difficulty", "submission_number", "accepted_number", "statistic_info")
 
 
+class ProblemListSerializer(serializers.ModelSerializer):
+    tags = serializers.SlugRelatedField(many=True, slug_field="name", read_only=True)
+
+    class Meta:
+        model = Problem
+        fields = ("id", "_id", "title", "tags", "difficulty",
+                  "submission_number", "accepted_number", "statistic_info",
+                  "total_score", "time_limit", "memory_limit")
+
+
 class ContestProblemMakePublicSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     display_id = serializers.CharField(max_length=32)

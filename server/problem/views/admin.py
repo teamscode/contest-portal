@@ -1,7 +1,10 @@
 import hashlib
 import json
 import os
-# import shutil
+import random
+import re as _re
+import shutil
+import string
 import tempfile
 import zipfile
 from wsgiref.util import FileWrapper
@@ -580,6 +583,27 @@ class ExportProblemAPI(APIView):
         return resp
 
 
+_IMG_SRC_RE = _re.compile(r'(<img[^>]*\s)src="images/([^"]+)"')
+
+
+def _extract_images(zip_file, problem_index, *html_fields):
+    """Extract images from {problem_index}/images/ in zip, save to UPLOAD_DIR, rewrite src."""
+    namelist = set(zip_file.namelist())
+
+    def repl(m):
+        filename = m.group(2)
+        zip_path = f"{problem_index}/images/{filename}"
+        if zip_path not in namelist:
+            return m.group(0)
+        ext = os.path.splitext(filename)[1]
+        name = "".join(random.choices(string.ascii_lowercase + string.digits, k=12)) + ext
+        with open(os.path.join(settings.UPLOAD_DIR, name), "wb") as f:
+            f.write(zip_file.read(zip_path))
+        return f'{m.group(1)}src="{settings.UPLOAD_PREFIX}/{name}"'
+
+    return [_IMG_SRC_RE.sub(repl, field) for field in html_fields]
+
+
 class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
     request_parsers = ()
 
@@ -624,14 +648,20 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                         # process test case
                         _, test_case_id = self.process_zip(tmp_file, spj=spj, dir=f"{i}/testcase/")
 
+                        desc, input_desc, output_desc, hint = _extract_images(
+                            zip_file, i,
+                            problem_info["description"]["value"],
+                            problem_info["input_description"]["value"],
+                            problem_info["output_description"]["value"],
+                            problem_info["hint"]["value"],
+                        )
+
                         problem_obj = Problem.objects.create(_id=problem_info["display_id"],
                                                              title=problem_info["title"],
-                                                             description=problem_info["description"]["value"],
-                                                             input_description=problem_info["input_description"][
-                                                                 "value"],
-                                                             output_description=problem_info["output_description"][
-                                                                 "value"],
-                                                             hint=problem_info["hint"]["value"],
+                                                             description=desc,
+                                                             input_description=input_desc,
+                                                             output_description=output_desc,
+                                                             hint=hint,
                                                              test_case_score=test_case_score if test_case_score else [],
                                                              time_limit=problem_info["time_limit"],
                                                              memory_limit=problem_info["memory_limit"],

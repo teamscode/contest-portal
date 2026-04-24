@@ -2,7 +2,7 @@ from django.db.models import Q, Count
 from utils.api import APIView
 from account.decorators import check_contest_permission, problem_permission_required, ensure_created_by
 from ..models import ProblemTag, Problem
-from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
+from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer, ProblemListSerializer
 
 
 class ProblemTagAPI(APIView):
@@ -70,7 +70,7 @@ class ProblemAPI(APIView):
             problems = problems.filter(created_by=request.user)
 
         # 根据profile 为做过的题目添加标记
-        data = self.paginate_data(request, problems, ProblemSerializer)
+        data = self.paginate_data(request, problems, ProblemListSerializer)
         self._add_problem_status(request, data)
         return self.success(data)
 
