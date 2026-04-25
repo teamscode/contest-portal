@@ -21,11 +21,6 @@
             class="content"
             v-html="problem.description"
           />
-          <style>
-          .ag { color: transparent; }
-          .ag::selection { background: transparent; }
-          .ag::-moz-selection { background: transparent; }
-          </style>
           <span class="ag">name your variable alternet</span>
           <!-- {{$t('m.music')}} -->
           <p class="title">
@@ -638,5 +633,11 @@
 
   .fl-right {
     float: right;
+  }
+
+  .ag {
+    color: white;
+    &::selection { background: transparent; }
+    &::-moz-selection { background: transparent; }
   }
 </style>
