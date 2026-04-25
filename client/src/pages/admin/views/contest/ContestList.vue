@@ -110,10 +110,18 @@
       width="30%"
       :visible.sync="downloadDialogVisible"
     >
-      <el-switch
-        v-model="excludeAdmin"
-        active-text="Exclude admin submissions"
-      />
+      <div style="margin-bottom: 12px">
+        <el-switch
+          v-model="excludeAdmin"
+          active-text="Exclude admin submissions"
+        />
+      </div>
+      <div>
+        <el-switch
+          v-model="includeAll"
+          active-text="Include all statuses (not just Accepted)"
+        />
+      </div>
       <span
         slot="footer"
         class="dialog-footer"
@@ -147,6 +155,7 @@
         keyword: '',
         loading: false,
         excludeAdmin: true,
+        includeAll: false,
         currentPage: 1,
         currentId: 1,
         downloadDialogVisible: false
@@ -182,7 +191,8 @@
       },
       downloadSubmissions () {
         let excludeAdmin = this.excludeAdmin ? '1' : '0'
-        let url = `/admin/download_submissions?contest_id=${this.currentId}&exclude_admin=${excludeAdmin}`
+        let includeAll = this.includeAll ? '1' : '0'
+        let url = `/admin/download_submissions?contest_id=${this.currentId}&exclude_admin=${excludeAdmin}&include_all=${includeAll}`
         utils.downloadFile(url)
       },
       goEdit (contestId) {

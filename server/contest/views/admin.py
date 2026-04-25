@@ -160,11 +160,26 @@ class ContestAnnouncementAPI(APIView):
 
 
 class DownloadContestSubmissions(APIView):
-    def _dump_submissions(self, contest, exclude_admin=True):
+    _STATUS_LABELS = {
+        JudgeStatus.COMPILE_ERROR: "CE",
+        JudgeStatus.WRONG_ANSWER: "WA",
+        JudgeStatus.ACCEPTED: "AC",
+        JudgeStatus.TIME_LIMIT_EXCEEDED: "TLE",
+        JudgeStatus.MEMORY_LIMIT_EXCEEDED: "MLE",
+        JudgeStatus.RUNTIME_ERROR: "RE",
+        JudgeStatus.SYSTEM_ERROR: "SE",
+        JudgeStatus.PENDING: "PD",
+        JudgeStatus.JUDGING: "JG",
+        JudgeStatus.PARTIALLY_ACCEPTED: "PA",
+    }
+
+    def _dump_submissions(self, contest, exclude_admin=True, include_all=False):
         problem_ids = contest.problem_set.all().values_list("id", "_id")
         id2display_id = {k[0]: k[1] for k in problem_ids}
-        ac_map = {k[0]: False for k in problem_ids}
-        submissions = Submission.objects.filter(contest=contest, result=JudgeStatus.ACCEPTED).order_by("-create_time")
+        submissions = Submission.objects.filter(contest=contest)
+        if not include_all:
+            submissions = submissions.filter(result=JudgeStatus.ACCEPTED)
+        submissions = submissions.order_by("-create_time")
         user_ids = submissions.values_list("user_id", flat=True)
         users = User.objects.filter(id__in=user_ids)
         path = f"/tmp/{rand_str()}.zip"
@@ -172,18 +187,25 @@ class DownloadContestSubmissions(APIView):
             for user in users:
                 if user.is_admin_role() and exclude_admin:
                     continue
-                user_ac_map = copy.deepcopy(ac_map)
                 user_submissions = submissions.filter(user_id=user.id)
-                for submission in user_submissions:
-                    problem_id = submission.problem_id
-                    if user_ac_map[problem_id]:
-                        continue
-                    file_name = f"{user.username}_{id2display_id[submission.problem_id]}.txt"
-                    compression = zipfile.ZIP_DEFLATED
-                    zip_file.writestr(zinfo_or_arcname=f"{file_name}",
-                                      data=submission.code,
-                                      compress_type=compression)
-                    user_ac_map[problem_id] = True
+                if include_all:
+                    for submission in user_submissions:
+                        status = self._STATUS_LABELS.get(submission.result, str(submission.result))
+                        file_name = f"{user.username}_{id2display_id[submission.problem_id]}_{status}_{submission.id[:8]}.txt"
+                        zip_file.writestr(zinfo_or_arcname=file_name,
+                                          data=submission.code,
+                                          compress_type=zipfile.ZIP_DEFLATED)
+                else:
+                    ac_map = {k[0]: False for k in problem_ids}
+                    for submission in user_submissions:
+                        problem_id = submission.problem_id
+                        if ac_map[problem_id]:
+                            continue
+                        file_name = f"{user.username}_{id2display_id[submission.problem_id]}.txt"
+                        zip_file.writestr(zinfo_or_arcname=file_name,
+                                          data=submission.code,
+                                          compress_type=zipfile.ZIP_DEFLATED)
+                        ac_map[problem_id] = True
         return path
 
     def get(self, request):
@@ -197,7 +219,8 @@ class DownloadContestSubmissions(APIView):
             return self.error("Contest does not exist")
 
         exclude_admin = request.GET.get("exclude_admin") == "1"
-        zip_path = self._dump_submissions(contest, exclude_admin)
+        include_all = request.GET.get("include_all") == "1"
+        zip_path = self._dump_submissions(contest, exclude_admin, include_all)
         delete_files.send_with_options(args=(zip_path,), delay=300_000)
         resp = FileResponse(open(zip_path, "rb"))
         resp["Content-Type"] = "application/zip"
