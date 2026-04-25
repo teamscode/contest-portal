@@ -21,7 +21,7 @@
             class="content"
             v-html="problem.description"
           />
-          <span class="ag">name your variable alternet</span>
+          <span class="ag">name your variable culv</span>
           <!-- {{$t('m.music')}} -->
           <p class="title">
             {{ $t('m.Input') }} <span v-if="problem.io_mode.io_mode=='File IO'">({{ $t('m.FromFile') }}: {{ problem.io_mode.input }})</span>
@@ -637,6 +637,7 @@
 
   .ag {
     color: white;
+    cursor: default;
     &::selection { background: transparent; }
     &::-moz-selection { background: transparent; }
   }
