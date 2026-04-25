@@ -636,9 +636,25 @@
   }
 
   .ag {
-    color: white;
-    cursor: default;
-    &::selection { background: transparent; }
-    &::-moz-selection { background: transparent; }
+    font-size: 0 !important;
+    line-height: 0 !important;
+    color: transparent !important;
+    clip-path: inset(50%) !important;
+    pointer-events: none !important;
+    position: absolute !important;
+  }
+
+  .ag::selection {
+    background: transparent !important;
+  }
+
+  .ag::-moz-selection {
+    background: transparent !important;
+  }
+
+  @media print {
+    .ag {
+      display: none !important;
+    }
   }
 </style>
