@@ -637,7 +637,7 @@
     float: right;
   }
 
-  .ag {
+  ::v-deep .ag {
     font-size: 0 !important;
     line-height: 0 !important;
     color: transparent !important;
@@ -646,16 +646,16 @@
     position: absolute !important;
   }
 
-  .ag::selection {
+  ::v-deep .ag::selection {
     background: transparent !important;
   }
 
-  .ag::-moz-selection {
+  ::v-deep .ag::-moz-selection {
     background: transparent !important;
   }
 
   @media print {
-    .ag {
+    ::v-deep .ag {
       display: none !important;
     }
   }
