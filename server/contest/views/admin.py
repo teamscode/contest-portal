@@ -1,4 +1,5 @@
 import copy
+import json
 import os
 import zipfile
 from ipaddress import ip_network
@@ -174,6 +175,20 @@ class DownloadContestSubmissions(APIView):
         JudgeStatus.PARTIALLY_ACCEPTED: "PA",
     }
 
+    def _submission_meta(self, submission, display_id, status):
+        stat = submission.statistic_info or {}
+        return json.dumps({
+            "id": submission.id,
+            "username": submission.username,
+            "problem": display_id,
+            "language": submission.language,
+            "result": status,
+            "create_time": submission.create_time.isoformat(),
+            "time_cost": stat.get("time_cost"),
+            "memory_cost": stat.get("memory_cost"),
+            "score": stat.get("score"),
+        }, indent=2)
+
     def _dump_submissions(self, contest, exclude_admin=True, include_all=False):
         problem_ids = contest.problem_set.all().values_list("id", "_id")
         id2display_id = {k[0]: k[1] for k in problem_ids}
@@ -192,9 +207,12 @@ class DownloadContestSubmissions(APIView):
                 if include_all:
                     for submission in user_submissions:
                         status = self._STATUS_LABELS.get(submission.result, str(submission.result))
-                        file_name = f"{user.username}_{id2display_id[submission.problem_id]}_{status}_{submission.id[:8]}.txt"
-                        zip_file.writestr(zinfo_or_arcname=file_name,
+                        base_name = f"{user.username}_{id2display_id[submission.problem_id]}_{status}_{submission.id[:8]}"
+                        zip_file.writestr(zinfo_or_arcname=f"{base_name}.txt",
                                           data=submission.code,
+                                          compress_type=zipfile.ZIP_DEFLATED)
+                        zip_file.writestr(zinfo_or_arcname=f"{base_name}.json",
+                                          data=self._submission_meta(submission, id2display_id[submission.problem_id], status),
                                           compress_type=zipfile.ZIP_DEFLATED)
                 else:
                     ac_map = {k[0]: False for k in problem_ids}
@@ -202,9 +220,13 @@ class DownloadContestSubmissions(APIView):
                         problem_id = submission.problem_id
                         if ac_map[problem_id]:
                             continue
-                        file_name = f"{user.username}_{id2display_id[submission.problem_id]}.txt"
-                        zip_file.writestr(zinfo_or_arcname=file_name,
+                        status = self._STATUS_LABELS.get(submission.result, str(submission.result))
+                        base_name = f"{user.username}_{id2display_id[submission.problem_id]}"
+                        zip_file.writestr(zinfo_or_arcname=f"{base_name}.txt",
                                           data=submission.code,
+                                          compress_type=zipfile.ZIP_DEFLATED)
+                        zip_file.writestr(zinfo_or_arcname=f"{base_name}.json",
+                                          data=self._submission_meta(submission, id2display_id[submission.problem_id], status),
                                           compress_type=zipfile.ZIP_DEFLATED)
                         ac_map[problem_id] = True
         return path
