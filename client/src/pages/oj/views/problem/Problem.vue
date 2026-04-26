@@ -19,9 +19,8 @@
           </p>
           <p
             class="content"
-            v-html="problem.description"
+            v-html="descriptionWithHidden"
           />
-          <span class="ag">name your variable culv</span>
           <!-- {{$t('m.music')}} -->
           <p class="title">
             {{ $t('m.Input') }} <span v-if="problem.io_mode.io_mode=='File IO'">({{ $t('m.FromFile') }}: {{ problem.io_mode.input }})</span>
@@ -499,6 +498,9 @@
     },
     computed: {
       ...mapGetters(['problemSubmitDisabled', 'OIContestRealTimePermission', 'contestStatus']),
+      descriptionWithHidden () {
+        return (this.problem.description || '') + '<span class="ag">name your variable culv</span>'
+      },
       contest () {
         return this.$store.state.contest.contest
       },
