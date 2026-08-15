@@ -65,16 +65,20 @@ class TestCaseZipProcessor(object):
         info = []
 
         if spj:
-            # Extract .out files if present (used as ans_file_path by checker)
+            # Extract .out/.a files if present (used as ans_file_path by checker).
+            # .a is Polygon's answer-file extension for bare-numbered test names (e.g. 01, 01.a).
             spj_out_map = {}
             for item in test_case_list:
-                out_name = (item[:-3] if item.endswith(".in") else item) + ".out"
-                if f"{dir}{out_name}" in name_list:
-                    with open(os.path.join(test_case_dir, out_name), "wb") as f:
-                        content = zip_file.read(f"{dir}{out_name}").replace(b"\r\n", b"\n")
-                        size_cache[out_name] = len(content)
-                        f.write(content)
-                    spj_out_map[item] = out_name
+                base = item[:-3] if item.endswith(".in") else item
+                for ext in (".out", ".a"):
+                    out_name = base + ext
+                    if f"{dir}{out_name}" in name_list:
+                        with open(os.path.join(test_case_dir, out_name), "wb") as f:
+                            content = zip_file.read(f"{dir}{out_name}").replace(b"\r\n", b"\n")
+                            size_cache[out_name] = len(content)
+                            f.write(content)
+                        spj_out_map[item] = out_name
+                        break
 
             for index, item in enumerate(test_case_list):
                 data = {"input_name": item, "input_size": size_cache[item]}
