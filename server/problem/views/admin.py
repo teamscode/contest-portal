@@ -180,8 +180,13 @@ class TestCaseAPI(CSRFExemptAPIView, TestCaseZipProcessor):
         test_case_dir = os.path.join(settings.TEST_CASE_DIR, problem.test_case_id)
         if not os.path.isdir(test_case_dir):
             return self.error("Test case does not exists")
-        name_list = self.filter_name_list(os.listdir(test_case_dir), problem.spj)
-        name_list.append("info")
+        with open(os.path.join(test_case_dir, "info")) as f:
+            test_case_info = json.load(f)
+        name_list = ["info"]
+        for item in test_case_info["test_cases"].values():
+            name_list.append(item["input_name"])
+            if item.get("output_name"):
+                name_list.append(item["output_name"])
         file_name = os.path.join(test_case_dir, problem.test_case_id + ".zip")
         with zipfile.ZipFile(file_name, "w") as file:
             for test_case in name_list:
@@ -559,7 +564,7 @@ class ExportProblemAPI(APIView):
             zip_file.write(filename=os.path.join(problem_test_case_dir, v["input_name"]),
                            arcname=f"{index}/testcase/{v['input_name']}",
                            compress_type=compression)
-            if not info["spj"]:
+            if v.get("output_name"):
                 zip_file.write(filename=os.path.join(problem_test_case_dir, v["output_name"]),
                                arcname=f"{index}/testcase/{v['output_name']}",
                                compress_type=compression)
