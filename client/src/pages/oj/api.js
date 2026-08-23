@@ -257,6 +257,11 @@ export default {
     return ajax('contest_rank', 'get', {
       params
     })
+  },
+  teamReviewAction (data) {
+    return ajax('admin/team_review', 'post', {
+      data
+    })
   }
 }
 

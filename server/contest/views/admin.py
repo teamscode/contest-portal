@@ -7,8 +7,8 @@ from ipaddress import ip_network
 import dateutil.parser
 from django.http import FileResponse
 
-from account.decorators import ensure_created_by
-from account.models import User
+from account.decorators import ensure_created_by, login_required
+from account.models import User, UserProfile
 from submission.models import Submission, JudgeStatus
 from utils.api import APIView, validate_serializer
 from utils.cache import cache
@@ -19,6 +19,7 @@ from ..models import Contest, ContestAnnouncement
 from ..serializers import (ContestAnnouncementSerializer, ContestAdminSerializer,
                            CreateConetestSeriaizer, CreateContestAnnouncementSerializer,
                            EditConetestSeriaizer, EditContestAnnouncementSerializer,
+                           TeamReviewActionSerializer,
                            )
 
 
@@ -249,3 +250,36 @@ class DownloadContestSubmissions(APIView):
         resp["Content-Type"] = "application/zip"
         resp["Content-Disposition"] = f"attachment;filename={os.path.basename(zip_path)}"
         return resp
+
+
+class TeamReviewActionAPI(APIView):
+    @validate_serializer(TeamReviewActionSerializer)
+    @login_required
+    def post(self, request):
+        data = request.data
+        try:
+            Contest.objects.get(id=data["contest_id"])
+        except Contest.DoesNotExist:
+            return self.error("Contest does not exist")
+        if not request.user.is_admin_role():
+            return self.error("No permission for this contest")
+        try:
+            profile = UserProfile.objects.get(user_id=data["user_id"])
+        except UserProfile.DoesNotExist:
+            return self.error("Team does not exist")
+
+        action = data["action"]
+        if action in ("upvote", "downvote"):
+            if data["delta"] not in (1, -1):
+                return self.error("Invalid delta")
+            field = "upvotes" if action == "upvote" else "downvotes"
+            setattr(profile, field, max(0, getattr(profile, field) + data["delta"]))
+            profile.save(update_fields=[field])
+        elif action == "hide":
+            profile.hidden = True
+            profile.save(update_fields=["hidden"])
+        elif action == "unhide":
+            profile.hidden = False
+            profile.save(update_fields=["hidden"])
+
+        return self.success({"upvotes": profile.upvotes, "downvotes": profile.downvotes, "hidden": profile.hidden})

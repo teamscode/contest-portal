@@ -99,6 +99,15 @@
           <Icon type="ios-stats" />
           {{ $t('m.Rankings') }}
         </VerticalMenu-item>
+
+        <VerticalMenu-item
+          v-if="isAdminRole"
+          :disabled="contestMenuDisabled"
+          :route="{name: 'contest-review', params: {contestID: contestID}}"
+        >
+          <Icon type="md-eye" />
+          {{ $t('m.Review') }}
+        </VerticalMenu-item>
       </VerticalMenu>
     </div>
   </div>
@@ -230,7 +239,7 @@
         now: state => state.contest.now
       }),
       ...mapGetters(
-        ['contestMenuDisabled', 'contestStatus', 'countdown', 'isContestAdmin',
+        ['contestMenuDisabled', 'contestStatus', 'countdown', 'isContestAdmin', 'isAdminRole',
           'OIContestRealTimePermission', 'passwordFormVisible', 'contestLoaded']
       ),
       countdownColor () {

@@ -84,6 +84,9 @@ class UserProfile(models.Model):
     avatar = models.TextField(default=f"{settings.AVATAR_URI_PREFIX}/default.png")
     language = models.TextField(null=True)
     source = models.TextField(null=True)
+    upvotes = models.IntegerField(default=0)
+    downvotes = models.IntegerField(default=0)
+    hidden = models.BooleanField(default=False)
 
     class Meta:
         db_table = "user_profile"

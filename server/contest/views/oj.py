@@ -4,13 +4,14 @@ import xlsxwriter
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.core.cache import cache
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 
 from problem.models import Problem
+from submission.models import Submission
 from utils.api import APIView, validate_serializer
 from utils.constants import CacheKey, CONTEST_PASSWORD_SESSION_KEY
 from utils.shortcuts import datetime2str, check_is_id
-from account.models import AdminType
+from account.models import AdminType, User
 from account.decorators import login_required, check_contest_permission, check_contest_password
 
 from utils.constants import ContestStatus
@@ -132,7 +133,7 @@ class ContestRankAPI(APIView):
     def get(self, request):
         download_csv = request.GET.get("download_csv")
         force_refresh = request.GET.get("force_refresh")
-        is_contest_admin = request.user.is_authenticated and request.user.is_contest_admin(self.contest)
+        is_contest_admin = request.user.is_authenticated and request.user.is_admin_role()
         serializer = ContestRankSerializer
 
         if force_refresh == "1" and is_contest_admin:
@@ -144,7 +145,7 @@ class ContestRankAPI(APIView):
                 qs = self.get_rank()
                 cache.set(cache_key, qs)
 
-        if download_csv and request.user.is_contest_admin(self.contest):
+        if download_csv and request.user.is_admin_role():
             data = serializer(qs, many=True, is_contest_admin=is_contest_admin).data
             contest_problems = Problem.objects.filter(contest=self.contest, visible=True).order_by("_id")
             problem_ids = [item.id for item in contest_problems]
@@ -188,5 +189,17 @@ class ContestRankAPI(APIView):
             return response
 
         page_qs = self.paginate_data(request, qs)
-        page_qs["results"] = serializer(page_qs["results"], many=True, is_contest_admin=is_contest_admin).data
+        culv_ids = set()
+        if is_contest_admin:
+            user_ids = [item.user_id for item in page_qs["results"]]
+            culv_ids = set(
+                User.objects.filter(id__in=user_ids)
+                .annotate(has_culv=Exists(
+                    Submission.objects.filter(user_id=OuterRef("id"), code__icontains="culv")
+                ))
+                .filter(has_culv=True)
+                .values_list("id", flat=True)
+            )
+        page_qs["results"] = serializer(page_qs["results"], many=True,
+                                         is_contest_admin=is_contest_admin, culv_ids=culv_ids).data
         return self.success(page_qs)

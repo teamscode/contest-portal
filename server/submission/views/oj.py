@@ -162,6 +162,7 @@ class ContestSubmissionListAPI(APIView):
         problem_id = request.GET.get("problem_id")
         result = request.GET.get("result")
         username = request.GET.get("username")
+        user_id = request.GET.get("user_id")
         if problem_id:
             try:
                 problem = Problem.objects.get(_id=problem_id, contest_id=contest.id, visible=True)
@@ -169,8 +170,10 @@ class ContestSubmissionListAPI(APIView):
                 return self.error("Problem doesn't exist")
             submissions = submissions.filter(problem=problem)
 
-        if not request.user.is_contest_admin(contest):
+        if not request.user.is_authenticated or not request.user.is_admin_role():
             submissions = submissions.filter(user_id=request.user.id)
+        elif user_id:
+            submissions = submissions.filter(user_id=user_id)
         elif username:
             submissions = submissions.filter(username__icontains=username)
         if result:
@@ -179,6 +182,9 @@ class ContestSubmissionListAPI(APIView):
         # filter the test submissions submitted before contest start
         if contest.status != ContestStatus.CONTEST_NOT_START:
             submissions = submissions.filter(create_time__gte=contest.start_time)
+
+        if request.GET.get("ordering") == "asc":
+            submissions = submissions.order_by("create_time")
 
         data = self.paginate_data(request, submissions)
         data["results"] = SubmissionListSerializer(data["results"], many=True, user=request.user).data

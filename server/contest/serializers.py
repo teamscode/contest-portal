@@ -81,7 +81,20 @@ class ContestRankSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         self.is_contest_admin = kwargs.pop("is_contest_admin", False)
+        self.culv_ids = kwargs.pop("culv_ids", frozenset())
         super().__init__(*args, **kwargs)
 
     def get_user(self, obj):
-        return UsernameSerializer(obj.user, need_team_members=self.is_contest_admin).data
+        return UsernameSerializer(
+            obj.user,
+            need_team_members=self.is_contest_admin,
+            need_review_data=self.is_contest_admin,
+            culv_ids=self.culv_ids,
+        ).data
+
+
+class TeamReviewActionSerializer(serializers.Serializer):
+    contest_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    action = serializers.ChoiceField(choices=["upvote", "downvote", "hide", "unhide"])
+    delta = serializers.IntegerField(required=False, default=1)

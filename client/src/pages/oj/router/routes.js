@@ -90,6 +90,16 @@ export default [
         name: 'contest-rank',
         path: 'rank',
         component: Contest.ContestRank
+      },
+      {
+        name: 'contest-review',
+        path: 'review',
+        component: Contest.ContestRankReview
+      },
+      {
+        name: 'contest-review-console',
+        path: 'review/:teamId',
+        component: Contest.ContestReview
       }
     ]
   },
