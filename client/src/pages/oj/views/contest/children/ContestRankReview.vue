@@ -74,6 +74,7 @@
     },
     data () {
       return {
+        includeReviewData: true,
         total: 0,
         page: 1,
         contestID: '',

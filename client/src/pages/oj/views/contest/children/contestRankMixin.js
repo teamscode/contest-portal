@@ -7,7 +7,8 @@ import { CONTEST_STATUS } from '@/utils/constants'
 export default {
   data () {
     return {
-      loading: false
+      loading: false,
+      includeReviewData: false
     }
   },
   components: {
@@ -23,7 +24,8 @@ export default {
         offset,
         limit: this.limit,
         contest_id: this.$route.params.contestID,
-        force_refresh: this.forceUpdate ? '1' : '0'
+        force_refresh: this.forceUpdate ? '1' : '0',
+        include_review_data: this.includeReviewData ? '1' : '0'
       }
       api.getContestRank(params).then(res => {
         if (!refresh) {

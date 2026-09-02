@@ -198,7 +198,13 @@ export default {
     getVoteColor,
     getVoteFill,
     loadRank () {
-      api.getContestRank({ offset: 0, limit: 200, contest_id: this.contestID, force_refresh: '1' })
+      api.getContestRank({
+        offset: 0,
+        limit: 200,
+        contest_id: this.contestID,
+        force_refresh: '1',
+        include_review_data: '1'
+      })
         .then(res => { this.miniRankRows = res.data.data.results })
     },
     loadFeed (userId = null) {

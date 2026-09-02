@@ -81,6 +81,7 @@ class ContestRankSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         self.is_contest_admin = kwargs.pop("is_contest_admin", False)
+        self.include_review_data = kwargs.pop("include_review_data", False)
         self.culv_ids = kwargs.pop("culv_ids", frozenset())
         super().__init__(*args, **kwargs)
 
@@ -88,7 +89,7 @@ class ContestRankSerializer(serializers.ModelSerializer):
         return UsernameSerializer(
             obj.user,
             need_team_members=self.is_contest_admin,
-            need_review_data=self.is_contest_admin,
+            need_review_data=self.include_review_data,
             culv_ids=self.culv_ids,
         ).data
 

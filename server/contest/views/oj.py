@@ -4,7 +4,7 @@ import xlsxwriter
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.core.cache import cache
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, OuterRef, Q, prefetch_related_objects
 
 from problem.models import Problem
 from submission.models import Submission
@@ -115,12 +115,12 @@ class ContestRankAPI(APIView):
         if self.contest.division == "Testing":
             return ContestRank.objects.filter(contest=self.contest,
                                               user__is_disabled=False). \
-                select_related("user").order_by("-total_score", "last_submission")
+                select_related("user", "user__userprofile").order_by("-total_score", "last_submission")
         else:
             return ContestRank.objects.filter(contest=self.contest,
                                               user__admin_type=AdminType.REGULAR_USER,
                                               user__is_disabled=False). \
-                select_related("user").order_by("-total_score", "last_submission")
+                select_related("user", "user__userprofile").order_by("-total_score", "last_submission")
 
     def column_string(self, n):
         string = ""
@@ -134,6 +134,13 @@ class ContestRankAPI(APIView):
         download_csv = request.GET.get("download_csv")
         force_refresh = request.GET.get("force_refresh")
         is_contest_admin = request.user.is_authenticated and request.user.is_admin_role()
+        # Review metadata is only used by the session-authenticated review UI. OpenAPI
+        # consumers still receive team members without paying for the submission scan.
+        include_review_data = (
+            is_contest_admin and
+            request.GET.get("include_review_data") == "1" and
+            getattr(request, "auth_method", None) != "api_key"
+        )
         serializer = ContestRankSerializer
 
         if force_refresh == "1" and is_contest_admin:
@@ -146,6 +153,9 @@ class ContestRankAPI(APIView):
                 cache.set(cache_key, qs)
 
         if download_csv and request.user.is_admin_role():
+            # Cached querysets may have been populated before user profiles were
+            # joined in get_rank(). Bulk-prefetch them to avoid one query per row.
+            prefetch_related_objects(qs, "user__userprofile")
             data = serializer(qs, many=True, is_contest_admin=is_contest_admin).data
             contest_problems = Problem.objects.filter(contest=self.contest, visible=True).order_by("_id")
             problem_ids = [item.id for item in contest_problems]
@@ -189,17 +199,29 @@ class ContestRankAPI(APIView):
             return response
 
         page_qs = self.paginate_data(request, qs)
+        # This also repairs indefinitely cached legacy querysets that only selected
+        # users. On fresh querysets select_related() makes this a no-op.
+        prefetch_related_objects(page_qs["results"], "user__userprofile")
         culv_ids = set()
-        if is_contest_admin:
+        if include_review_data:
             user_ids = [item.user_id for item in page_qs["results"]]
             culv_ids = set(
                 User.objects.filter(id__in=user_ids)
                 .annotate(has_culv=Exists(
-                    Submission.objects.filter(user_id=OuterRef("id"), code__icontains="culv")
+                    Submission.objects.filter(
+                        user_id=OuterRef("id"),
+                        contest_id=self.contest.id,
+                        code__icontains="culv"
+                    )
                 ))
                 .filter(has_culv=True)
                 .values_list("id", flat=True)
             )
-        page_qs["results"] = serializer(page_qs["results"], many=True,
-                                         is_contest_admin=is_contest_admin, culv_ids=culv_ids).data
+        page_qs["results"] = serializer(
+            page_qs["results"],
+            many=True,
+            is_contest_admin=is_contest_admin,
+            include_review_data=include_review_data,
+            culv_ids=culv_ids
+        ).data
         return self.success(page_qs)

@@ -609,11 +609,18 @@ class OpenAPIAppkeyAPITest(APITestCase):
         self.url = self.reverse("open_api_appkey_api")
 
     def test_reset_appkey(self):
-        resp = self.client.post(self.url, data={})
+        resp = self.client.get(self.url)
         self.assertFailed(resp)
 
         self.user.open_api = True
         self.user.save()
-        resp = self.client.post(self.url, data={})
+        resp = self.client.get(self.url)
         self.assertSuccess(resp)
-        self.assertEqual(resp.data["data"]["appkey"], User.objects.get(username=self.user.username).open_api_appkey)
+        first_key = resp.data["data"]["appkey"]
+        self.assertEqual(first_key, User.objects.get(username=self.user.username).open_api_appkey)
+
+        resp = self.client.get(self.url)
+        self.assertSuccess(resp)
+        second_key = resp.data["data"]["appkey"]
+        self.assertNotEqual(first_key, second_key)
+        self.assertEqual(second_key, User.objects.get(username=self.user.username).open_api_appkey)
