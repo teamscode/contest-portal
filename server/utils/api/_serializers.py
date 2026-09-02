@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 
@@ -17,20 +18,42 @@ class UsernameSerializer(serializers.Serializer):
         self.culv_ids = kwargs.pop("culv_ids", frozenset())
         super().__init__(*args, **kwargs)
 
+    @staticmethod
+    def get_user_profile(obj):
+        try:
+            return obj.userprofile
+        except ObjectDoesNotExist:
+            return None
+
     def get_team_members(self, obj):
-        return obj.userprofile.team_members if self.need_team_members else None
+        if not self.need_team_members:
+            return None
+        profile = self.get_user_profile(obj)
+        return profile.team_members if profile else []
 
     def get_team_name(self, obj):
-        return obj.userprofile.team_name
+        profile = self.get_user_profile(obj)
+        return profile.team_name if profile else None
 
     def get_upvotes(self, obj):
-        return obj.userprofile.upvotes if self.need_review_data else None
+        if not self.need_review_data:
+            return None
+        profile = self.get_user_profile(obj)
+        return profile.upvotes if profile else None
 
     def get_downvotes(self, obj):
-        return obj.userprofile.downvotes if self.need_review_data else None
+        if not self.need_review_data:
+            return None
+        profile = self.get_user_profile(obj)
+        return profile.downvotes if profile else None
 
     def get_has_culv_flag(self, obj):
-        return obj.id in self.culv_ids if self.need_review_data else None
+        if not self.need_review_data or not self.get_user_profile(obj):
+            return None
+        return obj.id in self.culv_ids
 
     def get_hidden(self, obj):
-        return obj.userprofile.hidden if self.need_review_data else None
+        if not self.need_review_data:
+            return None
+        profile = self.get_user_profile(obj)
+        return profile.hidden if profile else None

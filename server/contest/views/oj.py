@@ -1,10 +1,11 @@
 import io
+import logging
 
 import xlsxwriter
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.core.cache import cache
-from django.db.models import Exists, OuterRef, Q, prefetch_related_objects
+from django.db.models import Exists, OuterRef, Q, QuerySet, prefetch_related_objects
 
 from problem.models import Problem
 from submission.models import Submission
@@ -19,6 +20,8 @@ from ..models import ContestAnnouncement, Contest, ContestRank
 from ..serializers import ContestAnnouncementSerializer
 from ..serializers import ContestSerializer, ContestPasswordVerifySerializer
 from ..serializers import ContestRankSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class ContestAnnouncementListAPI(APIView):
@@ -111,6 +114,37 @@ class ContestAccessAPI(APIView):
 
 
 class ContestRankAPI(APIView):
+    @staticmethod
+    def delete_cached_rank(cache_key):
+        try:
+            cache.delete(cache_key)
+        except Exception:
+            logger.exception("Unable to delete contest rank cache %s", cache_key)
+
+    @classmethod
+    def get_cached_rank(cls, cache_key):
+        try:
+            qs = cache.get(cache_key)
+        except Exception:
+            logger.exception("Unable to load contest rank cache %s", cache_key)
+            cls.delete_cached_rank(cache_key)
+            return None
+
+        if qs is None:
+            return None
+        if not isinstance(qs, QuerySet) or qs.model is not ContestRank:
+            logger.error("Ignoring invalid contest rank cache %s", cache_key)
+            cls.delete_cached_rank(cache_key)
+            return None
+        return qs
+
+    @staticmethod
+    def set_cached_rank(cache_key, qs):
+        try:
+            cache.set(cache_key, qs)
+        except Exception:
+            logger.exception("Unable to store contest rank cache %s", cache_key)
+
     def get_rank(self):
         if self.contest.division == "Testing":
             return ContestRank.objects.filter(contest=self.contest,
@@ -147,10 +181,10 @@ class ContestRankAPI(APIView):
             qs = self.get_rank()
         else:
             cache_key = f"{CacheKey.contest_rank_cache}:{self.contest.id}"
-            qs = cache.get(cache_key)
-            if not qs:
+            qs = self.get_cached_rank(cache_key)
+            if qs is None:
                 qs = self.get_rank()
-                cache.set(cache_key, qs)
+                self.set_cached_rank(cache_key, qs)
 
         if download_csv and request.user.is_admin_role():
             # Cached querysets may have been populated before user profiles were

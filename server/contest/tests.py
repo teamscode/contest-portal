@@ -7,7 +7,7 @@ from django.db import connection
 from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 
-from account.models import AdminType
+from account.models import AdminType, User
 from utils.api.tests import APITestCase
 from utils.constants import CacheKey
 
@@ -168,6 +168,36 @@ class ContestRankAPITest(APITestCase):
         cache.delete(self.rank_cache_key)
         self.addCleanup(cache.delete, self.rank_cache_key)
 
+    def enable_admin_api_key(self):
+        self.admin.open_api = True
+        self.admin.open_api_appkey = "test-app-key"
+        self.admin.save()
+        self.client.logout()
+
+    def create_orphan_ranked_user(self):
+        self.acm_contest.division = "Advanced"
+        self.acm_contest.save(update_fields=["division"])
+        orphan = User.objects.create(
+            username="orphan",
+            admin_type=AdminType.REGULAR_USER
+        )
+        ContestRank.objects.create(user=orphan, contest=self.acm_contest)
+        return orphan
+
+    def assert_orphan_rank_is_safe(self, resp, orphan):
+        self.assertSuccess(resp)
+        users = {
+            item["user"]["id"]: item["user"]
+            for item in resp.data["data"]["results"]
+        }
+        orphan_data = users[orphan.id]
+        self.assertIsNone(orphan_data["team_name"])
+        self.assertEqual(orphan_data["team_members"], [])
+        self.assertIsNone(orphan_data["upvotes"])
+        self.assertIsNone(orphan_data["downvotes"])
+        self.assertIsNone(orphan_data["has_culv_flag"])
+        self.assertIsNone(orphan_data["hidden"])
+
     @mock.patch("contest.views.oj.Submission.objects.filter")
     def test_get_contest_rank(self, submission_filter):
         resp = self.client.get(
@@ -185,10 +215,7 @@ class ContestRankAPITest(APITestCase):
 
     @mock.patch("contest.views.oj.Submission.objects.filter")
     def test_api_key_rank_skips_review_data(self, submission_filter):
-        self.admin.open_api = True
-        self.admin.open_api_appkey = "test-app-key"
-        self.admin.save()
-        self.client.logout()
+        self.enable_admin_api_key()
 
         resp = self.client.get(
             self.url,
@@ -209,6 +236,64 @@ class ContestRankAPITest(APITestCase):
         self.assertIsNone(user["downvotes"])
         self.assertIsNone(user["has_culv_flag"])
         self.assertIsNone(user["hidden"])
+
+    @mock.patch("contest.views.oj.Submission.objects.filter")
+    def test_api_key_advanced_rank_handles_missing_profile(self, submission_filter):
+        orphan = self.create_orphan_ranked_user()
+        self.enable_admin_api_key()
+
+        resp = self.client.get(
+            self.url,
+            data={
+                "contest_id": self.acm_contest.id,
+                "limit": 1000,
+                "force_refresh": "1"
+            },
+            HTTP_APPKEY=self.admin.open_api_appkey
+        )
+
+        submission_filter.assert_not_called()
+        self.assert_orphan_rank_is_safe(resp, orphan)
+
+    @mock.patch("contest.views.oj.Submission.objects.filter")
+    def test_api_key_advanced_cached_rank_handles_missing_profile(self, submission_filter):
+        orphan = self.create_orphan_ranked_user()
+        legacy_cached_rank = ContestRank.objects.filter(
+            contest=self.acm_contest,
+            user__admin_type=AdminType.REGULAR_USER,
+            user__is_disabled=False
+        ).select_related("user")
+        cache.set(self.rank_cache_key, legacy_cached_rank)
+        self.enable_admin_api_key()
+
+        resp = self.client.get(
+            self.url,
+            data={"contest_id": self.acm_contest.id, "limit": 1000},
+            HTTP_APPKEY=self.admin.open_api_appkey
+        )
+
+        submission_filter.assert_not_called()
+        self.assert_orphan_rank_is_safe(resp, orphan)
+
+    @mock.patch("contest.views.oj.Submission.objects.filter")
+    def test_api_key_advanced_rank_recovers_from_corrupt_cache(self, submission_filter):
+        self.acm_contest.division = "Advanced"
+        self.acm_contest.save(update_fields=["division"])
+        self.enable_admin_api_key()
+
+        with mock.patch(
+            "contest.views.oj.cache.get",
+            side_effect=ValueError("corrupt cached rank")
+        ):
+            resp = self.client.get(
+                self.url,
+                data={"contest_id": self.acm_contest.id, "limit": 1000},
+                HTTP_APPKEY=self.admin.open_api_appkey
+            )
+
+        self.assertSuccess(resp)
+        submission_filter.assert_not_called()
+        self.assertEqual(resp.data["data"]["total"], 1)
 
     def test_review_rank_includes_review_data(self):
         profile = self.ranked_user.userprofile
